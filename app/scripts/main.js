@@ -20,7 +20,8 @@ require.config({
     paths: {
         jquery: '../bower_components/jquery/jquery',
         backbone: '../bower_components/backbone/backbone',
-        underscore: '../bower_components/underscore/underscore',
+        // replace underscore >> lodash
+        underscore: '../bower_components/lodash/dist/lodash',
         handlebars: '../bower_components/handlebars/handlebars'
     }
 });
