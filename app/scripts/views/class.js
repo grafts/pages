@@ -8,9 +8,9 @@ define([
 ], function ($, _, Backbone, JST) {
 	'use strict';
 
-	var VideoView = Backbone.View.extend({
-		template: JST['app/scripts/templates/video.hbs']
+	var ClassView = Backbone.View.extend({
+		template: JST['app/scripts/templates/class.hbs']
 	});
 
-	return VideoView;
+	return ClassView;
 });
