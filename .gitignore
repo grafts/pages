@@ -6,3 +6,4 @@ app/bower_components
 .tmp
 test/bower_components/
 app/styles/lessStyles/*.css
+.DS_Store
