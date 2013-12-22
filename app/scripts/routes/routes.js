@@ -2,19 +2,24 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'controller/video'
-], function ($, _, Backbone, VideoController) {
+	'controller/video',
+	'controller/user',
+], function ($, _, Backbone, VideoController, UserController) {
 
 	var Router          = Backbone.Router.extend({
 		
 		routes: {
 			
-			''              : '_router',
-			'*actions'      : '_router'
+			''                       : '_router',
+			':resource'              : '_router',
+			':resource/:id'          : '_router',
+			':resource/:id/:action'  : '_router',
+			'*actions'               : '_router'
 		},
 
 		controller : {
-			video : new VideoController()
+			video : new VideoController(),
+			user  : new UserController()
 		},
 
 		initialize : function(){
@@ -25,24 +30,23 @@ define([
 
 		},
 
-		_router : function(id){
-			var _path = Backbone.history.fragment.split('/'),
-				_resource = _path[0],
-				_search = deParam(Backbone.history.location.search);
+		_router : function(resource, id, action){
+			var search = deParam(Backbone.history.location.search);
 
-			if(_resource == ""){
-				_resource = 'video';
+			if(resource == ""){
+				resource = 'video';
 			}
 
-			if(!this.controller[_resource]){
+			if(!this.controller[resource]){
 				console.log('wrong url');
 				return;
 			}
 
-			this.controller[_resource].run({ 
-				path : _path, 
-				search : _search,
-				id : id
+			this.controller[resource].run({ 
+				id       : id,
+				resource : resource,
+				action   : action,
+				search   : search
 			});
 			
 			function deParam(qs){

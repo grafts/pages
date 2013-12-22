@@ -8,21 +8,18 @@ define([
 ], function ($, _, Backbone, JST) {
 	'use strict';
 
-	var VideoView = Backbone.View.extend({
-		// el: '.video-item',
+	var UserView = Backbone.View.extend({
 		tagName: 'div',
-		template: JST['app/scripts/templates/video.hbs'],
+		template: JST['app/scripts/templates/user.hbs'],
 		initialize: function(id){
-			console.log(arguments);
 			id && (this.id = id);
 			this.el.setAttribute('id', id);
-			this.el.setAttribute('class', 'video-item');
+			this.el.setAttribute('class', 'user-item');
 		},
 		render: function(){
-			console.log('video view render');
-			this.$el.show();
+			console.log('user view render', this.id);
 		}
 	});
 
-	return VideoView;
+	return UserView;
 });

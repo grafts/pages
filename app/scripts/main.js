@@ -15,6 +15,9 @@ require.config({
 		},
 		handlebars: {
 			exports: 'Handlebars'
+		},
+		editor: {
+			exports: 'editor'
 		}
 	},
 	paths: {
@@ -23,7 +26,9 @@ require.config({
 		backbone: '../bower_components/backbone/backbone',
 		// replace underscore >> lodash
 		underscore: '../bower_components/lodash/dist/lodash',
-		handlebars: '../bower_components/handlebars/handlebars'
+		handlebars: '../bower_components/handlebars/handlebars',
+
+		editor: '../scripts/vendor/medium'
 	}
 });
 
