@@ -5,28 +5,41 @@ define([
 	'underscore',
 	'backbone',
 	'templates',
-	'handlebars',
 	'editor'
-], function ($, _, Backbone, JST, Handlebars, editor) {
+], function ($, _, Backbone, JST, editor) {
 	'use strict';
 
 	var VideoView = Backbone.View.extend({
-		el: '.video-itemEdit',
-		template: JST['app/scripts/templates/video.hbs'],
-		initialize : function(){
-			
+		tagName: 'div',
+		template: JST['app/scripts/templates/videoEdit.hbs'],
+		events: {
+			'click a' : 'link'
+		},
+		initialize : function(id){
+			var self = this;
+
+			id && (this.id = id);
+			this.el.setAttribute('class', 'video-itemEdit');
+			this.$el.append(this.template(this.model.toJSON()));
+
+			this.input = new editor(self.el.getElementsByClassName('input'));
 		},
 		render: function(){
-			console.log('video editor render');
-			this.$el.show();
-
-			new editor({
-				element: document.getElementById('videoEditor_title'),
-				mode: 'rich',
-				placeholder: 'Your Article'
-			});
-
+			console.log('video edit view render');
+			return this.$el;
+		},
+		unrender: function(){
+			this.undelegateEvents();
+			this.$el.hide();
+			console.log(this.input.serialize());
+		},
+		link : function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		}
+			
+
 	});
 
 	return VideoView;

@@ -1,23 +1,151 @@
-@import "lessStyles/mixins.less";
-@import "lessStyles/common.less";
-@import "lessStyles/video.less";
-@import "lessStyles/fontello.less";
-@import "lessStyles/medium.less";
+@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(http://fonts.googleapis.com/css?family=Roboto:900);
 
+// variables
+@container_small: 640px;
+@container_big: 860px;
+@screen_small: (@container_small+80);
+@screen_big: (@container_big+80);
+@grid-gutter-width: 24px;
 
-.logo {
-	background: #3a2252;
-	background: rgba(0, 0, 0, 0.36);
-	width: 170px;
-	height: 60px;
-	text-align: center;
-	padding-top: 8px;
+// mixins
+.rounded-corners (@radius: 4px) {
+	-webkit-border-radius: @radius;
+	-moz-border-radius: @radius;
+	-ms-border-radius: @radius;
+	-o-border-radius: @radius;
+	border-radius: @radius;
+}
+.cover-bg (@cover: cover) {
+	-webkit-background-size: @cover;
+	-moz-background-size: @cover;
+	-o-background-size: @cover;
+	background-size: @cover;
 }
 
+// Clearfix
+// Source: http://nicolasgallagher.com/micro-clearfix-hack/
+//
+// For modern browsers
+// 1. The space content is one way to avoid an Opera bug when the
+//    contenteditable attribute is included anywhere else in the document.
+//    Otherwise it causes space to appear at the top and bottom of elements
+//    that are clearfixed.
+// 2. The use of `table` rather than `block` is only necessary if using
+//    `:before` to contain the top-margins of child elements.
+.clearfix() {
+	&:before,
+	&:after {
+		content: " "; // 1
+		display: table; // 2
+	}
+	&:after {
+		clear: both;
+	}
+}
+
+// Drop shadows
+.box-shadow(@shadow) {
+  -webkit-box-shadow: @shadow; // iOS <4.3 & Android <4.1
+          box-shadow: @shadow;
+}
+
+// 
+.transition_all(){
+	-webkit-transition: all .25s ease;
+	   -moz-transition: all .25s ease;
+	    -ms-transition: all .25s ease;
+	     -o-transition: all .25s ease;
+	        transition: all .25s ease;
+}
+
+.cover-bg {
+	.cover-bg;
+}
+
+@import "lessStyles/variables.less";
+@import "lessStyles/fontello.less";
+@import "lessStyles/common.less";
+@import "lessStyles/grid.less";
+@import "lessStyles/medium.less";
+@import "lessStyles/video.less";
+@import "lessStyles/user.less";
 
 
 
 
+.video-itemEdit-tool {
+	z-index: 1000;
+	position: fixed;
+	top: 12px;
+	right: 12px;
+	color: #fff;
+	color: rgba(0, 0, 0, 0.5);
+	a {
+		position: relative;
+		display: inline-block;
+		width: 47px;
+		height: 47px;
+		padding-top: 2px;
+		margin-left: 12px;
+		border: 1px solid #fff;
+		border: 1px solid rgba(0, 0, 0, 0.5);
+		.rounded-corners(24px);
+		.transition_all();
+		i {
+			position: absolute;
+			top: 5px;
+			left: 0px;
+			font-size: 32px;
+			line-height: 1em;
+			width: 40px;
+		}
+		&:hover {
+			color: #fff;
+			color: rgba(0, 0, 0, 1);
+		}
+	}
+}
 
-
-
+.video-itemEdit-input {
+	margin-bottom: 82px;
+	font-size: 20px;
+	line-height: 2em;
+	padding-top: 100px;
+	padding-bottom: 65px;
+	.coverImage {
+		min-height: 60px;
+		position: relative;
+		cursor: pointer;
+		i {
+			position: absolute;
+			top: 0;
+			left: -10px;
+			font-size: 52px;
+			color: rgba(88, 89, 91, 0.7);
+			.transition_all();
+			&:hover {
+				color: rgba(88, 89, 91, 1);
+			}
+		}
+	}
+	.input {
+		min-height: 52px;
+	}
+	.title {
+		letter-spacing: -0.04em;
+		font-size: 40px;
+		line-height: 1.5em;
+		margin-bottom: 4px;
+		&:after {
+			font-weight: bold;
+		}
+	}
+	.subtitle {
+		color: rgba(88, 89, 91, 0.7);
+		font-size: 24px;
+		line-height: 1.5em;
+		margin-bottom: 24px;
+	}
+}

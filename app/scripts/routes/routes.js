@@ -2,9 +2,10 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
+	'controller/utils',
 	'controller/video',
 	'controller/user',
-], function ($, _, Backbone, VideoController, UserController) {
+], function ($, _, Backbone, UtilsController, VideoController, UserController) {
 
 	var Router          = Backbone.Router.extend({
 		
@@ -17,7 +18,7 @@ define([
 			'*actions'               : '_router'
 		},
 
-		controller : {
+		controllers : {
 			video : new VideoController(),
 			user  : new UserController()
 		},
@@ -28,21 +29,27 @@ define([
 
 			_.bindAll(this);
 
+			Backbone.pubsub = _.extend({}, Backbone.Events);
+			(new UtilsController()).run();
 		},
 
 		_router : function(resource, id, action){
 			var search = deParam(Backbone.history.location.search);
 
-			if(resource == ""){
+			if(!resource || resource == ""){
 				resource = 'video';
 			}
 
-			if(!this.controller[resource]){
+			if(!this.controllers[resource]){
 				console.log('wrong url');
 				return;
 			}
 
-			this.controller[resource].run({ 
+			for(controller in this.controllers){
+				this.controllers[controller] && this.controllers[controller].stop();
+			}
+
+			this.controllers[resource].run({ 
 				id       : id,
 				resource : resource,
 				action   : action,

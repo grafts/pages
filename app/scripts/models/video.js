@@ -8,6 +8,13 @@ define([
 
 	var VideoModel = Backbone.Model.extend({
 		defaults: {
+			view: 123123,
+			like: 1123,
+			unlike: 123
+		},
+		urlRoot : '/video',
+		initialize: function(){
+			
 		}
 	});
 
