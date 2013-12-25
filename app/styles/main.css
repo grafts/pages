@@ -91,6 +91,11 @@
 }
 /* '' */
 
+.icon-link:before {
+  content: '\e825';
+}
+/* '' */
+
 .icon-attach:before {
   content: '\e801';
 }
@@ -115,6 +120,16 @@
   content: '\e803';
 }
 /* '' */
+
+.icon-quote-left:before {
+  content: '\e826';
+}
+/* '' */
+
+.icon-quote-right:before {
+  content: '\e827';
+}
+/* '' */
 
 .icon-export:before {
   content: '\e806';
@@ -141,15 +156,15 @@
 }
 /* '' */
 
-.icon-right-open:before {
-  content: '\e81a';
-}
-/* '' */
-
 .icon-videocam:before {
   content: '\e809';
 }
 /* '' */
+
+.icon-play:before {
+  content: '\e810';
+}
+/* '' */
 
 .icon-stop:before {
   content: '\e81b';
@@ -236,10 +251,10 @@
 }
 /* '' */
 
-.icon-play:before {
-  content: '\e810';
+.icon-right-open:before {
+  content: '\e81a';
 }
-/* '' */
+/* '' */
 
 /*common elements*/
 
