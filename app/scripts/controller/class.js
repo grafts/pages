@@ -5,18 +5,26 @@ define([
 	'underscore',
 	'backbone',
 
-	'views/class'
-], function ($, _, Backbone, ClassView) {
+	'models/class',
+	'collections/class',
+
+	'views/class',
+	'views/classEdit'
+], function ($, _, Backbone, Class, Classes, ClassView, ClassEditView) {
 	'use strict';
 
-	var ClassController = function(){
-		
-	};
-
-
-	ClassController.prototype.run = function(){
-		console.log(arguments);
-	};
+	var ClassController = Backbone.Controller.extend({
+		el          : $('section.class'),
+		initialize  : function(){
+			
+		},
+		model       : Class,
+		collections : Classes,
+		readView    : ClassView,
+		editView    : ClassEditView
+	});
 
 	return ClassController;
+
 });
+

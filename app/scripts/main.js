@@ -24,20 +24,25 @@ require.config({
 		router : '../scripts/routes/routes',
 		jquery: '../bower_components/jquery/jquery',
 		backbone: '../bower_components/backbone/backbone',
+		backboneController: '../scripts/vendor/backbone.controller',
 		// replace underscore >> lodash
 		underscore: '../bower_components/lodash/dist/lodash',
 		handlebars: '../bower_components/handlebars/handlebars',
+
+		loading : '../scripts/views/loading',
 
 		editor: '../scripts/vendor/medium'
 	}
 });
 
 require([
-	'backbone', 'router'
-], function (Backbone, Router) {
-	var router = new Router,
+	'backbone', 'backboneController'
+], function (Backbone, Controller) {
+	var router,
 		pushState = !!window.history.pushState;
 
-	router.initialize();
-	Backbone.history.start({ hashChange: !pushState, pushState : pushState });
+	require(['router'], function(Router){
+		router = new Router();
+		Backbone.history.start({ hashChange: !pushState, pushState : pushState });
+	});
 });

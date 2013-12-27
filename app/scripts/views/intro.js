@@ -1,25 +1,23 @@
+/*global define*/
+
 define([
 	'jquery',
 	'underscore',
-	'backbone',
-	'templates'
-], function ($, _, Backbone, JST) {
+	'backbone'
+], function ($, _, Backbone) {
 	'use strict';
 
-	var VideoView = Backbone.View.extend({
-		tagName: 'div',
-		template: JST['app/scripts/templates/class.hbs'],
+	var UserView = Backbone.View.extend({
+		el: 'section.intro',
 		events: {
 			'click a' : 'link'
 		},
 		initialize: function(id){
-			id && (this.id = id);
-			this.el.setAttribute('class', 'class-item');
-			this.$el.append(this.template(this.model.toJSON()));
 		},
 		render: function(){
-			console.log('class view render');
-			return this.$el;
+			console.log('intro view render');
+			this.$el.show();
+			return false;
 		},
 		unrender: function(){
 			this.undelegateEvents();
@@ -30,8 +28,7 @@ define([
 			e.stopPropagation();
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		}
-
 	});
 
-	return VideoView;
+	return UserView;
 });

@@ -3,9 +3,11 @@ define([
 	'underscore',
 	'backbone',
 	'controller/utils',
+	'controller/intro',
 	'controller/video',
 	'controller/user',
-], function ($, _, Backbone, UtilsController, VideoController, UserController) {
+	'controller/class',
+], function ($, _, Backbone, UtilsController, IntroController, VideoController, UserController, ClassController) {
 
 	var Router          = Backbone.Router.extend({
 		
@@ -19,8 +21,10 @@ define([
 		},
 
 		controllers : {
+			intro : new IntroController(),
 			video : new VideoController(),
-			user  : new UserController()
+			user  : new UserController(),
+			class : new ClassController()
 		},
 
 		initialize : function(){
@@ -30,14 +34,14 @@ define([
 			_.bindAll(this);
 
 			Backbone.pubsub = _.extend({}, Backbone.Events);
-			(new UtilsController()).run();
+			(new UtilsController).run();
 		},
 
 		_router : function(resource, id, action){
 			var search = deParam(Backbone.history.location.search);
 
 			if(!resource || resource == ""){
-				resource = 'video';
+				resource = 'intro';
 			}
 
 			if(!this.controllers[resource]){
