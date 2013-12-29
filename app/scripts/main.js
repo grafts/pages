@@ -48,8 +48,8 @@ require([
 	Backbone.history.start({ hashChange: !pushState, pushState : pushState });
 
 	require(['font!custom,families:[Nanum Gothic, Nanum Myeongjo],urls:[//fonts.googleapis.com/earlyaccess/nanumgothic.css, //fonts.googleapis.com/earlyaccess/nanummyeongjo.css]'], function(){
-		$('.serif').css('font-family', 'Nanum Gothic');
-		$('.sans-serif').css('font-family', 'Nanum Myeongjo');
+		$('.serif').css('font-family', 'Nanum Myeongjo');
+		$('.sans-serif').css('font-family', 'Nanum Gothic');
 	});
 
 });
