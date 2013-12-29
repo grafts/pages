@@ -36,13 +36,12 @@ require.config({
 });
 
 require([
-	'backbone', 'backboneController'
-], function (Backbone, Controller) {
+	'backbone', 'backboneController', 'router'
+], function (Backbone, Controller, Router) {
 	var router,
 		pushState = !!window.history.pushState;
 
-	require(['router'], function(Router){
-		router = new Router();
-		Backbone.history.start({ hashChange: !pushState, pushState : pushState });
-	});
+	router = new Router();
+	Backbone.history.start({ hashChange: !pushState, pushState : pushState });
+
 });

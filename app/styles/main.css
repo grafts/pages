@@ -1348,7 +1348,7 @@ body.scrollable {
 }
 @media (min-width: 940px) {
   .user-item-contents ul li {
-    width: 267px;
+    width: 266px;
   }
 }
 .user-item-contents ul li img {
@@ -1361,7 +1361,7 @@ body.scrollable {
 }
 @media (min-width: 940px) {
   .user-item-contents ul li img {
-    width: 267px;
+    width: 266px;
   }
 }
 .user-item-contents ul li .title {
@@ -1796,7 +1796,7 @@ section.off {
 @media (min-width: 940px) {
   .intro-contents .tutors-location ul li,
   .intro-contents .tutors-popular ul li {
-    width: 267px;
+    width: 266px;
   }
 }
 .intro-contents .tutors-location ul li img,
@@ -1813,7 +1813,7 @@ section.off {
 @media (min-width: 940px) {
   .intro-contents .tutors-location ul li img,
   .intro-contents .tutors-popular ul li img {
-    width: 267px;
+    width: 266px;
   }
 }
 .intro-contents .tutors-location ul li .title,
