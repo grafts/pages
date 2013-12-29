@@ -1,5 +1,3 @@
-@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
-@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 @import url(http://fonts.googleapis.com/css?family=Roboto:900);
 .cover-bg {
   -webkit-background-size: cover;
@@ -1479,7 +1477,6 @@ section.off {
   padding-bottom: 65px;
   text-align: left;
   color: #58595b;
-  font-family: 'Nanum Gothic', sans-serif;
 }
 .class-item-cover .class-item-cover-contents .class-item-title {
   letter-spacing: -0.04em;
@@ -1634,7 +1631,6 @@ section.off {
   padding-bottom: 65px;
   text-align: left;
   color: #58595b;
-  font-family: 'Nanum Gothic', sans-serif;
 }
 .class-item-cover .class-item-cover-contents .class-item-title {
   letter-spacing: -0.04em;
@@ -1674,9 +1670,6 @@ section.off {
   text-align: right;
   top: 0;
   right: 0;
-}
-.intro-contents {
-  font-family: 'Nanum Gothic', sans-serif;
 }
 .intro-contents .intro-contents-item {
   margin-bottom: 64px;
