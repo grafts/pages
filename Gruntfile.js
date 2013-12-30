@@ -173,7 +173,8 @@ module.exports = function (grunt) {
                 options: {
                     baseUrl: '<%= yeoman.app %>/scripts',
                     optimize: 'none',
-                    stubModules: ['font', 'propertyParser'],
+                    findNestedDependencies: true,
+                    // stubModules: ['font', 'propertyParser'],
                     paths: {
                         'templates': '../../.tmp/scripts/templates',
                         'jquery': '../../app/bower_components/jquery/jquery',

@@ -47,6 +47,10 @@ define([
 			loading.set();
 			setTimeout(function(){
 				loading.done();
+$('body').animate({scrollTop:0}, '200', 'swing', function() { 
+   
+});
+				console.log(1);
 			}, 300);
 		},
 
