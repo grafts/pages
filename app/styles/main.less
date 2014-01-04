@@ -23,6 +23,12 @@
 	-o-background-size: @cover;
 	background-size: @cover;
 }
+.user-select (@val: none) {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
 
 // Clearfix
 // Source: http://nicolasgallagher.com/micro-clearfix-hack/
@@ -89,6 +95,7 @@
 
 
 .button {
+	cursor: pointer;
 	border: 1px solid @common_color;
 	padding: 8px 20px;
 	display: inline-block;
@@ -111,19 +118,6 @@
 }
 
 
-
-
-.view {
-	-webkit-perspective: 1500px;
-}
-section {
-	.transition_all();
-	background: #fff;
-		.transform(translateZ(0) translateX(0) rotateY(0));
-	&.off {
-		.transform(translateZ(-800px) translateX(35%) rotateY(-30deg));
-	}
-}
 
 
 .class-item-cover {
@@ -351,138 +345,73 @@ section {
 
 
 
-
-
-.intro-contents {
-	.intro-contents-item {
-		margin-bottom: 64px;
+.view {
+	position: relative;
+	-webkit-perspective: 1500px;
+	height: 100%;
+	min-height: 100%;
+}
+section {
+	position: absolute;
+	background: #fff;
+	height: 100%;
+	min-height: 100%;
+	width: 100%;
+	display: none;
+	.transition_all();
+	.transform(translateZ(0) translateX(0) rotateY(0));
+	&.off {
+		.transform(translateZ(-800px) translateX(35%) rotateY(-30deg));
 	}
-	.slider {
+}
+
+.intro {
+}
+.intro-cover {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+
+	video {
+		position: absolute;
+		z-index: 0;
+		min-height: 100%;
+		min-width: 100%;
+		width: auto;
+		height: auto;
+		.user-select();
+	}
+	.headline {
+		position: absolute;
+		display: inline-block;
+		text-align: center;
 		width: 100%;
-		color: #fff;
-		// height: 500px;
-		.video {
-			@media (min-width: @screen_small) {
-				@width: (@container_small / 2) - @grid-gutter-width;
-				width: @container_small;
-				height: @container_small * 0.5625;
-			}
-			@media (min-width: @screen_big) {
-				@width: (@container_big / 2) - @grid-gutter-width;
-				width: @container_big;
-				height: @container_big * 0.5625;
-			}
-		}
-		.title {
-			padding-top: 12px;
-			letter-spacing: -0.04em;
-			font-size: 32px;
-			line-height: 1.4em;
-		}
-		.subtitle {
-			color: rgba(255, 255, 255, 0.7);
-			font-size: 16px;
-			line-height: 1.3em;
-		}
-		.author {
-			padding-top: 14px;
-			display: inline-block;
-			img {
-				display: inline-block;
-				height: 36px;
-				width: 36px;
-				.rounded-corners(18px);
-			}
-			span {
-				display: inline-block;
-				vertical-align: top;
-				font-size: 15px;
-				line-height: 1em;
-				padding-top: 8px;
-				color: rgba(255, 255, 255, 0.7);
-			}
-		}
-
-		ul {
-			height: 100%;
-			display: block;
-			li {
-				text-align: left;
-				display: block;
-				// height: 528px;
-				padding-top: 120px;
-				padding-bottom: 36px;
-				.cover-bg(cover);
-			}
-		}
-		.slider-button-left, .slider-button-right {
+		margin-top: 200px;
+		font-family: 'HelveticaNeue', 'Roboto', 'Arial', sans-serif;
+		h1 {
 			color: #fff;
-			color: rgba(255, 255, 255, 0.3);
-			position: absolute;
-			top: 264px;
-			font-size: 40px;
-			line-height: 0;
-			.transition_all();
-			&:hover {
-				color: rgba(255, 255, 255, 1);
+			font-size: 80px;
+			line-height: 1em;
+		}
+		.signup {
+			text-align: center;
+			margin-top: 40px;
+			.button {
+				font-size: 24px;
+				font-weight: bold;
 			}
-		}
-		.slider-button-left {
-			left: @grid-gutter-width/2;
-		}
-		.slider-button-right {
-			right: @grid-gutter-width/2;
 		}
 	}
-
-	.tutors-location, .tutors-popular {
-		h4 {
-			margin: 6px 0 24px 0;
-			color: #a7a9ac;
-			font-size: 16px;
-			font-weight: bold;
-			letter-spacing: 1px;
-		}
-		ul {
-			margin-left: -@grid-gutter-width;
-			li {
-				display: inline-block;
-				margin-left: @grid-gutter-width;
-				margin-bottom: @grid-gutter-width;
-				font-size: 14px;
-				@media (min-width: @screen_small) {
-					width: 305px;
-				}
-				@media (min-width: @screen_big) {
-					width: 266px;
-				}
-				img {
-					border: 1px solid rgba(0, 0, 0, 0.5);
-					display: block;
-					@media (min-width: @screen_small) {
-						width: 305px;
-					}
-					@media (min-width: @screen_big) {
-						width: 266px;
-					}
-				}
-				.title {
-					display: block;
-					font-weight: bold;
-					margin-top: 6px;
-					line-height: 1.5em;
-				}
-				.subtitle {
-					margin-top: 4px;
-					line-height: 1.5em;
-				}
-				.like {
-					display: inline-block;
-					margin-top: 4px;
-					font-size: 13px;
-					color: #98999b;
-				}
-			}
+}
+.intro-contents {
+	position: relative;
+	z-index: 1;
+	.article {
+		background: #eee;
+		width: 100%;
+		.function {
+			height: 120px;
 		}
 	}
 }
@@ -535,3 +464,11 @@ section {
 		}
 	}
 }
+
+
+
+
+
+
+
+
