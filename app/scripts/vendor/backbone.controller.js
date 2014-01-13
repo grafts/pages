@@ -41,21 +41,23 @@ define([
 
 			this.views[param.id] = view;
 			this.el.append(view.render());
+			this.el && this.el.show();
 
 			var loading = new Loading();
 			loading.render();
 			loading.set();
 			setTimeout(function(){
 				loading.done();
-$('body').animate({scrollTop:0}, '200', 'swing', function() { 
-   
-});
+				$('body').animate({scrollTop:0}, 100, function() { 
+
+				});
 				console.log(1);
 			}, 300);
 		},
 
 		stop : function(param){
 			console.log('stop video view');
+			this.el && this.el.hide();
 			for(var current in this.views){
 				this.views[current].unrender();
 			}

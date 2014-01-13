@@ -12,7 +12,7 @@ define([
 	var IntroController = Backbone.Controller.extend({
 		el          : $('section.intro'),
 		initialize  : function(){
-			this.view = new IntroView();
+			this.view = new IntroView({ el : 'section.intro' });
 		},
 		run : function(){
 			this.view.render();

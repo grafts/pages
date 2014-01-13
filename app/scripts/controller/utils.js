@@ -18,7 +18,7 @@ define([
 				});
 			}
 			this.logoStart = function(){
-				Backbone.pubsub.on('scroll', _.debounce(update, 200));
+				Backbone.pubsub.on('scroll', update, this);
 				
 				function update(){
 					var top = $(window).scrollTop();

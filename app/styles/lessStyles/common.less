@@ -32,9 +32,9 @@ input, textarea {
 blockquote {
 	border: 0;
 	page-break-inside: avoid;
-	padding: 4px 20px;
-	margin: 0 0 20px 0;
-	border-left: 5px solid #3a2252;
+	padding: 0 20px;
+	margin: 12px 0;
+	border-left: 5px solid #b1b3b6;
 	p {
 		font-size: 20px;
 		font-weight: normal;
@@ -57,7 +57,7 @@ body {
 	font-style: normal;
 	color: #58595b;
 	background: #58595b;
-	font-size: 18px;
+	font-size: 20px;
 	line-height: 1.4;
 	-webkit-font-smoothing: antialiased;
 	&.scrollable {
@@ -108,8 +108,8 @@ body {
 
 .header {
 	position: fixed;
-	top: 0;
-	left: 5%;
+	top: 16px;
+	left: 16px;
 	z-index: 100;
 	color: #fff;
 	a {
@@ -119,10 +119,10 @@ body {
 		width: 100%;
 	}
 	.logo {
-		background: #3a2252;
-		background: rgba(0, 0, 0, 0.36);
-		width: 170px;
-		height: 60px;
+		background: #231f20;
+		background: rgba(35, 31, 32, 0.8);
+		width: 70px;
+		height: 70px;
 		text-align: center;
 		padding: 0;
 		font-size: 54px;
@@ -133,6 +133,10 @@ body {
 		.transition_all();
 		&:hover {
 			opacity: 1;
+		}
+		img {
+			display: inline-block;
+			margin-top: 14px;
 		}
 	}
 	.hide {

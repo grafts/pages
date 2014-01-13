@@ -7,17 +7,17 @@ define([
 ], function ($, _, Backbone) {
 	'use strict';
 
-	var UserView = Backbone.View.extend({
-		el: 'section.intro',
+	var View = Backbone.View.extend({
 		events: {
-			'click a' : 'link'
+			'click a' : 'link',
+			'click div' : 'test'
 		},
 		initialize: function(id){
 		},
 		render: function(){
 			console.log('intro view render');
+			this.delegateEvents();
 			this.$el.show();
-			return false;
 		},
 		unrender: function(){
 			this.undelegateEvents();
@@ -27,8 +27,11 @@ define([
 			e.preventDefault();
 			e.stopPropagation();
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
+		},
+		test : function(){
+			console.log(arguments);
 		}
 	});
 
-	return UserView;
+	return View;
 });
