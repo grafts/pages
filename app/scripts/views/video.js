@@ -22,11 +22,11 @@ define([
 			this.$el.append(this.template(this.model.toJSON()));
 			this.playerPositionUpdate = _.debounce(function(){
 				if($(window).scrollTop() > 364){
-					self.$('.player').addClass('fix');
+					self.$('.contents').addClass('fix');
 				} else {
-					self.$('.player').removeClass('fix');
+					self.$('.contents').removeClass('fix');
 				}
-			}, 200);
+			}, 1);
 		},
 		render: function(){
 			var self = this;

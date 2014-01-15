@@ -115,11 +115,6 @@
 }
 
 
-blockquote {
-
-}
-
-
 
 .view {
 	position: relative;
@@ -133,7 +128,7 @@ section {
 	width: 100%;
 	display: none;
 	.transition_all();
-	.transform(translateZ(0) translateX(0) rotateY(0));
+	// .transform(translateZ(0) translateX(0) rotateY(0));
 	&.off {
 		.transform(translateZ(-800px) translateX(35%) rotateY(-30deg));
 	}
@@ -209,7 +204,12 @@ section {
 		top: 0;
 		left: 0;
 		width: 100%;
-		min-height: 740px;
+		@media (min-width: @screen_small) {
+			min-height: 640px;
+		}
+		@media (min-width: @screen_big) {
+			min-height: 740px;
+		}
 		.cover-bg();
 	}
 	.contents {
@@ -284,7 +284,11 @@ section {
 		.player {
 			position: absolute;
 			top: 380px;
+			width: 100%;
+			text-align: center;
+			z-index: 10;
 			iframe {
+				display: inline-block;
 				@media (min-width: @screen_small) {
 					width: 640px;
 					height: 360px;
@@ -294,11 +298,6 @@ section {
 					height: 480px;
 				}
 			}
-		}
-		.player.fix {
-			position: fixed;
-			top: 16px;
-			left: 0;
 		}
 
 		.timeline {
@@ -379,6 +378,12 @@ section {
 					h4 {
 						font-size: 28px;
 						margin-bottom: 8px;
+					}
+					@media (min-width: @screen_small) {
+						font-size: 15px;
+					}
+					@media (min-width: @screen_big) {
+						font-size: 20px;
 					}
 				}
 				.comments-link {
@@ -470,6 +475,22 @@ section {
 		}
 	}
 
+	.contents.fix {
+		.player {
+			position: fixed;
+			top: 0;
+			left: 0;
+			text-align: left;
+			padding: 16px 0 0 16px;
+		}
+		.container {
+			width: 100%;
+		}
+		.timeline {
+
+		}
+	}
+
 	.widget {
 		margin-bottom: 120px;
 		.widget-counter {
@@ -517,7 +538,52 @@ section {
 }
 
 
-
+.search {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin-left: 300px;
+	min-height: 100%;
+	background: #fff;
+	z-index: 1000;
+	.wrapper {
+		padding: 32px;
+		overflow: auto;
+	}
+	.summary {
+		text-align: right;
+	}
+	.collection {
+		.item {
+			.thumb {
+				width: 120px;
+			}
+			.title {
+				padding-left: 120px;
+			}
+			.subtitle {
+				padding-left: 120px;
+			}
+			.author {
+				padding-top: 14px;
+				display: inline-block;
+				img {
+					display: inline-block;
+					height: 36px;
+					width: 36px;
+					.rounded-corners(18px);
+				}
+				span {
+					display: inline-block;
+					vertical-align: top;
+					font-size: 15px;
+					line-height: 1em;
+					padding-top: 10px;
+				}
+			}
+		}
+	}
+}
 
 
 
