@@ -5,18 +5,17 @@ define([
 	'underscore',
 	'backbone',
 
+	'models/lesson',
+
 	'views/lesson'
-], function ($, _, Backbone, LessonView) {
+], function ($, _, Backbone, Lesson, LessonView) {
 	'use strict';
 
-	var LessonController = function(){
-		
-	};
+	var Controller = Backbone.Controller.extend({
+		el          : $('section.lesson'),
+		model       : Lesson,
+		readView    : LessonView
+	});
 
-
-	LessonController.prototype.run = function(){
-		console.log(arguments);
-	};
-
-	return LessonController;
+	return Controller;
 });

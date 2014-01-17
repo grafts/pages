@@ -9,20 +9,28 @@ define([
 ], function ($, _, Backbone, View) {
 	'use strict';
 
-	var IntroController = Backbone.Controller.extend({
+	var Controller = Backbone.Controller.extend({
 		el          : $('.search'),
 		initialize  : function(){
 			var self = this;
 			this.view = new View({ el : '.search' });
 		},
-		run : function(){
-			console.log(arguments);
+		run : function(data){
+
+			var q = data.id;
+
+			$('.header').addClass('on');
+			$('.header').find(':input').val(q);
+
 			this.view.render();
 		},
 		stop : function(){
 			this.view.unrender();
+		},
+		searchExcute : function(){
+			console.log(arguments);
 		}
 	});
 
-	return IntroController;
+	return Controller;
 });

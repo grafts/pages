@@ -10,7 +10,7 @@
     outline: none;
 }
 ::selection {
-	background: #58595b;
+	background: #464749;
 	color: white;
 }
 a {
@@ -55,16 +55,74 @@ body {
 	letter-spacing: -0.02em;
 	font-weight: 400;
 	font-style: normal;
-	color: #58595b;
-	background: #58595b;
+	color: #464749;
+	background: #464749;
 	font-size: 20px;
 	line-height: 1.4;
 	-webkit-font-smoothing: antialiased;
+}
+
+.button {
+	cursor: pointer;
+	border: 1px solid @common_color;
+	padding: 8px 20px;
+	display: inline-block;
+	font-size: 20px;
+	.transition_all();
+	.rounded-corners(24px);
+	&:hover {
+		color: #fff;
+		background: @hover_color;
+		border: 1px solid @hover_color;
+	}
+	.price {
+		font-weight: bold;
+		&:before {
+			font-weight: normal;
+			content: '-';
+			padding: 0 8px;
+		}
+	}
+}
+h1 {
+	color: #6d6f72;
+	font-size: 40px;
+	line-height: 1em;
+	font-family: 'HelveticaNeue', 'PT sans', 'NanumBarunGothic', sans-serif;
+}
+
+h4 {
+	color: #97999c;
+	font-size: 15px;
+	line-height: 1em;
+	margin: 6px 0 22px 0;
+	font-family: 'PT Sans', sans-serif;
+	font-weight: 400;
+	letter-spacing: 0.05em;
+}
+
+.view {
+	position: relative;
+	-webkit-perspective: 1500px;
+	height: 100%;
+	min-height: 100%;
 	&.scrollable {
 		overflow: hidden;
 	}
-}
 
+}
+section {
+	position: absolute;
+	background: #fff;
+	width: 100%;
+	min-height: 100%;
+	display: none;
+	.transition_all();
+	// .transform(translateZ(0) translateX(0) rotateY(0));
+	&.off {
+		.transform(translateZ(-800px) translateX(35%) rotateY(-30deg));
+	}
+}
 .browsehappy {
 	margin: 0;
 	padding: 20px;
@@ -112,6 +170,7 @@ body {
 	left: 16px;
 	z-index: 100;
 	color: #fff;
+	font-family: 'HelveticaNeue', 'PT sans', 'NanumBarunGothic', sans-serif;
 	a {
 		display: block;
 	}
@@ -129,7 +188,6 @@ body {
 		line-height: 58px;
 		color: #fff;
 		font-weight: bold; 
-		font-family: 'HelveticaNeue', 'Roboto', 'Arial', sans-serif;
 		.transition_all();
 		&:hover {
 			opacity: 1;
@@ -178,11 +236,14 @@ body {
 		display: none;
 		margin-top: 48px;
 		font-size: 20px;
-		input {
-			.rounded-corners(24px);
-			font-size: 18px;
-			width: 150px;
-			padding: 4px 12px;
+		form {
+			display: inline;
+			input {
+				.rounded-corners(24px);
+				font-size: 18px;
+				width: 200px;
+				padding: 4px 12px;
+			}
 		}
 		li {
 			opacity: 0;

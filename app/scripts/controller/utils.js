@@ -38,6 +38,12 @@ define([
 
 			this.scrollWatch();
 			this.logoStart();
+
+			Backbone.pubsub.on('gnb:toggle', toggleView, this);
+
+			function toggleView(){
+				$('.view').toggleClass('scrollable').children('section').toggleClass('off');
+			}
 		},
 		stop : function(){
 

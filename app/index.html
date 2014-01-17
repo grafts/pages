@@ -6,6 +6,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="fragment" content="!">
 		<title>Grafts</title>
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width">
@@ -23,7 +24,7 @@
 		<![endif]-->
 
 		<div class="header">
-			<!-- <div class="container"> -->
+			<div class="container">
 				<a class="logo" href="/">
 					<!-- Grafts -->
 					<img src="/images/logo.png" alt="logo">
@@ -32,7 +33,9 @@
 				<ul class="menu">
 					<li>
 						<i class="icon-search"></i>
-						<input type="text" placeholder="Search"/>
+						<form name="search" action="/search" method="GET">
+							<input type="text" placeholder="Search"/ name="q">
+						</form>
 					</li>
 					<li>
 						<a href="/">
@@ -84,92 +87,102 @@
 					</li>
 
 				</ul>
-			<!-- </div> -->
+			</div>
 		</div>
 
 		<div class="search">
 			<div class="wrapper">
-				<div class="summary">
-					<h1>SEARCH RESULTS</h1>
-					<div class="count">
-						<div>12 Videos</div>
-						<div>8 Classes</div>
-						<div>5 People</div>
-						<div>FOUND</div>
+				<div class="padding">
+					<div class="summary">
+						<h1>SEARCH RESULTS</h1>
+						<div class="count">
+							<div>12 VIDEOS</div>
+							<div>8 CLASSES</div>
+							<div>5 PEOPLE</div>
+							<div>FOUND</div>
+						</div>
 					</div>
-				</div>
-				<div class="result">
-					<div class="collection">
-						<hr/>
-						Videos
-						<ul>
-							<li class="item">
-								<div class="thumb">
-									<img src="/images/class_cover.jpg" alt="">
-								</div>
-								<div class="title">Video title Sample</div>
-								<div class="subtitle">Video Subtitle Sample Video Subtitle Sample Video Subtitle Sample</div>
-								<a class="author" href="/user/112">
-									<img class="avatar" src="/images/avatar.jpg" alt="avatar">
-									<span class="name">아만다 사이프리드</span>
-								</a>
-							</li>
-							<li class="item">
-								<div class="thumb">
-									<img src="/images/class_cover.jpg" alt="">
-								</div>
-								<div class="title">Video title Sample</div>
-								<div class="subtitle">Video Subtitle Sample Video Subtitle Sample Video Subtitle Sample</div>
-								<a class="author" href="/user/112">
-									<img class="avatar" src="/images/avatar.jpg" alt="avatar">
-									<span class="name">아만다 사이프리드</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-					<div class="collection">
-						<hr/>
-						Videos
-						<ul>
-							<li class="item">
-								<div class="thumb">
-									<img src="/images/class_cover.jpg" alt="">
-								</div>
-								<div class="title">Video title Sample</div>
-								<div class="subtitle">Video Subtitle Sample Video Subtitle Sample Video Subtitle Sample</div>
-								<a class="author" href="/user/112">
-									<img class="avatar" src="/images/avatar.jpg" alt="avatar">
-									<span class="name">아만다 사이프리드</span>
-								</a>
-							</li>
-							<li class="item">
-								<div class="thumb">
-									<img src="/images/class_cover.jpg" alt="">
-								</div>
-								<div class="title">Video title Sample</div>
-								<div class="subtitle">Video Subtitle Sample Video Subtitle Sample Video Subtitle Sample</div>
-								<a class="author" href="/user/112">
-									<img class="avatar" src="/images/avatar.jpg" alt="avatar">
-									<span class="name">아만다 사이프리드</span>
-								</a>
-							</li>
-						</ul>
-					</div>
+					<div class="result">
+						<div class="collection">
+							<hr/>
+							<h4>VIDEOS</h4>
+							<ul>
+								<li class="item">
+									<a href="/video/1">
+										<div class="thumb">
+											<img src="/images/class_cover.jpg" alt="">
+										</div>
+										<div class="title">Video title Sample</div>
+										<div class="subtitle">Video Subtitle Sample Video Subtitle Sample Video Subtitle Sample</div>
+										<a class="author" href="/user/112">
+											<img class="avatar" src="/images/avatar.jpg" alt="avatar">
+											<span class="name">아만다 사이프리드</span>
+										</a>
+									</a>
+								</li>
+								<li class="item">
+									<a href="/video/1">
+										<div class="thumb">
+											<img src="/images/class_cover.jpg" alt="">
+										</div>
+										<div class="title">Video title Sample</div>
+										<div class="subtitle">Video Subtitle Sample Video Subtitle Sample Video Subtitle Sample</div>
+										<a class="author" href="/user/112">
+											<img class="avatar" src="/images/avatar.jpg" alt="avatar">
+											<span class="name">아만다 사이프리드</span>
+										</a>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="collection">
+							<hr/>
+							<h4>CLASSES</h4>
+							<ul>
+								<li class="item">
+									<a href="/class/1">
+										<div class="thumb">
+											<img src="/images/class_cover.jpg" alt="">
+										</div>
+										<div class="title">Video title Sample</div>
+										<div class="subtitle">Video Subtitle Sample Video Subtitle Sample Video Subtitle Sample</div>
+										<a class="author" href="/user/112">
+											<img class="avatar" src="/images/avatar.jpg" alt="avatar">
+											<span class="name">아만다 사이프리드</span>
+										</a>
+									</a>
+								</li>
+								<li class="item">
+									<a href="/class/1">
+										<div class="thumb">
+											<img src="/images/class_cover.jpg" alt="">
+										</div>
+										<div class="title">Video title Sample</div>
+										<div class="subtitle">Video Subtitle Sample Video Subtitle Sample Video Subtitle Sample</div>
+										<a class="author" href="/user/112">
+											<img class="avatar" src="/images/avatar.jpg" alt="avatar">
+											<span class="name">아만다 사이프리드</span>
+										</a>
+									</a>
+								</li>
+							</ul>
+						</div>
 
-					<div class="collection user">
-						<hr/>
-						User
-						<ul>
-							<li class="item">
-								<a href="/user/1">
-									<div class="thumb">
-										<img src="/images/avatar_big.jpg" alt="">
-									</div>
-									<div class="title">Video title Sample</div>
-									<div class="subtitle">Video Subtitle Sample Video Subtitle Sample Video Subtitle Sample</div>
-								</a>
-							</li>
-						</ul>
+						<div class="collection user">
+							<hr/>
+							<h4>PEOPLE</h4>
+							<ul>
+								<li class="item">
+									<a href="/user/1">
+										<div class="thumb">
+											<img src="/images/avatar_big.jpg" alt="">
+										</div>
+										<div class="title">Video title Sample</div>
+										<div class="subtitle">Video Subtitle Sample Video Subtitle Sample Video Subtitle Sample</div>
+									</a>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -207,6 +220,7 @@
 			<section class="video"></section>
 			<section class="user"></section>
 			<section class="class"></section>
+			<section class="lesson"></section>
 		</div>
 
 

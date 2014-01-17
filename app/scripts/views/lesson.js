@@ -1,5 +1,3 @@
-/*global define*/
-
 define([
 	'jquery',
 	'underscore',
@@ -8,9 +6,33 @@ define([
 ], function ($, _, Backbone, JST) {
 	'use strict';
 
-	var LessonView = Backbone.View.extend({
-		template: JST['app/scripts/templates/lesson.hbs']
+	var View = Backbone.View.extend({
+		tagName: 'div',
+		template: JST['app/scripts/templates/lesson.hbs'],
+		events: {
+			'click a' : 'link'
+		},
+		initialize: function(id){
+			var self = this;
+			id && (this.id = id);
+			this.el.setAttribute('class', 'lesson-item');
+			this.$el.append(this.template(this.model.toJSON()));
+		},
+		render: function(){
+			console.log('lesson view render');
+			return this.$el;
+		},
+		unrender: function(){
+			this.undelegateEvents();
+			this.$el.hide();
+		},
+		link : function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
+		}
+
 	});
 
-	return LessonView;
+	return View;
 });

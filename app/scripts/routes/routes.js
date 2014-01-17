@@ -7,8 +7,9 @@ define([
 	'controller/video',
 	'controller/user',
 	'controller/class',
+	'controller/lesson',
 	'controller/search',
-], function ($, _, Backbone, UtilsController, IntroController, VideoController, UserController, ClassController, SearchController) {
+], function ($, _, Backbone, UtilsController, IntroController, VideoController, UserController, ClassController, LessonController, SearchController) {
 
 	var Router          = Backbone.Router.extend({
 		
@@ -26,6 +27,7 @@ define([
 			video  : new VideoController(),
 			user   : new UserController(),
 			class  : new ClassController(),
+			lesson : new LessonController(),
 			search : new SearchController()
 		},
 
