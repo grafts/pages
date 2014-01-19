@@ -8,7 +8,9 @@
 @screen_tall: 768px;
 @screen_short: 768px;
 @grid-gutter-width: 24px;
-@common_color: #464749;
+@title_color: #414042;
+@common_color: #636466;
+@line_color: #e7e7e7;
 @hover_color: #3498db;
 
 // mixins
@@ -31,6 +33,12 @@
 	-ms-user-select: none;
 	user-select: none;
 }
+.ellipsis(){
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	word-wrap:normal;
+}
+
 
 // Clearfix  
 // Source: http://nicolasgallagher.com/micro-clearfix-hack/
@@ -124,16 +132,15 @@
 		text-align: center;
 		width: 100%;
 		margin-top: 300px;
-		font-family: 'HelveticaNeue', 'PT sans', 'Arial', sans-serif;
-		h1 {
+		.copy {
 			.title {
 				color: #fff;
-				font-size: 64px;
+				font-size: 80px;
+				line-height: 1eml;
 			}
 			.subtitle {
 				color: #fff;
-				color: rgba(255, 255, 255, 0.7);
-				font-size: 32px;
+				font-size: 36px;
 			}
 		}
 		.signup {
@@ -287,107 +294,186 @@
 }
 
 
+.lesson-item.with-dark-cover {
+	.class-summary {
+		h4 {
+			color: #fff;
+		}
+		.name {
+			color: #fff;
+		}
+		.divder {
+			&:after {
+				border-top: 1px solid #fff;
+			}
+		}
+		.head-contents {
+			.title {
+				color: #fff;
+			}
+			.subtitle {
+				color: #fff;
+			}
+		}
+	}
+}
 
-.lesson {
+.lesson-item {
+	.cover {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 50%;
+		height: 100%;
+		.cover-bg();
+	}
 	.class-summary, .lesson-contents {
 		display: inline-block;
 		vertical-align: top;
-		margin: 100px 0 100px 0;
+		margin: 80px 0 80px 0;
+		padding: 0 @grid-gutter-width;
 		@media (min-width: @screen_small) {
-			width: (@container_small / 2) - @grid-gutter-width;
+			width: (@container_small / 2)-4;
 		}
 		@media (min-width: @screen_big) {
-			width: (@container_big / 2) - @grid-gutter-width;
+			width: (@container_big / 2)-4;
 		}
 		.container {
 			width: 100%;
 		}
 	}
 	.class-summary {
-		position: relative;
-		.box-shadow(0 0 12px 0 @common_color);
-		margin-right: @grid-gutter-width;
-		.cover {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			@media (min-width: @screen_small) {
-				min-height: 640px / 4;
+		text-align: center;
+		.author {
+			margin-top: 40px;
+			margin-bottom: 36px;
+			display: block;
+			.avatar {
+				display: inline-block;
+				height: 220px;
+				width: 220px;
+				margin-bottom: 10px;
+				border: 10px solid rgba(255, 255, 255, 0.5);
+				.rounded-corners(110px);
 			}
-			@media (min-width: @screen_big) {
-				min-height: 740px / 4;
+			h4 {
+				font-size: 18px;
+				margin: 0;
 			}
-			.cover-bg();
+			.name {
+				font-weight: bold;
+				font-size: 30px;
+				line-height: 1.2em;
+				margin: 0;
+			}
+		}
+		.divder {
+			text-align: center;
+			margin-bottom: 44px;
+			height: 1px;
+			&:after {
+				content: '';
+				width: 44px;
+				margin: 0;
+				display: inline-block;
+				border-top: 1px solid @common_color;
+				vertical-align: top;
+			}
 		}
 		.head-contents {
-			padding: 54px 24px 0 24px;
-			@media (min-width: @screen_small) {
-				min-height: 640px / 4;
-			}
-			@media (min-width: @screen_big) {
-				min-height: 740px / 4;
+			display: block;
+			h4 {
+				font-size: 18px;
+				margin: 0;
 			}
 			.title {
-				font-size: 24px;
-				color: #fff;
+				font-weight: bold;
+				font-size: 25px;
+				line-height: 1.2em;
+				margin: 0 0 16px 0;
 			}
 			.subtitle {
 				font-size: 18px;
-				color: #fff;
-				color: rgba(255, 255, 255, 0.7);
+				line-height: 1.2em;
+				margin: 0;
 			}
-			.author {
-				padding-top: 8px;
-				display: inline-block;
-				img {
-					display: inline-block;
-					height: 32px;
-					width: 32px;
-					.rounded-corners(16px);
-				}
-				span {
-					display: inline-block;
-					vertical-align: top;
-					font-size: 13px;
-					line-height: 1em;
-					padding-top: 8px;
-					color: rgba(255, 255, 255, 0.7);
-				}
-			}
-		}
-		.script {
-			font-size: 13px;
-			padding: 24px;
-			min-height: 300px;
-			max-height: 400px;
-			display:-webkit-box;
-			-webkit-line-clamp:3;
-			-webkit-box-orient:vertical;
-			overflow:hidden;
-			text-overflow:ellipsis;
+			
 		}
 	}
 	.lesson-contents {
-		.item {
-			margin-bottom: 56px;
-			.author {
-				padding-top: 14px;
-				display: inline-block;
-				img {
-					display: inline-block;
-					height: 92px;
-					width: 92px;
-					.rounded-corners(46px);
+		padding-right: 0;
+		h1 {
+			border-bottom: 8px solid @title_color;
+			padding-bottom: 6px;
+			margin-bottom: 8px;
+		}
+		.datas {
+			margin-bottom: 44px;
+			.item {
+				width: 100%;
+				margin-bottom: 4px;
+				font-size: 18px;
+				border-collapse: collapse;
+				tr {
+					td {
+						padding: 8px 0;
+						border: 0;
+						border-bottom: 1px solid @common_color;
+						&:last-child {
+							text-align: right;
+						}
+					}
 				}
-				span {
-					display: inline-block;
-					vertical-align: top;
-					font-size: 15px;
-					line-height: 1em;
-					padding-top: 10px;
+				.title {
+					text-align: left !important;
+				}
+				.name {
+					font-weight: bold;
+				}
+				border-bottom: 4px solid @common_color;
+				&:last-child {
+					border-bottom: 8px solid @title_color;
+				}
+			}
+		}
+		.agreement {
+			font-size: 24px;
+			padding-left: 20%;
+			text-align: right;
+			.read-this {
+				margin-bottom: 16px;
+				a {
+					color: #ff0000;
+					text-decoration: underline;
+				}
+			}
+			form {
+				.input {
+					margin-bottom: 16px;
+					font-size: 20px;
+				}
+				input.button {
+					font-size: 16px;
+					background: #fff;
+					&:hover {
+						background: @hover_color;
+					}
 				}
 			}
 		}
 	}
 }
+
+input[type="checkbox"] {
+    display:inline-block;
+    width:24px;
+    height:24px;
+    margin:0;
+    vertical-align:middle;
+    cursor:pointer;
+    border: 1px solid @common_color;
+    background: transparent;
+    .rounded-corners(10px);
+}
+
+

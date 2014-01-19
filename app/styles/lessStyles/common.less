@@ -55,13 +55,16 @@ body {
 	letter-spacing: -0.02em;
 	font-weight: 400;
 	font-style: normal;
-	color: #464749;
+	color: @common_color;
 	background: #464749;
 	font-size: 20px;
+	font-family: 'HelveticaNeue', 'PT sans', 'Arial', sans-serif;
 	line-height: 1.4;
 	-webkit-font-smoothing: antialiased;
 }
-
+strong {
+	font-weight: bold;
+}
 .button {
 	cursor: pointer;
 	border: 1px solid @common_color;
@@ -85,14 +88,14 @@ body {
 	}
 }
 h1 {
-	color: #6d6f72;
+	color: @title_color;
 	font-size: 40px;
 	line-height: 1em;
 	font-family: 'HelveticaNeue', 'PT sans', 'NanumBarunGothic', sans-serif;
 }
 
 h4 {
-	color: #97999c;
+	color: @title_color;
 	font-size: 15px;
 	line-height: 1em;
 	margin: 6px 0 22px 0;
