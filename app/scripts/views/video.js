@@ -40,23 +40,23 @@ define([
 					src : "/images/cover_background.png" 
 				},
 				contents : [
-						{
-							time : 40,
-							script : {
-								title : '룬 설정 방법',
-								text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'
-							},
-							comments : [
-								{
-									id : 1,
-									author : 1,
-									comment : 'wefwefwef'
-								}
-							]
+					{
+						time : 40,
+						script : {
+							title : '룬 설정 방법',
+							text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'
 						},
-						{time : 40, script : { title : '룬 설정 방법', text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'}, comments : [{id : 1, author : 1, comment : 'wefwefwef'} ] },
-						{time : 40, script : { title : '룬 설정 방법', text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'}, comments : [{id : 1, author : 1, comment : 'wefwefwef'} ] }, 
-						{time : 40, script : { title : '룬 설정 방법', text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'}, comments : [{id : 1, author : 1, comment : 'wefwefwef'} ] } 
+						comments : [
+							{
+								id : 1,
+								author : 1,
+								comment : 'wefwefwef'
+							}
+						]
+					},
+					{time : 40, script : { title : '룬 설정 방법', text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'}, comments : [{id : 1, author : 1, comment : 'wefwefwef'} ] },
+					{time : 40, script : { title : '룬 설정 방법', text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'}, comments : [{id : 1, author : 1, comment : 'wefwefwef'} ] }, 
+					{time : 40, script : { title : '룬 설정 방법', text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'}, comments : [{id : 1, author : 1, comment : 'wefwefwef'} ] } 
 				]
 			});
 			// for prototype, dummy data input
@@ -91,7 +91,8 @@ define([
 			pointers = pointers.map(function(val, n){
 				return {
 					time : val.time,
-					title : val.script.title
+					title : val.script.title,
+					position : val.time
 				}
 			});
 		},
