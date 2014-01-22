@@ -1,6 +1,6 @@
 {
-  "name": "code",
-  "version": "0.0.0",
+  "name": "grafts",
+  "version": "0.0.1",
   "dependencies": {
     "jquery": "~1.9.0",
     "underscore": "~1.4.3",
@@ -10,7 +10,9 @@
     "modernizr": "~2.6.2",
     "handlebars": "~1.0.0",
     "lodash": "~2.4.1",
-    "requirejs-plugins": "~1.0.2"
+    "requirejs-plugins": "~1.0.2",
+    "moment": "~2.5.0",
+    "es6-promise": "~0.1.1"
   },
   "devDependencies": {}
 }

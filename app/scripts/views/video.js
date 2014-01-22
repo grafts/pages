@@ -31,13 +31,22 @@ define([
 				}
 			}, 1);
 
-			this.model.on('change', this.setContents);
+			this.model.on('change:coverImage', this.addCover);
+			this.model.on('change:video', this.addPlayer);
+			this.model.on('change:contents', this.addContents);
 
-
+			//
+			//
 			// for prototype, dummy data input
 			this.model.set({
+				id : 1,
+				title : '리신공략, 각 라인별 일반적인 갱킹방법',
+				subtitle : '갱킹이 리신이며 리신이 갱킹이다!',
 				coverImage : { 
 					src : "/images/cover_background.png" 
+				},
+				video : {
+					id : '48auKg6es8E',
 				},
 				contents : [
 					{
@@ -60,11 +69,12 @@ define([
 				]
 			});
 			// for prototype, dummy data input
+			//
+			//
 
 		},
 		render: function(){
 			var self  = this;
-
 			Backbone.pubsub.on('scroll', self.playerPositionUpdate, this);
 			console.log('video view render');
 			return this.$el;
@@ -80,9 +90,64 @@ define([
 			e.stopPropagation();
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		},
-		setContents : function(){
-			this.addCover();
-			this.addPointers();
+		addPlayer : function(){
+			var self = this,
+				dom = self.$('.video'),
+				loadYoutubeLib;
+
+			var on = {
+				'unstarted' : function(){
+					console.log(arguments);
+				},
+				'ended' : function(){
+					console.log(arguments);
+				},
+				'playing' : function(){
+					console.log(arguments);
+				},
+				'paused' : function(){
+					console.log(arguments);
+				},
+				'buffering' : function(){
+					console.log(arguments);
+				},
+				'video cued' : function(){
+					console.log(arguments);
+				}
+			}
+
+			dom.empty();
+
+			loadYoutubeLib = new Promise(function(resolve, reject){
+				require(['youtube'], resolve);
+			});
+
+			loadYoutubeLib
+			.then(createPlayer)
+			.then(setEvent);
+
+			function createPlayer(YT){
+				var video = new YT.Player(dom[0], {
+					videoId : '48auKg6es8E'
+				});
+				return video;
+			}
+			function setEvent(video){
+				// unstarted (-1), ended (0), playing (1), paused (2), buffering (3), video cued (5).
+				var status = {
+						'-1' : 'unstarted',
+						'0'  : 'ended',
+						'1'  : 'playing',
+						'2'  : 'paused',
+						'3'  : 'buffering',
+						'5'  : 'video cued'
+					};
+
+				video.addEventListener('onStateChange', function(current, e){
+					console.log(arguments);
+					on[status[current.data]]();
+				});
+			}
 		},
 		addPointers : function(){
 			var self = this,
@@ -98,13 +163,19 @@ define([
 		},
 		addCover : function(){
 			var self = this,
-				cover = this.model.get('coverImage');
+				cover = this.model.get('coverImage'),
+				img;
 
 			if(!cover){
 				return;
 			}
 
-			var img = new Image();
+			this.$('.cover')
+			.removeClass('with-cover').removeClass('with-dark-cover').removeClass('on')
+			.removeAttr('background-image')
+			.empty();
+
+			img = new Image();
 			img.src = cover.src;
 			img.onload = _addCover;
 

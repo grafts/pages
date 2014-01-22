@@ -2,22 +2,38 @@
 'use strict';
 
 require.config({
-	shim: {
-		underscore: {
-			exports: '_'
+	shim : {
+		underscore : {
+			exports : '_'
 		},
-		backbone: {
-			deps: [
+		backbone : {
+			deps : [
 				'underscore',
 				'jquery'
 			],
-			exports: 'Backbone'
+			exports : 'Backbone'
 		},
-		handlebars: {
-			exports: 'Handlebars'
+		handlebars : {
+			exports : 'Handlebars'
 		},
-		editor: {
-			exports: 'editor'
+		editor : {
+			exports : 'editor'
+		},
+		font : {
+			deps : [
+				'propertyParser'
+			]
+		},
+		async : {
+			deps : [
+				'propertyParser'
+			]
+		},
+		youtube : {
+			deps : [
+				'youtubePreload'
+			],
+			exports : 'YT'
 		}
 	},
 	paths: {
@@ -28,21 +44,29 @@ require.config({
 		// replace underscore >> lodash
 		underscore         : '../bower_components/lodash/dist/lodash',
 		handlebars         : '../bower_components/handlebars/handlebars',
+		moment             : '../bower_components/moment/moment',
+		promise            : '../bower_components/es6-promise/promise',
 		
-		font               : '../bower_components/requirejs-plugins/src/font',
 		propertyParser     : '../bower_components/requirejs-plugins/src/propertyParser',
+		async              : '../bower_components/requirejs-plugins/src/async',
+		font               : '../bower_components/requirejs-plugins/src/font',
+		goog               : '../bower_components/requirejs-plugins/src/goog',
 		
 		loading            : '../scripts/views/loading',
 		
-		editor             : '../scripts/vendor/medium'
+		editor             : '../scripts/vendor/medium',
+		youtubePreload     : '../scripts/vendor/youtubePreload',
+		youtube            : 'https://s.ytimg.com/yts/jsbin/www-widgetapi-vfldKI4RW',
 	}
 });
 
 require([
-	'backbone', 'backboneController', 'router', 'propertyParser'
+	'backbone', 'backboneController', 'router', 'promise'
 ], function (Backbone, Controller, Router) {
 	var router,
 		pushState = !!window.history.pushState;
+
+	window.YTConfig = {};
 
 	router = new Router();
 	Backbone.history.start({ hashChange: !pushState, pushState : pushState });

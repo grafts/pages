@@ -176,12 +176,14 @@ module.exports = function (grunt) {
                     findNestedDependencies: true,
                     // stubModules: ['font', 'propertyParser'],
                     paths: {
-                        'templates': '../../.tmp/scripts/templates',
-                        'jquery': '../../app/bower_components/jquery/jquery',
-                        'underscore': '../../app/bower_components/lodash/dist/lodash',
-                        'backbone': '../../app/bower_components/backbone/backbone',
-                        'font'               : '../../app/bower_components/requirejs-plugins/src/font',
-                        'propertyParser'     : '../../app/bower_components/requirejs-plugins/src/propertyParser'
+                        'templates'      : '../../.tmp/scripts/templates',
+                        'jquery'         : '../../app/bower_components/jquery/jquery',
+                        'underscore'     : '../../app/bower_components/lodash/dist/lodash',
+                        'backbone'       : '../../app/bower_components/backbone/backbone',
+                        'propertyParser' : '../bower_components/requirejs-plugins/src/propertyParser',
+                        'async'          : '../bower_components/requirejs-plugins/src/async',
+                        'font'           : '../bower_components/requirejs-plugins/src/font',
+                        'goog'           : '../bower_components/requirejs-plugins/src/goog',
 
                     },
                     // TODO: Figure out how to make sourcemaps work with grunt-usemin
