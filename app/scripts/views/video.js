@@ -23,13 +23,6 @@ define([
 			id && (this.id = id);
 			this.el.setAttribute('class', 'video-item');
 			this.$el.append(this.template(this.model.toJSON()));
-			this.playerPositionUpdate = _.debounce(function(){
-				if($(window).scrollTop() > 364){
-					self.$('.contents').addClass('fix');
-				} else {
-					self.$('.contents').removeClass('fix');
-				}
-			}, 1);
 
 			this.model.on('change:coverImage', this.addCover);
 			this.model.on('change:video', this.addPlayer);
@@ -75,6 +68,15 @@ define([
 		},
 		render: function(){
 			var self  = this;
+
+			this.playerPositionUpdate = _.debounce(function(){
+				if($(window).scrollTop() > (this.$('.cover').height() + 80 - 16)){
+					self.$('.contents').addClass('fix');
+				} else {
+					self.$('.contents').removeClass('fix');
+				}
+			}, 1);
+
 			Backbone.pubsub.on('scroll', self.playerPositionUpdate, this);
 			console.log('video view render');
 			return this.$el;
