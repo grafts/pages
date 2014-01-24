@@ -1,13 +1,18 @@
 @import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700);
 
 // variables
-@container_mini: 560px;
-@container_small: 640px;
+@container_mini: 427px;
+@container_small: 560px;
+@container_medium: 640px;
 @container_big: 860px;
-@screen_small: (@container_small+80);
+@screen_mini: (@container_mini+32);
+@screen_small: (@container_small+64);
+@screen_medium: (@container_medium+120);
 @screen_big: (@container_big+160);
 @screen_tall: 769px;
-@screen_short: 768px;
+@screen_short: 640px;
+@video_mini_width: 427px;
+@video_mini_height: 240px;
 @video_small_width: 560px;
 @video_small_height: 315px;
 @video_medium_width: 640px;
@@ -581,7 +586,7 @@ input[type="checkbox"] {
 		}
 		.head-contents {
 			position: absolute;
-			bottom: 200px;
+			bottom: 120px;
 			width: 100%;
 			left: 0;
 			.title {
@@ -639,8 +644,8 @@ input[type="checkbox"] {
 			width: 100%;
 			iframe, img {
 				display: inline-block;
-				width: @video_medium_width;
-				height: @video_medium_height;
+				width: @video_small_width;
+				height: @video_small_height;
 			}
 			.timeline {
 				position: relative;
@@ -917,66 +922,6 @@ input[type="checkbox"] {
 			}
 		}
 	}
-	
-	@media (max-height: @screen_short) and (min-width: @screen_small) {	
-		.head {
-			min-width: 1232px;
-		}
-		.contents.fix {
-			.player {
-				position: fixed;
-			}
-		}
-		.contents, .contents.fix {
-			min-width: 1232px;
-			.player {
-				width: @video_small_width + 32;
-				height: 100%;
-				background: #2d2d2d;
-				top: 0;
-				padding: 120px 0;
-				left: auto;
-				padding-top: 16px;
-				background: #2d2d2d;
-				.box-shadow(0 0 0 0 #fff);
-				.transition(background-color 200ms linear);
-
-				.container {
-					width: @video_small_width;
-				}
-				iframe, img {
-					margin-top: 120px;
-					width: @video_small_width;
-					height: @video_small_height;
-				}
-			}
-			.timeline-contents {
-				padding-left: @video_small_width + 32;
-				padding-top: 20px;
-				.container {
-					width: @container_mini;
-					&:before {
-						content: '';
-						position: absolute;
-						top: -20px;
-						left: 22px;
-						height: 46px;
-						border-left: 1px solid #e7e7e7;
-					}
-				}
-				.item {
-					.clock {
-						right: auto;
-						left: 12px;
-					}
-					.anker {
-						display: none;
-						visibility: hidden;
-					}
-				}
-			}
-		}
-	}
 
 	.widget {
 		padding: 80px 0 120px 0;
@@ -1019,6 +964,120 @@ input[type="checkbox"] {
 					color: #808285;
 					margin-left: 4px;
 					cursor: pointer;
+				}
+			}
+		}
+	}
+}
+@media (max-height: @screen_short) and (min-width: @screen_small) {	
+	.video-item.with-cover, .video-item.with-dark-cover {
+		.head {
+			height: auto;
+			min-height: 480px;
+			.cover.on {
+				&:after {
+					content: '';
+				}
+			}
+			.head-contents {
+				width: 100%;
+				bottom: 32px;
+				.title {
+					width: 100%;
+					overflow: hidden;
+					font-size: 30px;
+					.ellipsis();
+				}
+				.subtitle {
+					width: 100%;
+					overflow: hidden;
+					font-size: 18px;
+					.ellipsis();
+				}
+			}
+		}
+	}
+	.video-item {
+		.head {
+			margin-left: @video_mini_width + @grid-gutter-width;
+			.head-contents {
+				.container{
+					width: @container_mini;
+				}
+			}
+		}
+		.contents, .contents.fix {
+			width: 100%;
+			.player {
+				position: fixed;
+				width: @video_mini_width + @grid-gutter-width;
+				height: 100%;
+				background: #2d2d2d;
+				top: 0;
+				padding: 120px 0;
+				left: 0;
+				padding-top: 16px;
+				background: #2d2d2d;
+				.box-shadow(0 0 0 0 #fff);
+				.transition(background-color 200ms linear);
+
+				.container {
+					width: @video_mini_width;
+				}
+				iframe, img {
+					margin-top: 120px;
+					width: @video_mini_width;
+					height: @video_mini_height;
+				}
+			}
+			.timeline-contents {
+				padding-left: @video_mini_width + @grid-gutter-width;
+				padding-top: 20px;
+				.container {
+					width: @container_mini;
+					&:before {
+						top: -20px;
+						left: 0;
+					}
+				}
+				.item {
+					.script {
+						margin-left: 0;
+					}
+					.clock {
+						right: auto;
+						left: -12px;
+					}
+					.anker {
+						display: none;
+						visibility: hidden;
+					}
+				}
+			}
+		}
+		.widget {
+			margin-left: @video_mini_width + @grid-gutter-width;
+			.container {
+				width: @container_mini;
+			}
+			.widget-counter {
+				a {
+					min-width: 120px;
+					margin-right: 12px;   
+				}
+				i {
+					font-size: 16px;
+					width: 32px;
+					height: 32px;
+					padding: 6px 0 0 0;
+					.rounded-corners(16px);
+				}
+			}
+			.widget-share {
+				ul {
+					li {
+						font-size: 24px;
+					}
 				}
 			}
 		}
