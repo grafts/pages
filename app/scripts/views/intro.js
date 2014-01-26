@@ -9,8 +9,7 @@ define([
 
 	var View = Backbone.View.extend({
 		events: {
-			'click a' : 'link',
-			'click div' : 'test'
+			'click a' : 'link'
 		},
 		initialize: function(id){
 		},
@@ -27,9 +26,6 @@ define([
 			e.preventDefault();
 			e.stopPropagation();
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
-		},
-		test : function(){
-			console.log(arguments);
 		}
 	});
 

@@ -13,7 +13,9 @@ define([
 		tagName: 'div',
 		template: JST['app/scripts/templates/video.hbs'],
 		events: {
-			'click a' : 'link'
+			'click a' : 'link',
+			'click .comments-link' : 'commentToggle',
+			'click .reply' : 'replyFormToggle'
 		},
 		initialize: function(id){
 			var self = this;
@@ -67,23 +69,67 @@ define([
 
 		},
 		render: function(){
-			var self  = this;
+			var self  = this,
+				startScroll = true,
+				scrollStoped = true,
+				windowHeight = $(window).height(),
+				_excuteAutoScroll = function(currentPosition){
+					if(!scrollStoped){
+						return;
+					}
+					if(startScroll && currentPosition > (windowHeight*0.2)){
+						scrollStoped = false;
+						$('html').animate({
+							scrollTop : windowHeight
+						},
+						200,
+						function(){
+							startScroll = false;
+							scrollStoped = true;
+						});
+					}
+					else if(!startScroll && currentPosition < (windowHeight*0.8)){
+						scrollStoped = false;
+						$('html').animate({
+							scrollTop : 0
+						},
+						200,
+						function(){
+							startScroll = true;
+							scrollStoped = true;
+						});
+					}
+				},
+				_setPlayer = function(currentPosition){
+					// scroll x 
+					if(currentPosition >= (self.playerOffset-16)){
+						self.$('.contents').addClass('fix');
+						self.$('.head').addClass('off');
+					} else {
+						self.$('.contents').removeClass('fix');
+						self.$('.head').removeClass('off');
+					}
 
-			this.playerPositionUpdate = _.debounce(function(){
-				if($(window).scrollTop() > (this.$('.cover').height() + 80 - 16)){
-					self.$('.contents').addClass('fix');
-				} else {
-					self.$('.contents').removeClass('fix');
-				}
+					//scroll y
+					if(window.pageXOffset>=0){
+						$('.player').css('margin-left', -window.pageXOffset + 'px');
+					}
+				};
+
+			this.scrollEventBind = _.debounce(function(){
+				var currentPosition = $(window).scrollTop();
+
+				_excuteAutoScroll(currentPosition);
+				_setPlayer(currentPosition);
+
 			}, 1);
 
-			Backbone.pubsub.on('scroll', self.playerPositionUpdate, this);
 			console.log('video view render');
 			return this.$el;
 		},
 		unrender: function(){
 			var self = this;
-			Backbone.pubsub.off('scroll', self.playerPositionUpdate, this);
+			Backbone.pubsub.off('scroll', self.scrollEventBind, this);
 			this.undelegateEvents();
 			this.$el.hide();
 		},
@@ -91,6 +137,13 @@ define([
 			e.preventDefault();
 			e.stopPropagation();
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
+		},
+		commentToggle : function(e){
+			$(e.currentTarget.nextElementSibling).toggle();
+			this.$('.contents').toggleClass('comments-on');
+		},
+		replyFormToggle : function(e){
+			$(e.currentTarget.nextElementSibling).toggle();
 		},
 		addPlayer : function(){
 			var self = this,
@@ -126,7 +179,11 @@ define([
 
 			loadYoutubeLib
 			.then(createPlayer)
-			.then(setEvent);
+			.then(setEvent)
+			.then(function(){
+				self.playerOffset = self.$('.player').offset().top;
+				Backbone.pubsub.on('scroll', self.scrollEventBind, self);
+			});
 
 			function createPlayer(YT){
 				var video = new YT.Player(dom[0], {

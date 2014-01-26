@@ -51,7 +51,6 @@ define([
 				$('body').animate({scrollTop:0}, 100, function() { 
 
 				});
-				console.log(1);
 			}, 300);
 		},
 
