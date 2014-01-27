@@ -23,6 +23,7 @@
 @grid-gutter-width: 24px;
 @title_color: #414042;
 @common_color: #636466;
+@light_font_color: #a7a9ac;
 @background_color: #464749;
 @line_color: #e7e7e7;
 @hover_color: #3498db;
@@ -696,9 +697,10 @@ input[type="checkbox"] {
 					background: #fff;
 					.rounded-corners(6px);
 					.progress {
-						width: 30%;
+						width: 0;
 						height: 100%;
 						background: #ed1207;
+						.transition(width 500ms linear);
 						.rounded-corners(6px);
 					}
 				}
@@ -750,7 +752,7 @@ input[type="checkbox"] {
 									padding: 4px;
 									color: #fff;
 									background: #a7a9ac;
-									width: 150px;
+									min-width: 80px;
 									.ellipsis();
 									.rounded-corners();
 									border-top-left-radius: 0;
@@ -763,7 +765,7 @@ input[type="checkbox"] {
 					position: absolute;
 					top: 44px;
 					left: 10%;
-					width: 120px;
+					min-width: 80px;
 					padding: 4px;
 					color: #fff;
 					text-align: left;
@@ -875,14 +877,15 @@ input[type="checkbox"] {
 					top: 3px;
 					right: -4px;
 					height: 22px;
+					min-width: 20px;
 					margin-right: -32px;
 					padding: 4px;
 					background: #b1b3b6;
 					font-size: 12px;
 					line-height: 1em;
 					color: #fff;
-					.rounded-corners(4px);
 					cursor: pointer;
+					.rounded-corners(4px);
 					&:after {
 						content: '';
 						position: absolute;
@@ -940,6 +943,11 @@ input[type="checkbox"] {
 						border-bottom: 1px solid @line_color;
 						.note {
 							padding-left: 40px;
+						}
+						.date {
+							padding-left: 40px;
+							font-size: 12px;
+							color: @light_font_color;
 						}
 					}
 					.reply {
@@ -1060,7 +1068,9 @@ input[type="checkbox"] {
 			}
 		}
 		.contents {
-
+			.container {
+				width: @container_small;
+			}
 			.timeline-contents {
 				.item {
 					.script {
@@ -1111,30 +1121,19 @@ input[type="checkbox"] {
 					width: 100%;
 					overflow: hidden;
 					font-size: 30px;
-					// .ellipsis();
 				}
 				.subtitle {
 					width: 100%;
 					overflow: hidden;
 					font-size: 18px;
-					// .ellipsis();
 				}
 			}
 		}
 	}
 	.video-item {
-		.head {
-			.head-contents {
-				.container{
-					// width: @container_mini;
-				}
-			}
-		}
 		.contents.comments-on {
 			.player {
 				.transform(translateX(-300px));
-			}
-			.timeline-contents {
 			}
 		}
 
@@ -1150,7 +1149,6 @@ input[type="checkbox"] {
 				padding-top: 16px;
 				.box-shadow(0 0 0 0 #fff);
 				.transition(background-color 200ms linear);
-
 				.container {
 					width: @video_mini_width;
 				}
@@ -1182,17 +1180,17 @@ input[type="checkbox"] {
 					}
 					.anker {
 						left: -14px;
-						// display: none;
-						// visibility: hidden;
 					}
 				}
 			}
 			.widget {
-				padding-left: @video_mini_width + @grid-gutter-width;
+				padding-left: @video_mini_width + @grid-gutter-width + @grid-gutter-width;
 				.container {
+					display: inline-block;
 					width: @container_mini;
 				}
 				.widget-counter {
+					font-size: 16px;
 					a {
 						min-width: 120px;
 						margin-right: 12px;   
@@ -1232,79 +1230,5 @@ input[type="checkbox"] {
 		min-width: @screen_medium;
 	}
 }
-
-// .video-item {
-// 	width: 100%;
-// 	@media (max-height: @screen_short) {
-// 		.cover {
-// 			left: @container_mini;
-// 			top: 0;
-// 			width: @container_mini;
-// 			height: 400px;
-// 		}
-// 		.head-contents {
-// 			.title {
-// 				font-size: 30px;
-// 				.ellipsis();
-// 			}
-// 			.subtitle {
-// 				font-size: 18px;
-// 				.ellipsis();
-// 			}
-// 			.author {
-// 				padding-top: 14px;
-// 				display: inline-block;
-// 				img {
-// 					display: inline-block;
-// 					height: 36px;
-// 					width: 36px;
-// 					.rounded-corners(18px);
-// 				}
-// 				span {
-// 					display: inline-block;
-// 					vertical-align: top;
-// 					font-size: 15px;
-// 					line-height: 1em;
-// 					padding-top: 10px;
-// 				}
-// 			}
-// 		}
-// 		.contents, .contents.fix {
-// 			width: @container_mini;
-// 			.container {
-// 				width: 100%;
-// 			}
-// 			.player {
-// 				position: absolute;
-// 				top: 0;
-// 				left: 0;
-// 				width: @video_small_width + 32;
-// 				height: 100%;
-// 				background: #2d2d2d;
-// 				.player-wrapper {
-// 					position: absolute;
-// 					top: 0;
-// 					left: 0;
-// 					width: @video_small_width + 32;
-// 					iframe {
-// 						margin-top: 100px;
-// 						width: @video_small_width;
-// 					}
-// 					.timeline {
-// 						width: @video_small_width;
-// 						color : #a7a9ac;
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-// 	@media (max-height: @screen_short) and (min-width: @screen_small) {
-// 	}
-// 	@media (min-height: @screen_tall) {
-		
-// 	}
-// }
-
-
 
 

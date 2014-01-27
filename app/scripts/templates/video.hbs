@@ -9,8 +9,8 @@
 
 	<div class="head-contents sans-serif">
 		<div class="container">
-			<h1 class="title">리신공략, 각 라인별 일반적인 갱킹방법</h1>
-			<p class="subtitle">갱킹이 리신이며 리신이 갱킹이다!</p>
+			<h1 class="title">{{title}}</h1>
+			<p class="subtitle">{{subtitle}}</p>
 			<a class="author" href="/user/112">
 				<img class="avatar" src="/images/avatar.jpg" alt="avatar">
 				<span class="name">아만다 사이프리드</span>
@@ -24,93 +24,40 @@
 	<div class="player">
 		<div class="container">
 			<div class="video"></div>
-
-			<div class="timeline">
-				<div class="track">
-					<div class="progress"></div>
-				</div>
-				<ul class="pointers">
-					<li class="item" data-time="04:30" style="left: 10%;">
-						<div class="time">04:30</div>
-						<div class="pointer" data-title="룬 설정 방법"></div>
-					</li>
-					<li class="item" data-time="05:30" style="left: 20%;">
-						<div class="time">05:30</div>
-						<div class="pointer" data-title="룬 설정 방법"></div>
-					</li>
-					<li class="item" data-time="12:30" style="left: 50%;">
-						<div class="time">12:30</div>
-						<div class="pointer" data-title="룬 설정 방법"></div>
-					</li>
-					<li class="item" data-time="16:30" style="left: 80%;">
-						<div class="time">16:30</div>
-						<div class="pointer" data-title="룬 설정 방법"></div>
-					</li>
-				</ul>
-			</div>
 		</div>
 	</div>
 
 	<div class="timeline-contents">
 		<div class="container">
 			<ul>
-				<li class="item">
-					<div class="clock">14:11</div>
+			{{#each contents}}
+				<li class="item" data-seq="{{@index}}">
+					<div class="clock">{{this.hhmmss}}</div>
 					<button class="anker"></button>
 					<div class="script serif">
-						<h3>룬 설정 방법</h3>
-						<p>게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인쪽으로 올라가도 돼지만 상대 미드라이너가 와드를 박았을 경우 센스있는 정글러에게 역갱을 당할 수 있습니다. 게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다.</p>
-						<blockquote>이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인쪽으로 올라가도 돼지만 상대 미드라이너가 와드를 박았을 경우 센스있는 정글러에게 역갱을 당할 수 있습니다.</blockquote>
-						<p>일반적으로 퍼플 진영 탑라이너들은 대부분 바론에서 올라오는 쪽에만 하나박고 삼거리쪽엔 박지 않습니다. 아깝거든요!! 이것을 노려서 바론뒤로 올라가는 갱킹이 의외로 성공률이 높습니다. 미드도 와드가 박혔고 탑골목도 와드박혔기때문에 약간은 방심하며 공격적으로 딜교환을 하게 되는 것이죠.</p>
+						<h3>{{this.script.title}}</h3>
+						{{#each this.script.texts}}
+							{{#if this.tag}}
+								<{{this.tag}} {{#if this.src}}src="{{this.src}}"{{/if}} >{{this.text}}</{{this.tag}}>
+							{{else}}
+								<p>{{this.text}}</p>
+							{{/if}}
+						{{/each}}
 					</div>
-					<button class="comments-link">11</button>
+					<button class="comments-link">{{this.comments.length}}</button>
 					<div class="comments">
 						<hr/>
 						<ul>
-							<li class="comment">
-								<a class="author" href="/user/112">
-									<img class="avatar" src="/images/avatar.jpg" alt="avatar">
-									<span class="name">아만다 사이프리드</span>
-								</a>
-								<p class="note">Words of wisdom indeed. But i do enjoy my midnight break and stroll to the 7-11!</p>
-							</li>
-						</ul>
-						<button class="reply button">
-							<i class="icon-plus"></i>
-							<span>Reply</span>
-						</button>
-						<div class="reply-form">
-							<a class="author">
-								<img class="avatar" src="/images/avatar.jpg" alt="avatar">
-								<span class="name">아만다 사이프리드</span>
-							</a>
-							<div class="input" data-placeholder="Leave a comment"></div>
-							<a class="button save">Save</a>
-							<a class="button cancel">Cancel</a>
-						</div>
-					</div>
-				</li>
-
-				<li class="item">
-					<div class="clock">14:11</div>
-					<button class="anker"></button>
-					<div class="script serif">
-						<h3>룬 설정 방법</h3>
-						<p>게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인쪽으로 올라가도 돼지만 상대 미드라이너가 와드를 박았을 경우 센스있는 정글러에게 역갱을 당할 수 있습니다. 게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다.</p>
-						<blockquote>이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인쪽으로 올라가도 돼지만 상대 미드라이너가 와드를 박았을 경우 센스있는 정글러에게 역갱을 당할 수 있습니다.</blockquote>
-						<p>일반적으로 퍼플 진영 탑라이너들은 대부분 바론에서 올라오는 쪽에만 하나박고 삼거리쪽엔 박지 않습니다. 아깝거든요!! 이것을 노려서 바론뒤로 올라가는 갱킹이 의외로 성공률이 높습니다. 미드도 와드가 박혔고 탑골목도 와드박혔기때문에 약간은 방심하며 공격적으로 딜교환을 하게 되는 것이죠.</p>
-					</div>
-					<button class="comments-link">11</button>
-					<div class="comments">
-						<hr/>
-						<ul>
-							<li class="comment">
-								<a class="author" href="/user/112">
-									<img class="avatar" src="/images/avatar.jpg" alt="avatar">
-									<span class="name">아만다 사이프리드</span>
-								</a>
-								<p class="note">Words of wisdom indeed. But i do enjoy my midnight break and stroll to the 7-11!</p>
-							</li>
+							{{#each this.comments}}
+								<li class="comment">
+									<a class="author" href="/user/{{this.author.id}}">
+										<img class="avatar" src="{{this.author.avatar}}" alt="avatar">
+										<span class="name">{{this.author.name}}</span>
+									</a>
+									<p class="note">{{this.comment}}</p>
+									<div class="date">{{this.date}}</div>
+								</li>
+							{{/each}}
 						</ul>
 						<button class="reply button">
 							<i class="icon-plus"></i>
@@ -121,6 +68,7 @@
 						</div>
 					</div>
 				</li>
+			{{/each}}
 			</ul>
 		</div>
 	</div>

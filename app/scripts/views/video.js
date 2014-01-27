@@ -4,8 +4,10 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'templates'
-], function ($, _, Backbone, JST) {
+	'templates',
+
+	'views/components/video_player_timeline'
+], function ($, _, Backbone, JST, TimelineView) {
 	'use strict';
 
 	var VideoView = Backbone.View.extend({
@@ -15,65 +17,41 @@ define([
 		events: {
 			'click a' : 'link',
 			'click .comments-link' : 'commentToggle',
-			'click .reply' : 'replyFormToggle'
+			'click .reply' : 'replyFormToggle',
+			'click .anker' : 'gotoClickedScript',
+			'click .clock' : 'gotoClickedScript'
 		},
 		initialize: function(id){
-			var self = this;
+			var self = this,
+				data = this.model.toJSON();
+
 
 			_.bindAll(this);
 
 			id && (this.id = id);
 			this.el.setAttribute('class', 'video-item');
-			this.$el.append(this.template(this.model.toJSON()));
+
+			data.contents = this.model.getContents();
+			this.$el.append(this.template(data));
 
 			this.model.on('change:coverImage', this.addCover);
 			this.model.on('change:video', this.addPlayer);
 			this.model.on('change:contents', this.addContents);
 
-			//
-			//
-			// for prototype, dummy data input
-			this.model.set({
-				id : 1,
-				title : '리신공략, 각 라인별 일반적인 갱킹방법',
-				subtitle : '갱킹이 리신이며 리신이 갱킹이다!',
-				coverImage : { 
-					src : "/images/cover_background.png" 
-				},
-				video : {
-					id : '48auKg6es8E',
-				},
-				contents : [
-					{
-						time : 40,
-						script : {
-							title : '룬 설정 방법',
-							text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'
-						},
-						comments : [
-							{
-								id : 1,
-								author : 1,
-								comment : 'wefwefwef'
-							}
-						]
-					},
-					{time : 40, script : { title : '룬 설정 방법', text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'}, comments : [{id : 1, author : 1, comment : 'wefwefwef'} ] },
-					{time : 40, script : { title : '룬 설정 방법', text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'}, comments : [{id : 1, author : 1, comment : 'wefwefwef'} ] }, 
-					{time : 40, script : { title : '룬 설정 방법', text  : '게임이 중반쯤되고 미드 라이너도 와드를 박고 탑라이너도 올라오는 부시에 와드를 박으면 갱킹이 어려워집니다. 이럴때 시도해 볼만한 갱킹은 바론뒤쪽에 와드를 박은후 를 타고 들어가 삼거리를 통해 가는 것입니다. 물론 미드라인'}, comments : [{id : 1, author : 1, comment : 'wefwefwef'} ] } 
-				]
-			});
-			// for prototype, dummy data input
-			//
-			//
+			this.addCover();
+			this.addPlayer();
+			this.addContents();
+
+			this.portraitLayout = true;
 
 		},
 		render: function(){
 			var self  = this,
 				startScroll = true,
 				scrollStoped = true,
-				windowHeight = $(window).height(),
+				layoutChangeHeight = 640,
 				_excuteAutoScroll = function(currentPosition){
+					var windowHeight = $(window).height();
 					if(!scrollStoped){
 						return;
 					}
@@ -101,8 +79,18 @@ define([
 					}
 				},
 				_setPlayer = function(currentPosition){
+					var windowHeight = $(window).height(),
+						maxHeight = 860,
+						playerOffset;
+
+					if(windowHeight > maxHeight){
+						playerOffset = maxHeight;
+					} else {
+						playerOffset = windowHeight;
+					}
+
 					// scroll x 
-					if(currentPosition >= (self.playerOffset-16)){
+					if(currentPosition >= (playerOffset+64)){
 						self.$('.contents').addClass('fix');
 						self.$('.head').addClass('off');
 					} else {
@@ -111,10 +99,20 @@ define([
 					}
 
 					//scroll y
-					if(window.pageXOffset>=0){
+					if(windowHeight > 640 && window.pageXOffset >= 0){
 						$('.player').css('margin-left', -window.pageXOffset + 'px');
 					}
-				};
+				},
+				_setLayout = _.debounce(function(){
+					if($(window).height() > layoutChangeHeight){
+						self.portraitLayout = true;
+						self.$el.removeClass('landscape');
+					} else {
+						self.portraitLayout = false;
+						self.$el.addClass('landscape');
+					}
+				}, 100);
+			
 
 			this.scrollEventBind = _.debounce(function(){
 				var currentPosition = $(window).scrollTop();
@@ -124,12 +122,15 @@ define([
 
 			}, 1);
 
+			Backbone.pubsub.on('resize', _setLayout, this);
+
 			console.log('video view render');
+
 			return this.$el;
 		},
 		unrender: function(){
 			var self = this;
-			Backbone.pubsub.off('scroll', self.scrollEventBind, this);
+			Backbone.pubsub.off(null, null, this);
 			this.undelegateEvents();
 			this.$el.hide();
 		},
@@ -145,28 +146,53 @@ define([
 		replyFormToggle : function(e){
 			$(e.currentTarget.nextElementSibling).toggle();
 		},
+		gotoClickedScript : function(e){
+			var current = $(e.currentTarget.parentNode).data().seq;
+			Backbone.pubsub.trigger('videoTimelineLink:' + this.model.id, current);
+		},
+		scrollToArticle : function(scriptSeq){
+			var item = this.$('.timeline-contents').find('.item:eq('+scriptSeq+')'),
+				playerHeight = 0;
+
+			if(!this.$el.hasClass('landscape')){
+				playerHeight = self.$('.player').height();
+			}
+
+			$('html').animate({
+				scrollTop : item.offset().top - playerHeight - 32
+			},
+			200,
+			function(){
+				
+			});
+		},
 		addPlayer : function(){
 			var self = this,
 				dom = self.$('.video'),
-				loadYoutubeLib;
+				loadYoutubeLib,
+				interval = function(video){
+					Backbone.pubsub.trigger('videoSync:' + self.model.id, video.getCurrentTime());
+				},
+				progressSync;
 
 			var on = {
-				'unstarted' : function(){
+				'unstarted' : function(video){
 					console.log(arguments);
 				},
-				'ended' : function(){
+				'ended' : function(video){
+					clearInterval(progressSync);
+				},
+				'playing' : function(video){
+					progressSync = setInterval(interval, 500, video);
+				},
+				'paused' : function(video){
+					clearInterval(progressSync);
 					console.log(arguments);
 				},
-				'playing' : function(){
+				'buffering' : function(video){
 					console.log(arguments);
 				},
-				'paused' : function(){
-					console.log(arguments);
-				},
-				'buffering' : function(){
-					console.log(arguments);
-				},
-				'video cued' : function(){
+				'video cued' : function(video){
 					console.log(arguments);
 				}
 			}
@@ -179,9 +205,9 @@ define([
 
 			loadYoutubeLib
 			.then(createPlayer)
-			.then(setEvent)
+			.then(setStateEvent)
+			.then(setPlayEvent)
 			.then(function(){
-				self.playerOffset = self.$('.player').offset().top;
 				Backbone.pubsub.on('scroll', self.scrollEventBind, self);
 			});
 
@@ -191,9 +217,9 @@ define([
 				});
 				return video;
 			}
-			function setEvent(video){
+			function setStateEvent(video){
 				// unstarted (-1), ended (0), playing (1), paused (2), buffering (3), video cued (5).
-				var status = {
+				var states = {
 						'-1' : 'unstarted',
 						'0'  : 'ended',
 						'1'  : 'playing',
@@ -203,22 +229,60 @@ define([
 					};
 
 				video.addEventListener('onStateChange', function(current, e){
-					console.log(arguments);
-					on[status[current.data]]();
+					on[states[current.data]](video);
 				});
+				return video;
+			}
+			function setPlayEvent(video){
+				var currentScriptSeq = -1,
+					_findArtcle = function(scriptSeq, video){
+						var script = this.model.get('contents')[scriptSeq],
+							time   = script.time;
+
+						video.seekTo(time);
+					};
+
+				Backbone.pubsub.on('videoTimelineLink:' + self.model.id, function(scriptSeq){
+					_findArtcle.call(this, scriptSeq, video);
+				}, self);
+					
+				Backbone.pubsub.on('videoSync:' + self.model.id, function(currentTime){
+					var contents = self.model.get('contents'),
+						scriptSeq = _.findIndex(contents, function(content) {
+							return content.time > currentTime;
+						});
+
+					if(scriptSeq < 0){
+						scriptSeq = contents.length - 1;
+					} else if(scriptSeq != 0){
+						scriptSeq -= 1;
+					}
+
+					if(currentScriptSeq != scriptSeq){
+						self.scrollToArticle(scriptSeq);
+						currentScriptSeq = scriptSeq;
+					}
+				}, self);
+
+				return video;
 			}
 		},
-		addPointers : function(){
-			var self = this,
-				pointers = this.model.get('contents');
+		addContents : function(){
+			var self = this;
+			
+			if(this.timeline){
+				this.timeline.unrender();
+				this.$('.timeline').remove();
+				delete this.timeline;
+			}
 
-			pointers = pointers.map(function(val, n){
-				return {
-					time : val.time,
-					title : val.script.title,
-					position : val.time
-				}
+			this.timeline = new TimelineView({
+				id : self.model.get('id'),
+				contents : self.model.getContents(),
+				duration : self.model.get('duration')
 			});
+
+			this.$('.video').after(this.timeline.render());
 		},
 		addCover : function(){
 			var self = this,

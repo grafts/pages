@@ -1,0 +1,13 @@
+<div class="track">
+	<div class="progress"></div>
+</div>
+<ul class="pointers">
+	{{#if pointers}}
+		{{#each pointers}}
+			<li class="item" data-time="{{this.hhmmss}}" style="left: {{this.position}}%;">
+				<div class="time">{{this.hhmmss}}</div>
+				<div class="pointer" data-title="{{script.title}}" data-seq="{{this.seq}}"></div>
+			</li>
+		{{/each}}
+	{{/if}}
+</ul>

@@ -16,7 +16,12 @@ define([
 				$(window).scroll(function(e){
 					Backbone.pubsub.trigger('scroll');
 				});
-			}
+			};
+			this.resizeWatch = function(){
+				window.addEventListener('resize', function(){
+					Backbone.pubsub.trigger('resize');
+				});
+			};
 			this.logoStart = function(){
 				Backbone.pubsub.on('scroll', update, this);
 				
@@ -37,6 +42,7 @@ define([
 			gnb.render();
 
 			this.scrollWatch();
+			this.resizeWatch();
 			this.logoStart();
 
 			Backbone.pubsub.on('gnb:toggle', toggleView, this);
