@@ -687,27 +687,23 @@ input[type="checkbox"] {
 			z-index: 10;
 			width: 100%;
 			iframe, img {
-				display: inline-block;
 				width: @video_small_width;
 				height: @video_small_height;
 			}
 			.timeline {
 				position: relative;
 				text-align: center;
-				display: inline-block;
 				width: 100%;
 				.track {
 					position: relative;
-					display: inline-block;
-					margin-top: 15px;
+					margin-top: 8px;
 					height: 12px;
 					width: 100%;
-					border: 1px solid #a7a9ac;
-					background: #fff;
+					background: @line_color;
 					.box-shadow(inset 0 0 0px rgba(0,0,0,0.1));
 					.rounded-corners(6px);
 					.progress {
-						width: 0;
+						width: 1%;
 						height: 100%;
 						background: #ed1207;
 						.transition(width 200ms linear);
@@ -716,12 +712,20 @@ input[type="checkbox"] {
 				}
 				.pointers {
 					position: relative;
-					margin-top: -35px;
+					margin-top: -12px;
 					.item {
 						position: absolute;
 						top: 0;
 						left: 10%;
+						width: 9px;
+						height: 12px;
+						&:hover {
+							.time {
+								display: block;
+							}
+						}
 						.time {
+							display: none;
 							position: absolute;
 							top: 0;
 							left: -20px;
@@ -733,17 +737,17 @@ input[type="checkbox"] {
 						}
 						.pointer {
 							position: absolute;
-							top: 11px;
+							top: 0;
 							left: -4px;
 							width: 9px;
-							height: 10px;
+							height: 12px;
 							.transition_all();
 							&:before {
 								content: '';
 								position: absolute;
 								top: 0;
 								left: 4px;
-								height: 16px;
+								height: 12px;
 								border-left: 1px solid #a7a9ac;
 							}
 							&:hover {

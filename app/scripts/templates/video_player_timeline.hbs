@@ -5,8 +5,8 @@
 	{{#if pointers}}
 		{{#each pointers}}
 			<li class="item" data-time="{{this.hhmmss}}" style="left: {{this.position}}%;">
-				<div class="time">{{this.hhmmss}}</div>
-				<div class="pointer" data-title="{{script.title}}" data-seq="{{this.seq}}"></div>
+				{{!-- <div class="time">{{this.hhmmss}}</div> --}}
+				<div class="pointer" data-title="{{this.hhmmss}} / {{script.title}}" data-seq="{{this.seq}}"></div>
 			</li>
 		{{/each}}
 	{{/if}}

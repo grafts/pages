@@ -277,6 +277,9 @@ blockquote p {
 blockquote p:last-child {
   margin-bottom: 0;
 }
+iframe {
+  display: block;
+}
 html,
 body {
   height: 100%;
@@ -1948,24 +1951,20 @@ input[type="checkbox"] {
 }
 .video-item .contents .player iframe,
 .video-item .contents .player img {
-  display: inline-block;
   width: 560px;
   height: 315px;
 }
 .video-item .contents .player .timeline {
   position: relative;
   text-align: center;
-  display: inline-block;
   width: 100%;
 }
 .video-item .contents .player .timeline .track {
   position: relative;
-  display: inline-block;
-  margin-top: 15px;
+  margin-top: 8px;
   height: 12px;
   width: 100%;
-  border: 1px solid #a7a9ac;
-  background: #fff;
+  background: #e7e7e7;
   -webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0.1);
   box-shadow: inset 0 0 0px rgba(0, 0, 0, 0.1);
   -webkit-border-radius: 6px;
@@ -1975,7 +1974,7 @@ input[type="checkbox"] {
   border-radius: 6px;
 }
 .video-item .contents .player .timeline .track .progress {
-  width: 0;
+  width: 1%;
   height: 100%;
   background: #ed1207;
   -webkit-transition: width 200ms linear;
@@ -1991,14 +1990,20 @@ input[type="checkbox"] {
 }
 .video-item .contents .player .timeline .pointers {
   position: relative;
-  margin-top: -35px;
+  margin-top: -12px;
 }
 .video-item .contents .player .timeline .pointers .item {
   position: absolute;
   top: 0;
   left: 10%;
+  width: 9px;
+  height: 12px;
+}
+.video-item .contents .player .timeline .pointers .item:hover .time {
+  display: block;
 }
 .video-item .contents .player .timeline .pointers .item .time {
+  display: none;
   position: absolute;
   top: 0;
   left: -20px;
@@ -2010,10 +2015,10 @@ input[type="checkbox"] {
 }
 .video-item .contents .player .timeline .pointers .item .pointer {
   position: absolute;
-  top: 11px;
+  top: 0;
   left: -4px;
   width: 9px;
-  height: 10px;
+  height: 12px;
   -webkit-transition: all 0.25s ease-out;
   -moz-transition: all 0.25s ease-out;
   -ms-transition: all 0.25s ease-out;
@@ -2025,7 +2030,7 @@ input[type="checkbox"] {
   position: absolute;
   top: 0;
   left: 4px;
-  height: 16px;
+  height: 12px;
   border-left: 1px solid #a7a9ac;
 }
 .video-item .contents .player .timeline .pointers .item .pointer:hover:before {
