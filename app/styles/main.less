@@ -1122,6 +1122,12 @@ input[type="checkbox"] {
 			.container {
 				width: @container_small;
 			}
+			.player {
+				iframe, img {
+					width: @video_small_width;
+					height: @video_small_height;
+				}
+			}
 			.timeline-contents {
 				.item {
 					.script {
@@ -1136,6 +1142,9 @@ input[type="checkbox"] {
 @media (max-width: @screen_small) {
 	.video-item {
 		.contents {
+			.container {
+				width: @video_mini_width;
+			}
 			.player {
 				iframe, img {
 					width: @video_mini_width;

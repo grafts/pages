@@ -7,9 +7,7 @@
   font-style: normal;
 }
 /* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
-
 /* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
-
 /*
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
@@ -18,7 +16,6 @@
   }
 }
 */
-
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
   font-family: "fontello";
@@ -40,246 +37,195 @@
   /* remove if not needed */
   margin-left: .2em;
   /* you can be more comfortable with increased icons size */
-
   /* font-size: 120%; */
-
   /* Uncomment for 3D effect */
-
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
-
 }
 .icon-search:before {
   content: '\e80a';
 }
 /* '' */
-
 .icon-twitter:before {
   content: '\e804';
 }
 /* '' */
-
 .icon-videocam:before {
   content: '\e809';
 }
 /* '' */
-
 .icon-picture:before {
   content: '\e815';
 }
 /* '' */
-
 .icon-ok:before {
   content: '\e80d';
 }
 /* '' */
-
 .icon-cancel:before {
   content: '\e80e';
 }
 /* '' */
-
 .icon-plus:before {
   content: '\e817';
 }
 /* '' */
-
 .icon-home:before {
   content: '\e80b';
 }
 /* '' */
-
 .icon-link:before {
   content: '\e825';
 }
 /* '' */
-
 .icon-attach:before {
   content: '\e801';
 }
 /* '' */
-
 .icon-eye:before {
   content: '\e80c';
 }
 /* '' */
-
 .icon-tag:before {
   content: '\e818';
 }
 /* '' */
-
 .icon-thumbs-up:before {
   content: '\e802';
 }
 /* '' */
-
 .icon-thumbs-down:before {
   content: '\e803';
 }
 /* '' */
-
 .icon-quote-left:before {
   content: '\e826';
 }
 /* '' */
-
 .icon-quote-right:before {
   content: '\e827';
 }
 /* '' */
-
 .icon-export:before {
   content: '\e806';
 }
 /* '' */
-
 .icon-keyboard:before {
   content: '\e829';
 }
 /* '' */
-
 .icon-chat:before {
   content: '\e808';
 }
 /* '' */
-
 .icon-location:before {
   content: '\e82a';
 }
 /* '' */
-
 .icon-trash:before {
   content: '\e80f';
 }
 /* '' */
-
 .icon-menu:before {
   content: '\e82b';
 }
 /* '' */
-
 .icon-cog:before {
   content: '\e807';
 }
 /* '' */
-
 .icon-heart:before {
   content: '\e828';
 }
 /* '' */
-
 .icon-logout:before {
   content: '\e82d';
 }
 /* '' */
-
 .icon-left-open:before {
   content: '\e819';
 }
 /* '' */
-
 .icon-right-open:before {
   content: '\e81a';
 }
 /* '' */
-
 .icon-play:before {
   content: '\e810';
 }
 /* '' */
-
 .icon-stop:before {
   content: '\e81b';
 }
 /* '' */
-
 .icon-pause:before {
   content: '\e81c';
 }
 /* '' */
-
 .icon-to-end:before {
   content: '\e81d';
 }
 /* '' */
-
 .icon-to-end-alt:before {
   content: '\e81e';
 }
 /* '' */
-
 .icon-to-start:before {
   content: '\e81f';
 }
 /* '' */
-
 .icon-to-start-alt:before {
   content: '\e820';
 }
 /* '' */
-
 .icon-fast-fw:before {
   content: '\e821';
 }
 /* '' */
-
 .icon-fast-bw:before {
   content: '\e822';
 }
 /* '' */
-
 .icon-desktop:before {
   content: '\e811';
 }
 /* '' */
-
 .icon-laptop:before {
   content: '\e812';
 }
 /* '' */
-
 .icon-tablet:before {
   content: '\e813';
 }
 /* '' */
-
 .icon-mobile:before {
   content: '\e814';
 }
 /* '' */
-
 .icon-chart-bar:before {
   content: '\e816';
 }
 /* '' */
-
 .icon-dollar:before {
   content: '\e823';
 }
 /* '' */
-
 .icon-gauge:before {
   content: '\e824';
 }
 /* '' */
-
 .icon-facebook-squared:before {
   content: '\e805';
 }
 /* '' */
-
 .icon-gplus-squared:before {
   content: '\e800';
 }
 /* '' */
-
 .icon-login:before {
   content: '\e82c';
 }
 /* '' */
-
 /*common elements*/
-
 *,
 *:after,
 *:before {
@@ -359,7 +305,7 @@ strong {
   padding: 8px 20px;
   display: inline-block;
   font-size: 20px;
-  background: white;
+  background: #fff;
   -webkit-transition: all 0.25s ease-out;
   -moz-transition: all 0.25s ease-out;
   -ms-transition: all 0.25s ease-out;
@@ -372,7 +318,7 @@ strong {
   border-radius: 24px;
 }
 .button:hover {
-  color: white;
+  color: #fff;
   background: #3498db;
   border: 1px solid #3498db;
 }
@@ -410,7 +356,7 @@ h4 {
 }
 section {
   position: absolute;
-  background: white;
+  background: #fff;
   width: 100%;
   min-height: 100%;
   display: none;
@@ -430,8 +376,8 @@ section.off {
 .browsehappy {
   margin: 0;
   padding: 20px;
-  background: #444444;
-  color: #eeeeee;
+  background: #444;
+  color: #eee;
   text-align: center;
 }
 .container {
@@ -497,7 +443,7 @@ section.off {
   top: 16px;
   left: 16px;
   z-index: 100;
-  color: white;
+  color: #fff;
   font-family: 'HelveticaNeue', 'PT sans', 'NanumBarunGothic', sans-serif;
 }
 .header a {
@@ -515,7 +461,7 @@ section.off {
   padding: 0;
   font-size: 54px;
   line-height: 58px;
-  color: white;
+  color: #fff;
   font-weight: bold;
   -webkit-transition: all 0.25s ease-out;
   -moz-transition: all 0.25s ease-out;
@@ -626,7 +572,7 @@ section.off {
   transition: all 0.25s ease-out;
 }
 .header ul.menu li:hover {
-  color: white;
+  color: #fff;
 }
 .header ul.menu li img {
   display: inline-block;
@@ -1075,7 +1021,6 @@ section.off {
     opacity: 1;
   }
 }
-
 .user-item-cover {
   position: relative;
   width: 100%;
@@ -1090,7 +1035,7 @@ section.off {
   margin-top: 120px;
   display: inline-block;
   overflow: hidden;
-  border: 4px solid white;
+  border: 4px solid #fff;
   border: 4px solid rgba(255, 255, 255, 0.7);
   -webkit-border-radius: 120px;
   -moz-border-radius: 120px;
@@ -1122,7 +1067,7 @@ section.off {
 }
 .user-item-cover .user-item-cover-contents .name {
   margin-top: 12px;
-  color: white;
+  color: #fff;
 }
 .user-item-cover .user-item-cover-contents .description {
   display: block;
@@ -1460,12 +1405,12 @@ section.off {
   margin-top: 300px;
 }
 .intro-cover .headline .copy .title {
-  color: white;
+  color: #fff;
   font-size: 80px;
   line-height: 1eml;
 }
 .intro-cover .headline .copy .subtitle {
-  color: white;
+  color: #fff;
   font-size: 36px;
 }
 .intro-cover .headline .signup {
@@ -1475,8 +1420,8 @@ section.off {
 .intro-cover .headline .signup .button {
   font-size: 24px;
   font-weight: bold;
-  color: white;
-  border-color: white;
+  color: #fff;
+  border-color: #fff;
   border-color: rgba(255, 255, 255, 0.7);
   background: transparent;
 }
@@ -1489,7 +1434,7 @@ section.off {
   z-index: 1;
 }
 .intro-contents .article {
-  background: #eeeeee;
+  background: #eee;
   width: 100%;
 }
 .intro-contents .article .function {
@@ -1507,7 +1452,7 @@ section.off {
 }
 .search .wrapper {
   position: relative;
-  background: white;
+  background: #fff;
   overflow: auto;
   width: 100%;
   height: 100%;
@@ -1627,19 +1572,19 @@ section.off {
   opacity: 0.8;
 }
 .lesson-item.with-dark-cover .class-summary h4 {
-  color: white;
+  color: #fff;
 }
 .lesson-item.with-dark-cover .class-summary .name {
-  color: white;
+  color: #fff;
 }
 .lesson-item.with-dark-cover .class-summary .divder:after {
-  border-top: 1px solid white;
+  border-top: 1px solid #fff;
 }
 .lesson-item.with-dark-cover .class-summary .head-contents .title {
-  color: white;
+  color: #fff;
 }
 .lesson-item.with-dark-cover .class-summary .head-contents .subtitle {
-  color: white;
+  color: #fff;
 }
 .lesson-item .cover {
   position: absolute;
@@ -1780,7 +1725,7 @@ section.off {
   margin-bottom: 16px;
 }
 .lesson-item .lesson-contents .agreement .read-this a {
-  color: red;
+  color: #ff0000;
   text-decoration: underline;
 }
 .lesson-item .lesson-contents .agreement form .input {
@@ -1789,7 +1734,7 @@ section.off {
 }
 .lesson-item .lesson-contents .agreement form input.button {
   font-size: 16px;
-  background: white;
+  background: #fff;
 }
 .lesson-item .lesson-contents .agreement form input.button:hover {
   background: #3498db;
@@ -1845,17 +1790,18 @@ input[type="checkbox"] {
   left: 50%;
 }
 .video-item.with-dark-cover .head .tool {
-  color: white;
+  color: #fff;
   color: rgba(255, 255, 255, 0.7);
 }
 .video-item.with-dark-cover .head .tool a {
   border: 1px solid rgba(255, 255, 255, 0.7);
 }
 .video-item.with-dark-cover .head .tool a:hover {
-  color: white;
+  color: #fff;
+  color: #ffffff;
 }
 .video-item.with-dark-cover .head .head-contents .title {
-  color: white;
+  color: #fff;
 }
 .video-item.with-dark-cover .head .head-contents .subtitle {
   color: rgba(255, 255, 255, 0.7);
@@ -1913,7 +1859,8 @@ input[type="checkbox"] {
   width: 40px;
 }
 .video-item .head .tool a:hover {
-  color: white;
+  color: #fff;
+  color: #ffffff;
 }
 .video-item .head .head-contents {
   position: absolute;
@@ -1966,7 +1913,7 @@ input[type="checkbox"] {
   width: 100%;
   height: auto;
   padding-top: 16px;
-  background: white;
+  background: #fff;
   -webkit-transition: background-color 200ms linear;
   -moz-transition: background-color 200ms linear;
   -ms-transition: background-color 200ms linear;
@@ -1989,7 +1936,7 @@ input[type="checkbox"] {
   top: 0;
   left: 0;
   width: 100%;
-  background: white;
+  background: #fff;
   z-index: 1;
 }
 .video-item .contents .player {
@@ -2018,7 +1965,7 @@ input[type="checkbox"] {
   height: 12px;
   width: 100%;
   border: 1px solid #a7a9ac;
-  background: white;
+  background: #fff;
   -webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0.1);
   box-shadow: inset 0 0 0px rgba(0, 0, 0, 0.1);
   -webkit-border-radius: 6px;
@@ -2098,7 +2045,7 @@ input[type="checkbox"] {
   font-size: 13px;
   text-align: left;
   padding: 4px;
-  color: white;
+  color: #fff;
   background: #a7a9ac;
   min-width: 80px;
   text-overflow: ellipsis;
@@ -2117,7 +2064,7 @@ input[type="checkbox"] {
   left: 10%;
   min-width: 80px;
   padding: 4px;
-  color: white;
+  color: #fff;
   text-align: left;
   font-size: 13px;
   background: #a7a9ac;
@@ -2189,7 +2136,7 @@ input[type="checkbox"] {
   font-size: 15px;
   line-height: 1em;
   font-weight: bold;
-  color: white;
+  color: #fff;
   cursor: pointer;
   -webkit-transition: background-color 150ms linear;
   -moz-transition: background-color 150ms linear;
@@ -2226,7 +2173,7 @@ input[type="checkbox"] {
   width: 30px;
   height: 30px;
   background: #b1b3b6;
-  border: 10px solid white;
+  border: 10px solid #fff;
   cursor: pointer;
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
@@ -2273,7 +2220,7 @@ input[type="checkbox"] {
   background: #b1b3b6;
   font-size: 12px;
   line-height: 1em;
-  color: white;
+  color: #fff;
   cursor: pointer;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -2313,7 +2260,7 @@ input[type="checkbox"] {
   margin-left: 36px;
   width: 280px;
   font-size: 14px;
-  background: white;
+  background: #fff;
   padding: 14px 8px;
   display: none;
   -webkit-transition: all 0.25s ease-out;
@@ -2374,7 +2321,7 @@ input[type="checkbox"] {
 }
 .video-item .contents .widget {
   padding: 80px 0 120px 0;
-  background: white;
+  background: #fff;
 }
 .video-item .contents .widget .widget-counter {
   display: inline-block;
@@ -2408,7 +2355,7 @@ input[type="checkbox"] {
   transition: all 0.25s ease-out;
 }
 .video-item .contents .widget .widget-counter i:hover {
-  color: white;
+  color: #fff;
   background: #3498db;
   border: 1px solid #3498db;
 }
@@ -2485,12 +2432,20 @@ input[type="checkbox"] {
   .video-item .contents .container {
     width: 560px;
   }
+  .video-item .contents .player iframe,
+  .video-item .contents .player img {
+    width: 560px;
+    height: 315px;
+  }
   .video-item .contents .timeline-contents .item .script {
     font-size: 15px;
     padding: 32px 0 100px 32px;
   }
 }
 @media (max-width: 640px) {
+  .video-item .contents .container {
+    width: 427px;
+  }
   .video-item .contents .player iframe,
   .video-item .contents .player img {
     width: 427px;
@@ -2548,8 +2503,8 @@ input[type="checkbox"] {
     padding: 120px 0;
     left: 0;
     padding-top: 16px;
-    -webkit-box-shadow: 0 0 0 0 white;
-    box-shadow: 0 0 0 0 white;
+    -webkit-box-shadow: 0 0 0 0 #ffffff;
+    box-shadow: 0 0 0 0 #ffffff;
     -webkit-transition: background-color 200ms linear;
     -moz-transition: background-color 200ms linear;
     -ms-transition: background-color 200ms linear;
