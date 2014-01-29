@@ -1,6 +1,7 @@
 define([
 	// All your tests go here.
-	'spec/test'
+	'spec/test',
+	'spec/controller'
 ], function () {
 	'use strict';
 

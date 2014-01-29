@@ -1,13 +1,20 @@
 /* global describe, it */
+define([
+	'jquery',
+	'underscore',
+	'backbone'
+], function ($, _, Backbone, Video, VideoView) {
+	'use strict';
 
-(function () {
-    'use strict';
-
-    describe('Give it some context', function () {
-        describe('maybe a bit more context here', function () {
-            it('should run here few assertions', function () {
-            	// should.exist(0);
-            });
-        });
-    });
-})();
+	describe('require basic components', function () {
+		it('jquery', function () {
+			should.exist($);
+		});
+		it('lodash', function () {
+			should.exist(_);
+		});
+		it('backbone', function () {
+			should.exist(Backbone);
+		});
+	});
+});
