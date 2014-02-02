@@ -2,12 +2,11 @@
 'use strict';
 
 require([
-	'backbone', 'backboneController', 'router', 'promise'
-], function (Backbone, Controller, Router) {
+	'backbone', 'router', 'promise'
+], function (Backbone, Router) {
+
 	var router,
 		pushState = !!window.history.pushState;
-
-	window.YTConfig = {};
 
 	router = new Router();
 	Backbone.history.start({ hashChange: !pushState, pushState : pushState });

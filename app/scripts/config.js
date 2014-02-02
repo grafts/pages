@@ -6,10 +6,16 @@ require.config({
 		underscore : {
 			exports : '_'
 		},
-		backbone : {
+		backboneBase : {
 			deps : [
 				'underscore',
 				'jquery'
+			],
+			exports : 'Backbone'
+		},
+		backbone : {
+			deps : [
+				'backboneBase'
 			],
 			exports : 'Backbone'
 		},
@@ -39,8 +45,8 @@ require.config({
 	paths: {
 		router             : '../scripts/routes/routes',
 		jquery             : '../bower_components/jquery/jquery',
-		backbone           : '../bower_components/backbone/backbone',
-		backboneController : '../scripts/vendor/backbone.controller',
+		backboneBase       : '../bower_components/backbone/backbone',
+		backbone           : '../scripts/vendor/backbone.controller',
 		// replace underscore >> lodash
 		underscore         : '../bower_components/lodash/dist/lodash',
 		handlebars         : '../bower_components/handlebars/handlebars',

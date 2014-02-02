@@ -3,7 +3,7 @@
 define([
 	'jquery',
 	'underscore',
-	'backbone',
+	'backboneBase',
 	'loading'
 ], function ($, _, Backbone, Loading) {
 	'use strict';
@@ -66,5 +66,5 @@ define([
 	Controller.extend = Backbone.Model.extend;
 	Backbone.Controller = Controller;
 
-	return Controller;
+	return Backbone;
 });
