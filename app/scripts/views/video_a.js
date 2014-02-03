@@ -13,7 +13,7 @@ define([
 	var VideoView = Backbone.View.extend({
 		// el: '.video-item',
 		tagName: 'div',
-		template: JST['app/scripts/templates/video.hbs'],
+		template: JST['app/scripts/templates/video_a.hbs'],
 		events: {
 			'click a' : 'link',
 			'click .comments-link' : 'commentToggle',
@@ -25,10 +25,11 @@ define([
 			var self = this,
 				data = this.model.toJSON();
 
+
 			_.bindAll(this);
 
 			id && (this.id = id);
-			this.el.setAttribute('class', 'video-item');
+			this.el.setAttribute('class', 'video_a-item');
 
 			data.contents = this.model.getContents();
 			this.$el.append(this.template(data));
@@ -36,12 +37,10 @@ define([
 			this.model.on('change:coverImage', this.addCover);
 			this.model.on('change:video', this.addPlayer);
 			this.model.on('change:contents', this.addContents);
-			this.model.on('change:relate', this.addRelate);
 
-			this.addCover(this.$('.head'), this.model.get('coverImage'));
+			this.addCover();
 			this.addPlayer();
 			this.addContents();
-			this.addCover(this.$('.relate'), this.model.get('relate').coverImage);
 
 			this.portraitLayout = true;
 
@@ -119,7 +118,7 @@ define([
 				var currentPosition = $(window).scrollTop();
 
 				_excuteAutoScroll(currentPosition);
-				// _setPlayer(currentPosition);
+				_setPlayer(currentPosition);
 
 			}, 1);
 
@@ -141,15 +140,8 @@ define([
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		},
 		commentToggle : function(e){
-			var seq = e.currentTarget.parentNode.dataset.seq,
-				comments = this.$('.comments-bundle');
-			
-			this.commentChange(seq);
-			comments.toggle();
+			$(e.currentTarget.nextElementSibling).toggle();
 			this.$('.contents').toggleClass('comments-on');
-		},
-		commentChange : function(seq){
-			this.$('.comments-bundle').children().removeClass('on').eq(seq).addClass('on');
 		},
 		replyFormToggle : function(e){
 			$(e.currentTarget.nextElementSibling).toggle();
@@ -159,31 +151,27 @@ define([
 			Backbone.pubsub.trigger('videoTimelineLink:' + this.model.id, current);
 		},
 		scrollToArticle : function(scriptSeq){
-			var timeline     = this.$('.timeline-contents').find('.scripts'),
-				item         = timeline.children('.item:eq('+scriptSeq+')');
+			var item = this.$('.timeline-contents').find('.item:eq('+scriptSeq+')'),
+				playerHeight = 0;
 
-			timeline.scrollTop(timeline.scrollTop() + item.position().top);
-			this.commentChange(scriptSeq);
+			if(!this.$el.hasClass('landscape')){
+				playerHeight = self.$('.player').height();
+			}
+
+			$('html').animate({
+				scrollTop : item.offset().top - playerHeight - 32
+			},
+			200,
+			function(){
+				
+			});
 		},
 		addPlayer : function(){
 			var self = this,
 				dom = self.$('.video'),
 				loadYoutubeLib,
 				interval = function(video){
-
-					var currentTime      = video.getCurrentTime(),
-						contents         = self.model.get('contents'),
-						scriptSeq        = _.findIndex(contents, function(content) {
-							return content.time > currentTime;
-						});
-
-					if(scriptSeq < 0){
-						scriptSeq = contents.length - 1;
-					} else if(scriptSeq != 0){
-						scriptSeq -= 1;
-					}
-
-					Backbone.pubsub.trigger('videoSync:' + self.model.id, currentTime, scriptSeq);
+					Backbone.pubsub.trigger('videoSync:' + self.model.id, video.getCurrentTime());
 				},
 				progressSync;
 
@@ -257,12 +245,24 @@ define([
 				Backbone.pubsub.on('videoTimelineLink:' + self.model.id, function(scriptSeq){
 					_findArtcle.call(this, scriptSeq, video);
 				}, self);
-				Backbone.pubsub.on('videoSync:' + self.model.id, function(currentTime, scriptSeq){
-					if(currentScriptSeq != scriptSeq){
-						currentScriptSeq = scriptSeq;
-						self.scrollToArticle(scriptSeq);
+					
+				Backbone.pubsub.on('videoSync:' + self.model.id, function(currentTime){
+					var contents = self.model.get('contents'),
+						scriptSeq = _.findIndex(contents, function(content) {
+							return content.time > currentTime;
+						});
+
+					if(scriptSeq < 0){
+						scriptSeq = contents.length - 1;
+					} else if(scriptSeq != 0){
+						scriptSeq -= 1;
 					}
-				});
+
+					if(currentScriptSeq != scriptSeq){
+						self.scrollToArticle(scriptSeq);
+						currentScriptSeq = scriptSeq;
+					}
+				}, self);
 
 				return video;
 			}
@@ -284,16 +284,16 @@ define([
 
 			this.$('.video').after(this.timeline.render());
 		},
-		addCover : function(dom, cover){
+		addCover : function(){
 			var self = this,
-				coverDom = dom.children('.cover'),
+				cover = this.model.get('coverImage'),
 				img;
 
 			if(!cover){
 				return;
 			}
 
-			coverDom
+			this.$('.cover')
 			.removeClass('with-cover').removeClass('with-dark-cover').removeClass('on')
 			.removeAttr('background-image')
 			.empty();
@@ -309,9 +309,8 @@ define([
 					className = 'with-dark-cover';
 				}
 
-				coverDom
-				.css('background-image', 'url(' + this.src + ')')
-				.addClass('on')
+				self
+				.$('.cover').css('background-image', 'url(' + this.src + ')').addClass('on')
 				.end().addClass(className);
 			}
 
@@ -370,6 +369,7 @@ define([
 
 			}
 		}
+
 	});
 
 	return VideoView;

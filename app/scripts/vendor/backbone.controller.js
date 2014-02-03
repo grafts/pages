@@ -55,7 +55,7 @@ define([
 		},
 
 		stop : function(param){
-			console.log('stop video view');
+			console.log(this.el.attr('class') + ' view stop');
 			this.el && this.el.hide();
 			for(var current in this.views){
 				this.views[current].unrender();
@@ -65,6 +65,7 @@ define([
 
 	Controller.extend = Backbone.Model.extend;
 	Backbone.Controller = Controller;
+	Backbone.pubsub = _.extend({}, Backbone.Events);
 
 	return Backbone;
 });

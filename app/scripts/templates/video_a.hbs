@@ -11,9 +11,9 @@
 		<div class="container">
 			<h1 class="title">{{title}}</h1>
 			<p class="subtitle">{{subtitle}}</p>
-			<a class="author" href="/user/{{author.id}}">
-				<img class="avatar" src="{{author.avatar}}" alt="avatar">
-				<span class="name">{{author.name}}</span>
+			<a class="author" href="/user/112">
+				<img class="avatar" src="/images/avatar.jpg" alt="avatar">
+				<span class="name">아만다 사이프리드</span>
 			</a>
 		</div>
 	</div>
@@ -29,22 +29,25 @@
 
 	<div class="timeline-contents">
 		<div class="container">
-			<ul class="scripts">
+			<ul>
 			{{#each contents}}
 				<li class="item" data-seq="{{@index}}">
 					<div class="clock">{{this.hhmmss}}</div>
 					<button class="anker"></button>
 					<div class="script serif">
-						<h3>{{this.script}}</h3>
+						<h3>{{this.script.title}}</h3>
+						{{#each this.script.texts}}
+							{{#if this.tag}}
+								<{{this.tag}} {{#if this.src}}src="{{this.src}}"{{/if}} >{{this.text}}</{{this.tag}}>
+							{{else}}
+								<p>{{this.text}}</p>
+							{{/if}}
+						{{/each}}
 					</div>
 					<button class="comments-link">{{this.comments.length}}</button>
-				</li>
-			{{/each}}
-			</ul>
-			<div class="comments-bundle">
-				{{#each contents}}
-					<div class="item">
-						<ul class="comments">
+					<div class="comments">
+						<hr/>
+						<ul>
 							{{#each this.comments}}
 								<li class="comment">
 									<a class="author" href="/user/{{this.author.id}}">
@@ -64,8 +67,9 @@
 							<div class="input" data-placeholder="Leave a comment"></div>
 						</div>
 					</div>
-				{{/each}}
-			</div>
+				</li>
+			{{/each}}
+			</ul>
 		</div>
 	</div>
 	<div class="widget">
@@ -99,25 +103,6 @@
 					</li>
 				</ul>
 			</div>
-		</div>
-	</div>
-</div>
-
-<div class="relate">
-	<div class="cover"></div>
-	<div class="container">
-		<h4>RELATED VIDEO</h4>
-	</div>
-	<div class="relate-contents sans-serif">
-		<div class="container">
-			<a href="/video/{{relate.id}}">
-				<h1 class="title">{{relate.title}}</h1>
-				<p class="subtitle">{{relate.subtitle}}</p>
-			</a>
-			<a class="author" href="/user/{{relate.author.id}}">
-				<img class="avatar" src="{{relate.author.avatar}}" alt="avatar">
-				<span class="name">{{relate.author.name}}</span>
-			</a>
 		</div>
 	</div>
 </div>

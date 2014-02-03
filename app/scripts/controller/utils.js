@@ -13,7 +13,7 @@ define([
 		el : $('.header'),
 		initialize : function(){
 			this.scrollWatch = function(){
-				$(window).scroll(function(e){
+				$('body').scroll(function(e){
 					Backbone.pubsub.trigger('scroll');
 				});
 			};
@@ -26,7 +26,7 @@ define([
 				Backbone.pubsub.on('scroll', update, this);
 				
 				function update(){
-					var top = $(window).scrollTop();
+					var top = $('body').scrollTop();
 					if(top != 0){
 						$('.logo').addClass('hide');
 					}

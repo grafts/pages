@@ -5,12 +5,13 @@ define([
 	'controller/utils',
 	'controller/intro',
 	'controller/video',
+	'controller/video_a',
 	'controller/live',
 	'controller/user',
 	'controller/class',
 	'controller/lesson',
 	'controller/search',
-], function ($, _, Backbone, UtilsController, IntroController, VideoController, LiveController, UserController, ClassController, LessonController, SearchController) {
+], function ($, _, Backbone, UtilsController, IntroController, VideoController, Video_aController, LiveController, UserController, ClassController, LessonController, SearchController) {
 
 	var Router          = Backbone.Router.extend({
 		
@@ -26,6 +27,7 @@ define([
 		controllers : {
 			intro  : new IntroController(),
 			video  : new VideoController(),
+			video_a: new Video_aController(),
 			live   : new LiveController(),
 			user   : new UserController(),
 			class  : new ClassController(),
@@ -39,7 +41,6 @@ define([
 
 			_.bindAll(this);
 
-			Backbone.pubsub = _.extend({}, Backbone.Events);
 			(new UtilsController).run();
 		},
 

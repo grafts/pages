@@ -40,9 +40,10 @@ define([
 		sync : function(){
 			Backbone.pubsub.on('videoSync:' + this.id, this.updateProgress, this);
 		},
-		updateProgress : function(progress){
+		updateProgress : function(progress, scriptSeq){
 			var self = this;
 			this.$('.progress').css('width', (progress/this.duration*100) + '%');
+			this.$('.item').removeClass('on').eq(scriptSeq).addClass('on');
 		},
 		link : function(e){
 			Backbone.pubsub.trigger('videoTimelineLink:' + this.id, $(e.currentTarget).data().seq);
