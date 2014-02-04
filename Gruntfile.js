@@ -179,12 +179,11 @@ module.exports = function (grunt) {
                         'templates'      : '../../.tmp/scripts/templates',
                         'jquery'         : '../../app/bower_components/jquery/jquery',
                         'underscore'     : '../../app/bower_components/lodash/dist/lodash',
-                        'backbone'       : '../../app/bower_components/backbone/backbone',
+                        'backboneBase'   : '../../app/bower_components/backbone/backbone',
                         'propertyParser' : '../bower_components/requirejs-plugins/src/propertyParser',
                         'async'          : '../bower_components/requirejs-plugins/src/async',
                         'font'           : '../bower_components/requirejs-plugins/src/font',
-                        'goog'           : '../bower_components/requirejs-plugins/src/goog',
-
+                        'goog'           : '../bower_components/requirejs-plugins/src/goog'
                     },
                     // TODO: Figure out how to make sourcemaps work with grunt-usemin
                     // https://github.com/yeoman/grunt-usemin/issues/30
