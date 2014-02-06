@@ -64,10 +64,20 @@ body {
 	font-style: normal;
 	color: @common_color;
 	background: @background_color;
-	font-size: 20px;
+	font-size: 13px;
 	font-family: 'HelveticaNeue', 'PT sans', 'Arial', sans-serif;
 	line-height: 1.4;
 	-webkit-font-smoothing: antialiased;
+	@media (min-width: @screen_medium) {
+		font-size: 14px;
+	}
+	@media (min-width: @screen_big) {
+		font-size: 15px;
+	}
+	@media (min-width: @screen_huge) {
+		font-size: 16px;
+	}
+
 }
 strong {
 	font-weight: bold;
@@ -111,7 +121,7 @@ h4 {
 	letter-spacing: 0.05em;
 }
 
-.view {
+.screen {
 	position: relative;
 	-webkit-perspective: 1500px;
 	height: 100%;

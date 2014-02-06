@@ -69,8 +69,10 @@ define([
 		(function(t){
 			var c = _.cloneDeep(dummyContent);
 			c.time = t;
-			c.comments.push(dummyContentComments[parseInt(Math.random(dummyContentComments.length)*10)]);
 			c.script = dummyContentTitle[parseInt(Math.random(dummyContentTitle.length+1)*10)];
+			for(var j=0; j<10;j+=parseInt(Math.random(10)*10)){
+				c.comments.push(dummyContentComments[parseInt(Math.random(dummyContentComments.length)*10)]);
+			}
 			dummy.contents.push(c);
 		})(i)
 	}

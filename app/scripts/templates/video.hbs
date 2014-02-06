@@ -34,51 +34,30 @@
 				<li class="item" data-seq="{{@index}}">
 					<div class="clock">{{this.hhmmss}}</div>
 					<button class="anker"></button>
-					<div class="script serif">
-						<h3>{{this.script}}</h3>
+					<div class="script">
+						<h5 class="sans-serif">{{this.script}}</h5>
 					</div>
-					<button class="comments-link">{{this.comments.length}}</button>
+					<button class="comments-link">
+						<span class="count">{{this.comments.length}}</span>
+						<i class="icon-cancel"></i>
+					</button>
 				</li>
 			{{/each}}
 			</ul>
-			<div class="comments-bundle">
-				{{#each contents}}
-					<div class="item">
-						<ul class="comments">
-							{{#each this.comments}}
-								<li class="comment">
-									<a class="author" href="/user/{{this.author.id}}">
-										<img class="avatar" src="{{this.author.avatar}}" alt="avatar">
-										<span class="name">{{this.author.name}}</span>
-									</a>
-									<p class="note">{{this.comment}}</p>
-									<div class="date">{{this.date}}</div>
-								</li>
-							{{/each}}
-						</ul>
-						<button class="reply button">
-							<i class="icon-plus"></i>
-							<span>Reply</span>
-						</button>
-						<div class="reply-form">
-							<div class="input" data-placeholder="Leave a comment"></div>
-						</div>
-					</div>
-				{{/each}}
-			</div>
 		</div>
 	</div>
+
 	<div class="widget">
 		<div class="container">
 			<div class="widget-counter">
-				<a class="view">
+				<span class="view">
 					<i class="icon-eye"></i>
 					<span>{{view}}</span>
-				</a>
-				<a class="like">
+				</span>
+				<span class="like">
 					<i class="icon-thumbs-up"></i>
 					<span>{{like}}</span>
-				</a>
+				</span>
 			</div>
 			<div class="widget-share">
 				<ul>
@@ -100,6 +79,37 @@
 				</ul>
 			</div>
 		</div>
+	</div>
+
+	<div class="script-comments-bundle">
+		<div class="container">
+			{{#each contents}}
+				<div class="item">
+					<div class="comments-wrapper">
+						<ul class="comments">
+							{{#each this.comments}}
+								<li class="comment">
+									<a class="author" href="/user/{{this.author.id}}">
+										<img class="avatar" src="{{this.author.avatar}}" alt="avatar">
+										<span class="name">{{this.author.name}}</span>
+									</a>
+									<p class="note">{{this.comment}}</p>
+									<div class="date">{{this.date}}</div>
+								</li>
+							{{/each}}
+						</ul>
+						<button class="reply button">
+							<i class="icon-plus"></i>
+							<span>Reply</span>
+						</button>
+						<div class="reply-form">
+							<div class="input" data-placeholder="Leave a comment"></div>
+						</div>
+					</div>
+				</div>
+			{{/each}}
+		</div>
+		<div class="close"></div>
 	</div>
 </div>
 

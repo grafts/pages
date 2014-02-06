@@ -26,7 +26,7 @@ define([
 				Backbone.pubsub.on('scroll', update, this);
 				
 				function update(){
-					var top = $('body').scrollTop();
+					var top = $('.screen').offset().top;
 					if(top != 0){
 						$('.logo').addClass('hide');
 					}

@@ -16,10 +16,11 @@ define([
 		template: JST['app/scripts/templates/video.hbs'],
 		events: {
 			'click a' : 'link',
-			'click .comments-link' : 'commentToggle',
+			'click .scripts .item.on .comments-link' : 'commentToggle',
 			'click .reply' : 'replyFormToggle',
-			'click .anker' : 'gotoClickedScript',
-			'click .clock' : 'gotoClickedScript'
+			'click .clock'  : 'gotoClickedScript',
+			'click .anker'  : 'gotoClickedScript',
+			'click .script'  : 'gotoClickedScript'
 		},
 		initialize: function(id){
 			var self = this,
@@ -79,31 +80,6 @@ define([
 						});
 					}
 				},
-				_setPlayer = function(currentPosition){
-					var windowHeight = $(window).height(),
-						maxHeight = 860,
-						playerOffset;
-
-					if(windowHeight > maxHeight){
-						playerOffset = maxHeight;
-					} else {
-						playerOffset = windowHeight;
-					}
-
-					// scroll x 
-					if(currentPosition >= (playerOffset+64)){
-						self.$('.contents').addClass('fix');
-						self.$('.head').addClass('off');
-					} else {
-						self.$('.contents').removeClass('fix');
-						self.$('.head').removeClass('off');
-					}
-
-					//scroll y
-					if(windowHeight > 640 && window.pageXOffset >= 0){
-						$('.player').css('margin-left', -window.pageXOffset + 'px');
-					}
-				},
 				_setLayout = _.debounce(function(){
 					if($(window).height() > layoutChangeHeight){
 						self.portraitLayout = true;
@@ -119,7 +95,6 @@ define([
 				var currentPosition = $(window).scrollTop();
 
 				_excuteAutoScroll(currentPosition);
-				// _setPlayer(currentPosition);
 
 			}, 1);
 
@@ -141,15 +116,21 @@ define([
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		},
 		commentToggle : function(e){
-			var seq = e.currentTarget.parentNode.dataset.seq,
-				comments = this.$('.comments-bundle');
+			var seq      = e.currentTarget.parentNode.dataset.seq,
+				contents = this.$('.contents'),
+				comments = this.$('.script-comments-bundle');
 			
-			this.commentChange(seq);
+			if(contents.hasClass('comments-on')){
+				this.$('.script-comments-bundle').find('.item').removeClass('on');
+			}
+			else {
+				this.commentChange(seq);
+			}
 			comments.toggle();
 			this.$('.contents').toggleClass('comments-on');
 		},
 		commentChange : function(seq){
-			this.$('.comments-bundle').children().removeClass('on').eq(seq).addClass('on');
+			this.$('.script-comments-bundle').find('.item').removeClass('on').eq(seq).addClass('on');
 		},
 		replyFormToggle : function(e){
 			$(e.currentTarget.nextElementSibling).toggle();
@@ -159,10 +140,21 @@ define([
 			Backbone.pubsub.trigger('videoTimelineLink:' + this.model.id, current);
 		},
 		scrollToArticle : function(scriptSeq){
-			var timeline     = this.$('.timeline-contents').find('.scripts'),
-				item         = timeline.children('.item:eq('+scriptSeq+')');
+			var self         = this,
+				timeline     = this.$('.timeline-contents').find('.scripts'),
+				items        = timeline.children(),
+				item         = items.eq(scriptSeq);
 
-			timeline.scrollTop(timeline.scrollTop() + item.position().top);
+			items.removeClass('on');
+			// this.$('.scripts').addClass('moving');
+			timeline.animate({
+				scrollTop : timeline.scrollTop() + item.position().top
+			},
+			500,
+			function(){
+				item.addClass('on');
+				// self.$('.scripts').removeClass('moving');
+			});
 			this.commentChange(scriptSeq);
 		},
 		addPlayer : function(){
@@ -188,26 +180,73 @@ define([
 				progressSync;
 
 			var on = {
-				'unstarted' : function(video){
-					console.log(arguments);
+					'unstarted' : function(video){
+						console.log(arguments);
+					},
+					'ended' : function(video){
+						clearInterval(progressSync);
+					},
+					'playing' : function(video){
+						progressSync = setInterval(interval, 500, video);
+					},
+					'paused' : function(video){
+						clearInterval(progressSync);
+						console.log(arguments);
+					},
+					'buffering' : function(video){
+						console.log(arguments);
+					},
+					'video cued' : function(video){
+						console.log(arguments);
+					}
+				};
+
+			var _removeLoadingImage = function(YT){
+					dom.empty();
+					return YT;
 				},
-				'ended' : function(video){
-					clearInterval(progressSync);
+				_createPlayer = function(YT){
+					var video = new YT.Player(dom[0], {
+						videoId : '48auKg6es8E'
+					});
+					return video;
 				},
-				'playing' : function(video){
-					progressSync = setInterval(interval, 500, video);
+				_setStateEvent = function(video){
+					// unstarted (-1), ended (0), playing (1), paused (2), buffering (3), video cued (5).
+					var states = {
+							'-1' : 'unstarted',
+							'0'  : 'ended',
+							'1'  : 'playing',
+							'2'  : 'paused',
+							'3'  : 'buffering',
+							'5'  : 'video cued'
+						};
+
+					video.addEventListener('onStateChange', function(current, e){
+						on[states[current.data]](video);
+					});
+					return video;
 				},
-				'paused' : function(video){
-					clearInterval(progressSync);
-					console.log(arguments);
-				},
-				'buffering' : function(video){
-					console.log(arguments);
-				},
-				'video cued' : function(video){
-					console.log(arguments);
-				}
-			}
+				_setPlayEvent = function(video){
+					var currentScriptSeq = -1,
+						_findArtcle = function(scriptSeq, video){
+							var script = this.model.get('contents')[scriptSeq],
+								time   = script.time;
+
+							video.seekTo(time);
+						};
+
+					Backbone.pubsub.on('videoTimelineLink:' + self.model.id, function(scriptSeq){
+						_findArtcle.call(this, scriptSeq, video);
+					}, self);
+					Backbone.pubsub.on('videoSync:' + self.model.id, function(currentTime, scriptSeq){
+						if(currentScriptSeq != scriptSeq){
+							currentScriptSeq = scriptSeq;
+							self.scrollToArticle(scriptSeq);
+						}
+					});
+					return video;
+				};
 
 			dom.empty();
 
@@ -216,96 +255,56 @@ define([
 			});
 
 			loadYoutubeLib
-			.then(createPlayer)
-			.then(setStateEvent)
-			.then(setPlayEvent)
+			.then(_removeLoadingImage)
+			.then(_createPlayer)
+			.then(_setStateEvent)
+			.then(_setPlayEvent)
 			.then(function(){
 				Backbone.pubsub.on('scroll', self.scrollEventBind, self);
 			});
 
-			function createPlayer(YT){
-				var video = new YT.Player(dom[0], {
-					videoId : '48auKg6es8E'
-				});
-				return video;
-			}
-			function setStateEvent(video){
-				// unstarted (-1), ended (0), playing (1), paused (2), buffering (3), video cued (5).
-				var states = {
-						'-1' : 'unstarted',
-						'0'  : 'ended',
-						'1'  : 'playing',
-						'2'  : 'paused',
-						'3'  : 'buffering',
-						'5'  : 'video cued'
-					};
-
-				video.addEventListener('onStateChange', function(current, e){
-					on[states[current.data]](video);
-				});
-				return video;
-			}
-			function setPlayEvent(video){
-				var currentScriptSeq = -1,
-					_findArtcle = function(scriptSeq, video){
-						var script = this.model.get('contents')[scriptSeq],
-							time   = script.time;
-
-						video.seekTo(time);
-					};
-
-				Backbone.pubsub.on('videoTimelineLink:' + self.model.id, function(scriptSeq){
-					_findArtcle.call(this, scriptSeq, video);
-				}, self);
-				Backbone.pubsub.on('videoSync:' + self.model.id, function(currentTime, scriptSeq){
-					if(currentScriptSeq != scriptSeq){
-						currentScriptSeq = scriptSeq;
-						self.scrollToArticle(scriptSeq);
-					}
-				});
-
-				return video;
-			}
 		},
 		addContents : function(){
-			var self = this;
+			var self = this,
+				_addTimeline = function(){
+					if(this.timeline){
+						this.timeline.unrender();
+						this.$('.timeline').remove();
+						delete this.timeline;
+					}
+
+					this.timeline = new TimelineView({
+						id : self.model.get('id'),
+						contents : self.model.getContents(),
+						duration : self.model.get('duration')
+					});
+
+					this.$('.video').after(this.timeline.render());
+				},
+				_addScripts = function(){
+					this.$('.scripts').children(':eq(0)').addClass('on');
+				};
+
+			_addTimeline.call(this);
+			_addScripts.call(this);
 			
-			if(this.timeline){
-				this.timeline.unrender();
-				this.$('.timeline').remove();
-				delete this.timeline;
-			}
-
-			this.timeline = new TimelineView({
-				id : self.model.get('id'),
-				contents : self.model.getContents(),
-				duration : self.model.get('duration')
-			});
-
-			this.$('.video').after(this.timeline.render());
 		},
 		addCover : function(dom, cover){
 			var self = this,
 				coverDom = dom.children('.cover'),
-				img;
+				img,
+				_addCover,
+				_is_dark,
+				_getAverageRGB;
 
 			if(!cover){
 				return;
 			}
 
-			coverDom
-			.removeClass('with-cover').removeClass('with-dark-cover').removeClass('on')
-			.removeAttr('background-image')
-			.empty();
-
-			img = new Image();
-			img.src = cover.src;
-			img.onload = _addCover;
-
-			function _addCover(){
+			_addCover = function(){
 				var className = 'with-cover';
 
-				if(is_dark(getAverageRGB(this))){
+				if(_is_dark(_getAverageRGB(this))){
 					className = 'with-dark-cover';
 				}
 
@@ -313,18 +312,16 @@ define([
 				.css('background-image', 'url(' + this.src + ')')
 				.addClass('on')
 				.end().addClass(className);
-			}
-
-			function is_dark(averageRGB){
+			};
+			_is_dark = function(averageRGB){
 				var max = 255 * 3 / 2,
 					avg = _.values(averageRGB).reduce(function(previousValue, currentValue){
 						return previousValue + currentValue;
 					});
 
 					return (max > avg);
-			}
-
-			function getAverageRGB(imgEl) {
+			};
+			_getAverageRGB = function(imgEl) {
 
 				var blockSize = 5, // only visit every 5 pixels
 					defaultRGB = {r:255,g:255,b:255}, // for non-supporting envs
@@ -367,8 +364,17 @@ define([
 				rgb.b = ~~(rgb.b/count);
 
 				return rgb;
+			};
 
-			}
+			coverDom
+			.removeClass('with-cover').removeClass('with-dark-cover').removeClass('on')
+			.removeAttr('background-image')
+			.empty();
+
+			img = new Image();
+			img.src = cover.src;
+			img.onload = _addCover;
+
 		}
 	});
 
