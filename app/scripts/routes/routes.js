@@ -42,6 +42,12 @@ define([
 			_.bindAll(this);
 
 			(new UtilsController).run();
+
+			require(['font!custom,families:[NanumBarunGothic, Nanum Myeongjo],urls:[/styles/fonts/NanumBarunGothic.css, //fonts.googleapis.com/earlyaccess/nanummyeongjo.css]'], function(){
+				$('.serif').css('font-family', 'Nanum Myeongjo');
+				$('.sans-serif').css('font-family', 'NanumBarunGothic');
+			});
+
 		},
 
 		_router : function(resource, id, action){

@@ -1,7 +1,7 @@
 'use strict';
 
 require.config({
-	deps : ['main'],
+	deps : ['main', 'promise'],
 	shim : {
 		underscore : {
 			exports : '_'
