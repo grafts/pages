@@ -6,22 +6,23 @@ define([
 	'backbone',
 	'templates',
 
-	'youtube',
+	'youtube!',
+	'views/components/cover',
 	'views/components/video_player_timeline'
-], function ($, _, Backbone, JST, YT, TimelineView) {
+], function ($, _, Backbone, JST, YT, CoverView, TimelineView) {
 	'use strict';
 
-	var VideoView = Backbone.View.extend({
+	var View = Backbone.View.extend({
 		// el: '.video-item',
 		tagName: 'div',
 		template: JST['app/scripts/templates/video.hbs'],
 		events: {
-			'click a' : 'link',
+			'click a'                                : 'link',
 			'click .scripts .item.on .comments-link' : 'commentToggle',
-			'click .reply' : 'replyFormToggle',
-			'click .clock'  : 'gotoClickedScript',
-			'click .anker'  : 'gotoClickedScript',
-			'click .script'  : 'gotoClickedScript'
+			'click .reply'                           : 'replyFormToggle',
+			'click .clock'                           : 'gotoClickedScript',
+			'click .anker'                           : 'gotoClickedScript',
+			'click .script'                          : 'gotoClickedScript'
 		},
 		initialize: function(id){
 			var self = this,
@@ -35,71 +36,52 @@ define([
 			data.contents = this.model.getContents();
 			this.$el.append(this.template(data));
 
-			this.model.on('change:coverImage', this.addCover);
-			this.model.on('change:video', this.addPlayer);
-			this.model.on('change:contents', this.addContents);
-			this.model.on('change:relate', this.addRelate);
-
-			this.addCover(this.$('.head'), this.model.get('coverImage'));
+			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
 			this.addPlayer();
 			this.addContents();
-			this.addCover(this.$('.relate'), this.model.get('relate').coverImage);
-
-			this.portraitLayout = true;
+			this.addCoverImage(this.$('.relate'), this.model.get('relate').coverImage);
 
 		},
 		render: function(){
-			var self  = this,
-				startScroll = true,
-				scrollStoped = true,
-				layoutChangeHeight = 640,
-				_excuteAutoScroll = function(currentPosition){
-					var windowHeight = $(window).height();
-					if(!scrollStoped){
-						return;
-					}
-					if(startScroll && currentPosition > (windowHeight*0.2)){
-						scrollStoped = false;
-						$('html').animate({
-							scrollTop : windowHeight
-						},
-						200,
-						function(){
-							startScroll = false;
-							scrollStoped = true;
-						});
-					}
-					else if(!startScroll && currentPosition < (windowHeight*0.8)){
-						scrollStoped = false;
-						$('html').animate({
-							scrollTop : 0
-						},
-						200,
-						function(){
-							startScroll = true;
-							scrollStoped = true;
-						});
-					}
-				},
-				_setLayout = _.debounce(function(){
-					if($(window).height() > layoutChangeHeight){
-						self.portraitLayout = true;
-						self.$el.removeClass('landscape');
-					} else {
-						self.portraitLayout = false;
-						self.$el.addClass('landscape');
-					}
-				}, 100);
+			// var self  = this,
+			// 	startScroll = true,
+			// 	scrollStoped = true,
+			// 	_excuteAutoScroll = function(currentPosition){
+			// 		var windowHeight = $(window).height();
+			// 		if(!scrollStoped){
+			// 			return;
+			// 		}
+			// 		if(startScroll && currentPosition > (windowHeight*0.2)){
+			// 			scrollStoped = false;
+			// 			$('html').animate({
+			// 				scrollTop : windowHeight
+			// 			},
+			// 			200,
+			// 			function(){
+			// 				startScroll = false;
+			// 				scrollStoped = true;
+			// 			});
+			// 		}
+			// 		else if(!startScroll && currentPosition < (windowHeight*0.8)){
+			// 			scrollStoped = false;
+			// 			$('html').animate({
+			// 				scrollTop : 0
+			// 			},
+			// 			200,
+			// 			function(){
+			// 				startScroll = true;
+			// 				scrollStoped = true;
+			// 			});
+			// 		}
+			// 	};
 			
 
-			this.scrollEventBind = _.debounce(function(){
-				var currentPosition = $(window).scrollTop();
+			// this.scrollEventBind = _.debounce(function(){
+			// 	var currentPosition = self.$el.offset().top;
 
-				_excuteAutoScroll(currentPosition);
+			// 	_excuteAutoScroll(currentPosition);
 
-			}, 1);
-
-			Backbone.pubsub.on('resize', _setLayout, this);
+			// }, 1);
 
 			console.log('video view render');
 
@@ -288,94 +270,31 @@ define([
 			_addScripts.call(this);
 			
 		},
-		addCover : function(dom, cover){
-			var self = this,
-				coverDom = dom.children('.cover'),
-				img,
-				_addCover,
-				_is_dark,
-				_getAverageRGB;
+		addCoverImage : function(dom, cover){
+			var self  = this,
+				name  = dom.attr('class');
 
-			if(!cover){
+			if(!cover || !cover.src){
 				return;
 			}
 
-			_addCover = function(){
-				var className = 'with-cover';
+			if(!this.cover){
+				this.cover = {};
+			}
 
-				if(_is_dark(_getAverageRGB(this))){
-					className = 'with-dark-cover';
-				}
+			if(this.cover[name]){
+				this.cover[name].unrender();
+				delete this.cover;
+			}
 
-				coverDom
-				.css('background-image', 'url(' + this.src + ')')
-				.addClass('on')
-				.end().addClass(className);
-			};
-			_is_dark = function(averageRGB){
-				var max = 255 * 3 / 2,
-					avg = _.values(averageRGB).reduce(function(previousValue, currentValue){
-						return previousValue + currentValue;
-					});
+			this.cover[name] = new CoverView({
+				el       : dom,
+				cover    : cover
+			});
 
-					return (max > avg);
-			};
-			_getAverageRGB = function(imgEl) {
-
-				var blockSize = 5, // only visit every 5 pixels
-					defaultRGB = {r:255,g:255,b:255}, // for non-supporting envs
-					canvas = document.createElement('canvas'),
-					context = canvas.getContext && canvas.getContext('2d'),
-					data, width, height,
-					i = -4,
-					length,
-					rgb = {r:0,g:0,b:0},
-					count = 0;
-
-				if (!context) {
-					return defaultRGB;
-				}
-
-				height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
-				width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
-
-				context.drawImage(imgEl, 0, 0);
-
-				try {
-					data = context.getImageData(0, 0, width, height);
-				} catch(e) {
-					/* security error, img on diff domain */
-					return defaultRGB;
-				}
-
-				length = data.data.length;
-
-				while ( (i += blockSize * 4) < length ) {
-					++count;
-					rgb.r += data.data[i];
-					rgb.g += data.data[i+1];
-					rgb.b += data.data[i+2];
-				}
-
-				// ~~ used to floor values
-				rgb.r = ~~(rgb.r/count);
-				rgb.g = ~~(rgb.g/count);
-				rgb.b = ~~(rgb.b/count);
-
-				return rgb;
-			};
-
-			coverDom
-			.removeClass('with-cover').removeClass('with-dark-cover').removeClass('on')
-			.removeAttr('background-image')
-			.empty();
-
-			img = new Image();
-			img.src = cover.src;
-			img.onload = _addCover;
-
+			this.cover[name].render();
 		}
 	});
 
-	return VideoView;
+	return View;
 });

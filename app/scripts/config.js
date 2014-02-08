@@ -34,9 +34,6 @@ require.config({
 			deps : [
 				'propertyParser'
 			]
-		},
-		youtube : {
-			exports : 'YT'
 		}
 	},
 	paths: {
@@ -58,6 +55,6 @@ require.config({
 		loading            : '../scripts/views/loading',
 		
 		editor             : '../scripts/vendor/medium',
-		youtube            : 'https://www.youtube.com/iframe_api?noext',
+		youtube            : '../scripts/vendor/youtube'
 	}
 });

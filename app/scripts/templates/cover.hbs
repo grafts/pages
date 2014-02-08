@@ -1,0 +1,20 @@
+<div class="cover"></div>
+
+{{#if editable}}
+<div class="tool">
+	<a class="tool-edit" href="/{{resource}}/{{id}}/update">
+		<i class="icon-cog"></i>
+	</a>
+</div>
+{{/if}}
+
+<div class="contents sans-serif">
+	<div class="container">
+		<h1 class="title">{{title}}</h1>
+		<p class="subtitle">{{subtitle}}</p>
+		<a class="author" href="/user/{{author.id}}">
+			<img class="avatar" src="{{author.avatar}}" alt="avatar">
+			<span class="name">{{author.name}}</span>
+		</a>
+	</div>
+</div>
