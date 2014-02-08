@@ -204,9 +204,9 @@ define([
 
 			var _removeLoadingImage = function(){
 					dom.empty();
-					return true;
+					return YT;
 				},
-				_createPlayer = function(){
+				_createPlayer = function(YT){
 					var video = new YT.Player(dom[0], {
 						videoId : '48auKg6es8E'
 					});

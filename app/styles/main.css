@@ -2724,6 +2724,10 @@ input[type="checkbox"] {
 .video-item .head.with-dark-cover .tool a:hover {
   color: white;
 }
+.video-item .head.with-dark-cover .head-contents {
+  position: absolute;
+  bottom: 80px;
+}
 .video-item .head.with-dark-cover .head-contents .title {
   color: white;
 }
@@ -2775,16 +2779,16 @@ input[type="checkbox"] {
   color: white;
 }
 .video-item .head .head-contents {
-  position: absolute;
-  bottom: 80px;
+  position: relative;
   width: 100%;
   left: 0;
 }
 .video-item .head .head-contents .title {
+  margin-top: 120px;
+  margin-bottom: 20px;
   letter-spacing: -0.02em;
   font-size: 2.3em;
   line-height: 1.4em;
-  margin-bottom: 20px;
 }
 .video-item .head .head-contents .subtitle {
   font-size: 1.4em;
@@ -2807,9 +2811,8 @@ input[type="checkbox"] {
 .video-item .head .head-contents .author span {
   display: inline-block;
   vertical-align: top;
-  font-size: 1.15em;
-  line-height: 1em;
-  padding-top: 10px;
+  font-size: 1em;
+  line-height: 2.5em;
   padding-left: 4px;
 }
 .video-item .contents {
@@ -3448,8 +3451,7 @@ input[type="checkbox"] {
   display: inline-block;
   vertical-align: top;
   font-size: 1em;
-  line-height: 1em;
-  padding-top: 10px;
+  line-height: 2.5em;
   padding-left: 4px;
 }
 @media (min-width: 459px) {
