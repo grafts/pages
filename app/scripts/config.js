@@ -36,9 +36,6 @@ require.config({
 			]
 		},
 		youtube : {
-			deps : [
-				'youtubePreload'
-			],
 			exports : 'YT'
 		}
 	},
@@ -61,7 +58,6 @@ require.config({
 		loading            : '../scripts/views/loading',
 		
 		editor             : '../scripts/vendor/medium',
-		youtubePreload     : '../scripts/vendor/youtubePreload',
-		youtube            : 'https://s.ytimg.com/yts/jsbin/www-widgetapi-vfldKI4RW',
+		youtube            : 'https://www.youtube.com/iframe_api?noext',
 	}
 });

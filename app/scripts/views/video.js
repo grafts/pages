@@ -6,8 +6,9 @@ define([
 	'backbone',
 	'templates',
 
+	'youtube',
 	'views/components/video_player_timeline'
-], function ($, _, Backbone, JST, TimelineView) {
+], function ($, _, Backbone, JST, YT, TimelineView) {
 	'use strict';
 
 	var VideoView = Backbone.View.extend({
@@ -160,7 +161,7 @@ define([
 		addPlayer : function(){
 			var self = this,
 				dom = self.$('.video'),
-				loadYoutubeLib,
+				loadPlayer,
 				interval = function(video){
 
 					var currentTime      = video.getCurrentTime(),
@@ -201,11 +202,11 @@ define([
 					}
 				};
 
-			var _removeLoadingImage = function(YT){
+			var _removeLoadingImage = function(){
 					dom.empty();
-					return YT;
+					return true;
 				},
-				_createPlayer = function(YT){
+				_createPlayer = function(){
 					var video = new YT.Player(dom[0], {
 						videoId : '48auKg6es8E'
 					});
@@ -250,11 +251,9 @@ define([
 
 			dom.empty();
 
-			loadYoutubeLib = new Promise(function(resolve, reject){
-				require(['youtube'], resolve);
-			});
+			loadPlayer = Promise.resolve();
 
-			loadYoutubeLib
+			loadPlayer
 			.then(_removeLoadingImage)
 			.then(_createPlayer)
 			.then(_setStateEvent)
