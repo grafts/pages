@@ -77,7 +77,17 @@ body {
 	@media (min-width: @screen_huge) {
 		font-size: 16px;
 	}
-
+}
+input[type="checkbox"] {
+    display:inline-block;
+    width:24px;
+    height:24px;
+    margin:0;
+    vertical-align:middle;
+    cursor:pointer;
+    border: 1px solid @common_color;
+    background: transparent;
+    .rounded-corners(10px);
 }
 strong {
 	font-weight: bold;
@@ -126,22 +136,23 @@ h4 {
 	-webkit-perspective: 1500px;
 	height: 100%;
 	min-height: 100%;
+	.transform-origin(0 0);
+	.transition_all(0.15s);
 	&.scrollable {
 		overflow: hidden;
 	}
-
+	&.off {
+		.filter(blur(4px));
+		.transform(translateX(300px) translateY(80px) rotate(-2deg));
+	}
 }
 section {
-	position: absolute;
+	position: relative;
 	background: #fff;
 	width: 100%;
 	min-height: 100%;
 	display: none;
 	.transition_all();
-	// .transform(translateZ(0) translateX(0) rotateY(0));
-	&.off {
-		.transform(translateZ(-800px) translateX(35%) rotateY(-30deg));
-	}
 }
 .browsehappy {
 	margin: 0;
@@ -232,36 +243,18 @@ section {
 			opacity: 1;
 		}
 		ul.menu {
-			display: inline-block;
-			li {
-				@delay : 0.02s;
-				opacity: 1;
-				.transform(translateX(0));
-				&:nth-child(2) {
-					.transition-delay(@delay * 2);
-				}
-				&:nth-child(3) {
-					.transition-delay(@delay * 3);
-				}
-				&:nth-child(4) {
-					.transition-delay(@delay * 4);
-				}
-				&:nth-child(5) {
-					.transition-delay(@delay * 5);
-				}
-				&:nth-child(6) {
-					.transition-delay(@delay * 6);
-				}
-				&:nth-child(7) {
-					.transition-delay(@delay * 7);
-				}
-			}
+			opacity: 1;
+			.transform(rotate(0) translateX(0));
 		}
 	}
 	ul.menu {
-		display: none;
+		display: inline-block;
 		margin-top: 48px;
 		font-size: 20px;
+		opacity: 0;
+		.transform(rotate(90deg) translateX(-40px));
+		.transform-origin(-100px 0);
+		.transition_all();
 		form {
 			display: inline;
 			input {
@@ -272,11 +265,8 @@ section {
 			}
 		}
 		li {
-			opacity: 0;
-			.transform(translateX(-100%));
 			color: rgba(255, 255, 255,0.7);
 			margin-bottom: 24px;
-			.transition_all();
 			&:hover {
 				color: #fff;
 			}

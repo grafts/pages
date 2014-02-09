@@ -48,7 +48,7 @@ define([
 			Backbone.pubsub.on('gnb:toggle', toggleView, this);
 
 			function toggleView(){
-				$('.view').toggleClass('scrollable').children('section').toggleClass('off');
+				$('.screen').toggleClass('scrollable').toggleClass('off');
 			}
 		},
 		stop : function(){

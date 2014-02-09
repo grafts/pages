@@ -1,0 +1,168 @@
+.lesson-item.with-dark-cover {
+	.class-summary {
+		h4 {
+			color: #fff;
+		}
+		.name {
+			color: #fff;
+		}
+		.divder {
+			&:after {
+				border-top: 1px solid #fff;
+			}
+		}
+		.head-contents {
+			.title {
+				color: #fff;
+			}
+			.subtitle {
+				color: #fff;
+			}
+		}
+	}
+}
+
+.lesson-item {
+	.cover {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 50%;
+		height: 100%;
+		.cover-bg();
+	}
+	.class-summary, .lesson-contents {
+		display: inline-block;
+		vertical-align: top;
+		margin: 80px 0 80px 0;
+		padding: 0;
+		width: 47%;
+		.container {
+			width: 100%;
+		}
+	}
+	.class-summary {
+		text-align: center;
+		.author {
+			margin-top: 40px;
+			margin-bottom: 36px;
+			display: block;
+			.avatar {
+				display: inline-block;
+				height: 220px;
+				width: 220px;
+				margin-bottom: 10px;
+				border: 10px solid rgba(255, 255, 255, 0.5);
+				.rounded-corners(110px);
+			}
+			h4 {
+				font-size: 1.2em;
+				margin: 0;
+			}
+			.name {
+				font-weight: bold;
+				font-size: 2em;
+				line-height: 1.2em;
+				margin: 0;
+			}
+		}
+		.divder {
+			text-align: center;
+			margin-bottom: 44px;
+			height: 1px;
+			&:after {
+				content: '';
+				width: 44px;
+				margin: 0;
+				display: inline-block;
+				border-top: 1px solid @common_color;
+				vertical-align: top;
+			}
+		}
+		.head-contents {
+			display: block;
+			h4 {
+				font-size: 1.2em;
+				margin: 0;
+			}
+			.title {
+				font-weight: bold;
+				font-size: 1.65em;
+				line-height: 1.2em;
+				margin: 0 0 16px 0;
+			}
+			.subtitle {
+				font-size: 1.2em;
+				line-height: 1.2em;
+				margin: 0;
+			}
+			
+		}
+	}
+	.lesson-contents {
+		padding-right: 0;
+		float: right;
+		h1 {
+			border-bottom: 8px solid @title_color;
+			padding-bottom: 6px;
+			margin-bottom: 8px;
+			width: 100%;
+			overflow: hidden;
+			.ellipsis();
+		}
+		.datas {
+			margin-bottom: 44px;
+			.item {
+				width: 100%;
+				margin-bottom: 4px;
+				font-size: 1.2em;
+				border-collapse: collapse;
+				tr {
+					td {
+						padding: 8px 0;
+						border: 0;
+						border-bottom: 1px solid @common_color;
+						&:last-child {
+							text-align: right;
+						}
+					}
+				}
+				.title {
+					text-align: left !important;
+				}
+				.name {
+					font-weight: bold;
+				}
+				border-bottom: 4px solid @common_color;
+				&:last-child {
+					border-bottom: 8px solid @title_color;
+				}
+			}
+		}
+		.agreement {
+			font-size: 1.6em;
+			padding-left: 20%;
+			text-align: right;
+			.read-this {
+				margin-bottom: 16px;
+				a {
+					color: #ff0000;
+					text-decoration: underline;
+				}
+			}
+			form {
+				.input {
+					margin-bottom: 16px;
+					font-size: 1.1em;
+				}
+				input.button {
+					font-size: 0.8em;
+					background: #fff;
+					&:hover {
+						background: @hover_color;
+					}
+				}
+			}
+		}
+	}
+}

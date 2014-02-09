@@ -31,7 +31,7 @@ define([
 			this.$el.addClass('on');
 			Backbone.pubsub.trigger('gnb:toggle', null, this);
 
-			bg = $('<div class="close"/>');
+			bg = $('<div class="gnb-close"/>');
 			this.$el.after(bg);
 			setTimeout(function(){
 				bg.addClass('on').on('click', function(){
@@ -46,7 +46,7 @@ define([
 			this.$el.removeClass('on');
 			Backbone.pubsub.trigger('gnb:toggle', null, this);
 
-			if(bg.hasClass('close')){
+			if(bg.hasClass('gnb-close')){
 				bg.remove();
 			}
 		},
