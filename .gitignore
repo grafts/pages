@@ -6,4 +6,5 @@ app/bower_components
 .tmp
 test/bower_components/
 app/styles/lessStyles/*.css
+app/styles/*.map
 .DS_Store
