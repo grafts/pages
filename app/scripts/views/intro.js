@@ -16,12 +16,24 @@ define([
 		render: function(){
 			console.log('intro view render');
 			this.delegateEvents();
+			this.adjustVideoPosition();
 			this.$el.show();
+
+			Backbone.pubsub.on('resize', this.adjustVideoPosition, this);
 		},
 		unrender: function(){
 			this.undelegateEvents();
+			Backbone.pubsub.off(null, null, this);
 			this.$el.hide();
 		},
+		adjustVideoPosition : _.debounce(function(){
+			var video = this.$('video'),
+				vidWidth = video.width(),
+				bodyWidth = $('body').width(),
+				marginLeft = (vidWidth - bodyWidth)/2;
+
+			video.css('margin-left', -marginLeft + 'px');
+		}, 200),
 		link : function(e){
 			e.preventDefault();
 			e.stopPropagation();

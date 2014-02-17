@@ -23,7 +23,7 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
 
     var modRewrite = require('connect-modrewrite')([
-        '!\\.ttf|\\.woff|\\.ttf|\\.eot|\\.html|\\.js|\\.coffee|\\.css|\\.png|\\.jpg|\\.gif|\\.svg$ /index.html [L]'
+        '!\\.mp4|\\.webm|\\.ttf|\\.woff|\\.ttf|\\.eot|\\.html|\\.js|\\.coffee|\\.css|\\.png|\\.jpg|\\.gif|\\.svg$ /index.html [L]'
     ]);
 
     // configurable paths
