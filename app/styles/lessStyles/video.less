@@ -299,63 +299,6 @@
 			}
 		}
 
-		.widget {
-			margin-top: @height * 0.19;
-			padding-bottom: @height * 0.19;
-			height: 40px;
-			.transition_all();
-			.widget-counter {
-				display: inline-block;
-				i {
-					cursor: pointer;
-					display: inline-block;
-					font-size: 1.3em;
-					width: 1.9em;
-					height: 1.9em;
-					text-align: center;
-					padding-top: 0.37em;
-					line-height: 0;
-					border: 1px solid #424242;
-					color: #424242;
-					.rounded-corners(80px);
-					.transition_all();
-					&:hover {
-						color: #fff;
-						background: @hover_color;
-						border: 1px solid @hover_color;
-					}
-				}
-				.view, .like {
-					span {
-						display: inline-block;
-						font-size: 1.2em;
-						min-width: 80px;
-						margin-right: 1em;
-					}
-				}
-			}
-			.widget-share {
-				display: inline-block;
-				float: right;
-				ul {
-					padding: 0;
-					margin: 0;
-					li {
-						display: inline-block;
-						font-size: 2em;
-						color: #808285;
-						margin-left: 4px;
-						cursor: pointer;
-						.transition_all();
-						&:hover {
-							color: @point_color;
-							font-size: 3em;
-						}
-					}
-				}
-			}
-		}
-
 		.script-comments-bundle {
 			position: relative;
 			display: none;
@@ -486,78 +429,7 @@
 			display: inline-block;
 		}
 	}
-
-
-	.relate.with-cover, .relate.with-dark-cover {
-		.transition_all();
-		.cover {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			opacity: 0;
-			.cover-bg();
-		}
-		.cover.on {
-			opacity: 1;
-		}
-	}
-	.relate.with-dark-cover {
-		.relate-contents {
-			.title {
-				color : #fff;
-			}
-			.subtitle {
-				color: rgba(255, 255, 255, 0.7);
-			}
-			.author {
-				span {
-					color: rgba(255, 255, 255, 0.7);
-				}
-			}
-		}
-	}
-	.relate {
-		position: relative;
-		width: 100%;
-		background: #fff;
-		padding: @height * 0.22;
-		border-top: 1px solid @line_color;
-		.headline {
-			.title {
-				letter-spacing: -0.02em;
-				font-size: 2em;
-				line-height: 1.4em;
-				margin-bottom: 20px;
-			}
-			.subtitle {
-				font-size: 1.2em;
-				line-height: 1.3em;
-			}
-			.author {
-				padding-top: 14px;
-				display: inline-block;
-				img {
-					display: inline-block;
-					height: 32px;
-					width: 32px;
-					.rounded-corners(18px);
-				}
-				span {
-					display: inline-block;
-					vertical-align: top;
-					font-size: 1em;
-					line-height: 2.5em;
-					padding-left: 4px;
-				}
-			}
-		}
-	}
 }
-
-
-
 
 .video_mediaquery(@screen, @width, @height){
 	@timeline_height: 12px;
@@ -644,9 +516,6 @@
 				.widget {
 					.transform(translateX(@distance));
 				}
-			}
-			.relate {
-				padding: @height * 0.22;
 			}
 		}
 	}
