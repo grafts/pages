@@ -36,7 +36,7 @@ module.exports = function (grunt) {
         yeoman: yeomanConfig,
         watch: {
             options: {
-                nospawn: true,
+                // nospawn: true,
                 livereload: true
             },
             coffee: {

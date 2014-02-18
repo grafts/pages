@@ -1,27 +1,25 @@
-<div class="user-item-cover cover-bg" style="background-image: url(/images/cover_background.png);">
-	<div class="container"> 
+<div class="head">
+	<div class="tool">
+		<a class="tool-edit" href="/user/{{id}}/update">
+			<i class="icon-cog"></i>
+		</a>
+	</div>
 
-		<div class="user-item-cover-tool">
-			<a class="user-item-cover-tool-edit" href="/user/2/update">
-				<i class="icon-cog"></i>
-			</a>
-		</div>
-
-		<div class="user-item-cover-contents">
+	<div class="headline sans-serif">
+		<div class="container">
 			<div class="avatar">
-				<img class="avatar-image" src="/images/avatar_big.jpg" alt="avatar">
+				<img class="avatar-image" src="{{image.big.src}}" alt="avatar">
 			</div>
-			<h1 class="name">아만다 사이프리드</h1>
-			<span class="description">펜실베니아 갱킹의 제왕<br/>리신 정글 하드캐리합니다</span>
+			<h1 class="name">{{name}}</h1>
+			<span class="description">{{description}}</span>
 		</div>
-
 	</div>
 </div>
 
-<div class="user-item-contents">
+<div class="contents">
 	<div class="container">
 
-		<div class="user-item-contents-class">
+		<div class="contents-class">
 			<hr/>
 			<h4>Class</h4>
 			<ul>
@@ -58,7 +56,7 @@
 			</ul>
 		</div>
 
-		<div class="user-item-contents-video">
+		<div class="contents-video">
 			<hr/>
 			<h4>Video</h4>
 			<ul>

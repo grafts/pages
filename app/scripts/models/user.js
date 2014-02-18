@@ -1,23 +1,35 @@
-/*global define*/
-
 define([
 	'underscore',
 	'backbone'
 ], function (_, Backbone) {
 	'use strict';
 
-	var UserModel = Backbone.Model.extend({
-		defaults: {
-			id : '112',
-			name : '아만다 사이프리드',
-			description : '펜실베니아 갱킹의 제왕<br>리신 정글 하드캐리합니다',
-			image : 'images/avatar.jpg',
-			image_big : 'images/avatar_big.jpg',
-		},
+	//
+	//
+	// for prototype, dummy data input
+	var dummy = {
+			id          : 1,
+			name        : '아만다 사이프리드',
+			description : '펜실베니아 갱킹의 제왕. 리신 정글 하드캐리합니다',
+			image       : {
+				thumb   : {
+					src : '/images/avatar.jpg',
+				},
+				big     : {
+					src : '/images/avatar_big.jpg',
+				},
+				cover   : {
+					src : '/images/cover_background.png'
+				}
+			}
+		};
+
+	var Model = Backbone.Model.extend({
+		defaults: dummy,
 		initialize: function(){
 			
 		}
 	});
 
-	return UserModel;
+	return Model;
 });

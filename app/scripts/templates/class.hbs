@@ -1,6 +1,6 @@
 <div class="head">
 	<div class="tool">
-		<a class="tool-edit" href="/video/2/update">
+		<a class="tool-edit" href="/class/{{id}}/update">
 			<i class="icon-cog"></i>
 		</a>
 	</div>
@@ -23,7 +23,7 @@
 	</div>
 </div>
 
-<div class="class-item-contents">
+<div class="contents">
 	<div class="container">
 
 		<div class="video">
@@ -31,50 +31,62 @@
 		</div>
 		
 		<p><p>Some of the teams I have been in are Reason Gaming, Millenium and MouseSports.<br>It was with discipline, hard training and personal analysis of game mechanics that I was able to achieve my goals.<br>And today it is with great joy and excitement that I can offer to teach you these same methods that turned me into a Pro.<br>Each lesson is personalized to a students needs and wishes.<br>Here are some examples of the knowledge I can offer you in my lessons:<br>-Champion Analyses: Its Role, Skill mechanics, Synergyes, counter picks and tricks;<br>-Micro: Positioning, farming, skill timing and cooldown control;<br>-Macro: Timer control, mini map control and vision, analyses and comprehension of key points on the map, game phases, etc...<br>-Optimization: Runes, masteries, items and skins;<br>-Pro Gamer Psychology;<br>-Premade Coaching;<br>-Team Coaching;<br>-Team Leadership;<br>-E-sports career management. (How to get into a Pro Team, sponsorships, livestreaming, contracts, etc...)<br>-And many many more.<br>Here is my ESL page if you want a full list of my achievements and e-sports career:<br>http://www.esl.eu/fr/player/4965697/<br>Contact me if you wish to improve or have further questions.<br>Hope to see you soon.<br>GL &amp; HF ;).</p></p>
-
 	</div>
-</div>
 
-<div class="class-item-widget">
-	<div class="container">
-		<div class="class-item-widget-counter">
-			<a class="view">
-				<i class="icon-eye"></i>
-				<span>1</span>
-			</a>
-			<a class="like">
-				<i class="icon-thumbs-up"></i>
-				<span>1</span>
-			</a>
-			<a class="dislike">
-				<i class="icon-thumbs-down"></i>
-				<span>1</span>
-			</a>
-		</div>
-		<div class="class-item-widget-share">
-			<ul>
-				<li>
-					<a>
-						<i class="icon-gplus-squared"></i>
-					</a>
-				</li>
-				<li>
-					<a>
-						<i class="icon-facebook-squared"></i>
-					</a>
-				</li>
-				<li>
-					<a>
-						<i class="icon-twitter"></i>
-					</a>
-				</li>
-			</ul>
+	<div class="widget">
+		<div class="container">
+			<div class="widget-counter">
+				<span class="view">
+					<i class="icon-eye"></i>
+					<span>{{view}}</span>
+				</span>
+				<span class="like">
+					<i class="icon-thumbs-up"></i>
+					<span>{{like}}</span>
+				</span>
+			</div>
+			<div class="widget-share">
+				<ul>
+					<li>
+						<a>
+							<i class="icon-gplus-squared"></i>
+						</a>
+					</li>
+					<li>
+						<a>
+							<i class="icon-facebook-squared"></i>
+						</a>
+					</li>
+					<li>
+						<a>
+							<i class="icon-twitter"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </div>
 
-<div class="class-item-comment">
+<div class="comment">
 	<div class="container">
-		<hr/>
+	</div>
+</div>
+
+<div class="relate">
+	<div class="container">
+		<h4>RELATED VIDEO</h4>
+	</div>
+	<div class="headline sans-serif">
+		<div class="container">
+			<a href="/video/{{relate.id}}">
+				<h1 class="title">{{relate.title}}</h1>
+				<p class="subtitle">{{relate.subtitle}}</p>
+			</a>
+			<a class="author" href="/user/{{relate.author.id}}">
+				<img class="avatar" src="{{relate.author.avatar}}" alt="avatar">
+				<span class="name">{{relate.author.name}}</span>
+			</a>
+		</div>
 	</div>
 </div>
