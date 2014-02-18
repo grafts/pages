@@ -241,7 +241,7 @@ define([
 			.then(_setStateEvent)
 			.then(_setPlayEvent)
 			.then(function(){
-				Backbone.pubsub.on('scroll', self.scrollEventBind, self);
+				// Backbone.pubsub.on('scroll', self.scrollEventBind, self);
 			});
 
 		},

@@ -6,8 +6,9 @@ define([
 	'backbone',
 	'templates',
 
+	'youtube!',
 	'views/components/video_player_timeline'
-], function ($, _, Backbone, JST, TimelineView) {
+], function ($, _, Backbone, JST, YT, TimelineView) {
 	'use strict';
 
 	var VideoView = Backbone.View.extend({
@@ -199,9 +200,7 @@ define([
 
 			dom.empty();
 
-			loadYoutubeLib = new Promise(function(resolve, reject){
-				require(['youtube'], resolve);
-			});
+			loadYoutubeLib = Promise.resolve();
 
 			loadYoutubeLib
 			.then(createPlayer)
@@ -211,7 +210,7 @@ define([
 				Backbone.pubsub.on('scroll', self.scrollEventBind, self);
 			});
 
-			function createPlayer(YT){
+			function createPlayer(){
 				var video = new YT.Player(dom[0], {
 					videoId : '48auKg6es8E'
 				});

@@ -26,7 +26,9 @@ define([
 				mode: 'rich',
 				placeholder: 'Your Article'
 			});
-
+		},
+		unrender : function(){
+			
 		}
 	});
 
