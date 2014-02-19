@@ -1,5 +1,3 @@
-/*global define*/
-
 define([
 	'jquery',
 	'underscore',
@@ -22,7 +20,17 @@ define([
 		editView    : Backbone.View,
 		initialize  : function(){},
 		run         : function(param){
-			var view, View, edit='';
+
+			this.views[param.id] = this.createView(param);
+			this.el.append(this.views[param.id].render());
+			this.el && this.el.show();
+
+			this.dummyLoading();
+			this.garbageCollect();
+
+		},
+		createView : function(param){
+			var View, edit;
 
 			if((param.action && param.action == 'update') || (param.id && param.id == 'create')){
 				View = this.editView;
@@ -30,19 +38,32 @@ define([
 			}
 			else {
 				View = this.readView;
+				edit = '';
 			}
 
-			view = new View({
-				model : new this.model({
-					id : param.id
-				}),
-				id    : this.el.attr('class') + '_' + edit + param.id
-			});
-
-			this.views[param.id] = view;
-			this.el.append(view.render());
-			this.el && this.el.show();
-
+			if(this.views[param.id]){
+				return this.views[param.id];
+			}
+			else {
+				return new View({
+					model : new this.model({
+						id : param.id
+					}),
+					id    : this.el.attr('class') + '_' + edit + param.id
+				});
+			}
+		},
+		stop : function(param){
+			console.log(this.el.attr('class') + ' view stop');
+			this.el && this.el.hide();
+			for(var current in this.views){
+				this.views[current].unrender();
+			}
+		},
+		garbageCollect : function(){
+			
+		},
+		dummyLoading : function(){
 			var loading = new Loading();
 			loading.render();
 			loading.set();
@@ -52,14 +73,6 @@ define([
 
 				});
 			}, 300);
-		},
-
-		stop : function(param){
-			console.log(this.el.attr('class') + ' view stop');
-			this.el && this.el.hide();
-			for(var current in this.views){
-				this.views[current].unrender();
-			}
 		}
  	});
 

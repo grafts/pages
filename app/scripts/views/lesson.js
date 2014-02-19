@@ -20,6 +20,7 @@ define([
 		},
 		render: function(){
 			console.log('lesson view render');
+			this.$el.show();
 			// for prototype, dummy data input
 			this.model.set('coverImage', {
 				src : "/images/light_cover_background.png"

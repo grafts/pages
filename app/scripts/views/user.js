@@ -23,6 +23,7 @@ define([
 		},
 		render: function(){
 			console.log('user view render');
+			this.$el.show();
 			this.addCoverImage(this.$('.head'), this.model.get('image').cover);
 			return this.$el;
 		},

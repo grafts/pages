@@ -21,6 +21,7 @@ define([
 		},
 		render: function(){
 			console.log('class view render');
+			this.$el.show();
 			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
 			this.addCoverImage(this.$('.relate'), this.model.get('relate').coverImage);
 			return this.$el;

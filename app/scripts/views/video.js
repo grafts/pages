@@ -84,14 +84,19 @@ define([
 			// }, 1);
 
 			console.log('video view render');
-
+			this.$el.show();
 			return this.$el;
 		},
-		unrender: function(){
+		unrender: function(type){
 			var self = this;
+			Backbone.pubsub.trigger('videoUnrender:' + self.model.id, type);
 			Backbone.pubsub.off(null, null, this);
 			this.undelegateEvents();
 			this.$el.hide();
+		},
+		destroy : function(){
+			this.unrender(true);
+			this.remove();
 		},
 		link : function(e){
 			e.preventDefault();
@@ -217,6 +222,14 @@ define([
 								time   = script.time;
 
 							video.seekTo(time);
+						},
+						_unrender = function(type, video){
+							if(type){
+								video.destroy();
+							}
+							else {
+								video.stopVideo();
+							}
 						};
 
 					Backbone.pubsub.on('videoTimelineLink:' + self.model.id, function(scriptSeq){
@@ -228,6 +241,9 @@ define([
 							self.scrollToArticle(scriptSeq);
 						}
 					});
+					Backbone.pubsub.on('videoUnrender:' + self.model.id, function(type){
+						_unrender.call(this, type, video);
+					}, self);
 					return video;
 				};
 
