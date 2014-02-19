@@ -27,7 +27,7 @@ define([
 				
 				function update(){
 					var top = $(window).scrollTop();
-					if(top != 0){
+					if(top > 0){
 						$('.logo').addClass('hide');
 					}
 					else {
