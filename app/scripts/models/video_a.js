@@ -14,7 +14,8 @@ define([
 		{ text : '일반적으로 퍼플 진영 탑라이너들은 대부분 바론에서 올라오는 쪽에만 하나박고 삼거리쪽엔 박지 않습니다. 아깝거든요!! 이것을 노려서 바론뒤로 올라가는 갱킹이 의외로 성공률이 높습니다. 미드도 와드가 박혔고 탑골목도 와드박혔기때문에 약간은 방심하며 공격적으로 딜교환을 하게 되는 것이죠.', src:"/asd"}
 	];
 
-	var VideoModel = Backbone.Model.extend({
+	var Model = Backbone.Model.extend({
+		className: 'video_a',
 		defaults: {
 			//
 			//
@@ -132,5 +133,5 @@ define([
 		}
 	});
 
-	return VideoModel;
+	return Model;
 });

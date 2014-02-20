@@ -7,6 +7,7 @@ define([
 	'use strict';
 
 	var Model = Backbone.Model.extend({
+		className: 'live',
 		defaults: {
 		},
 		urlRoot : '/live',

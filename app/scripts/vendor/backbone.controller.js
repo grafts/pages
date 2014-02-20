@@ -2,8 +2,9 @@ define([
 	'jquery',
 	'underscore',
 	'backboneBase',
+	'parse',
 	'loading'
-], function ($, _, Backbone, Loading) {
+], function ($, _, Backbone, Parse, Loading) {
 	'use strict';
 
 	var Controller = function(){
@@ -79,6 +80,10 @@ define([
 	Controller.extend = Backbone.Model.extend;
 	Backbone.Controller = Controller;
 	Backbone.pubsub = _.extend({}, Backbone.Events);
+
+	// override backbone mode, collection to parse's
+	Backbone.Model = Parse.Object;
+	Backbone.Collection = Parse.Collection;
 
 	return Backbone;
 });

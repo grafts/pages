@@ -6,10 +6,11 @@ define([
 ], function (_, Backbone) {
 	'use strict';
 
-	var LessonModel = Backbone.Model.extend({
+	var Model = Backbone.Model.extend({
+		className : 'lesson',
 		defaults: {
 		}
 	});
 
-	return LessonModel;
+	return Model;
 });

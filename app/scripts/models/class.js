@@ -42,6 +42,7 @@ define([
 		};
 
 	var Model = Backbone.Model.extend({
+		className: 'class',
 		defaults: dummy
 	});
 

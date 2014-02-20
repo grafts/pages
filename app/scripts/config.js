@@ -19,12 +19,12 @@ require.config({
 			],
 			exports : 'Backbone'
 		},
-		parseDep : {
+		parseBase : {
 			exports : 'Parse'
 		},
 		parse : {
 			deps : [
-				'parseDep'
+				'parseBase'
 			],
 			exports : 'Parse'
 		},
@@ -65,7 +65,7 @@ require.config({
 		
 		editor             : '../scripts/vendor/medium',
 		youtube            : '../scripts/vendor/youtube',
-		parseDep           : '../scripts/vendor/parse-1.2.16',
+		parseBase          : '../scripts/vendor/parse-1.2.16',
 		parse              : '../scripts/vendor/parse'
 	}
 });

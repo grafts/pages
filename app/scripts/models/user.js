@@ -26,6 +26,7 @@ define([
 
 	var Model = Backbone.Model.extend({
 		defaults: dummy,
+		className: '_User',
 		initialize: function(){
 			
 		}
