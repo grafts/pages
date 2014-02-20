@@ -19,6 +19,15 @@ require.config({
 			],
 			exports : 'Backbone'
 		},
+		parseDep : {
+			exports : 'Parse'
+		},
+		parse : {
+			deps : [
+				'parseDep'
+			],
+			exports : 'Parse'
+		},
 		handlebars : {
 			exports : 'Handlebars'
 		},
@@ -55,6 +64,8 @@ require.config({
 		loading            : '../scripts/views/loading',
 		
 		editor             : '../scripts/vendor/medium',
-		youtube            : '../scripts/vendor/youtube'
+		youtube            : '../scripts/vendor/youtube',
+		parseDep           : '../scripts/vendor/parse-1.2.16',
+		parse              : '../scripts/vendor/parse'
 	}
 });
