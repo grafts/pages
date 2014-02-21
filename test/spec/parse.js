@@ -65,25 +65,51 @@ define([
 				});
 			});
 		});
-		describe('save & destroy', function () {
+		describe('query!', function () {
 			var Video   = Parse.Object.extend("video"),
-				vid     = new Video();
-
-			it('set a new video', function(done){
-				vid.save({
+				vid     = new Video(),
+				dummy   = {
 					title      : '리신공략, 각 라인별 일반적인 갱킹방법',
 					subtitle   : '갱킹이 리신이며 리신이 갱킹이다!',
 					video      : {
 						id : 'yL9i5OXUhg4'
 					}
-				}, {
+				};
+
+			it('set a new video', function(done){
+				vid.save(dummy, {
 					success: function(data) {
 						should.exist(data);
+						dummy = data;
 						done();
 					},
 					error: function(data, error) {
 						// The save failed.
 						// error is a Parse.Error with an error code and description.
+					}
+				});
+			});
+			it('set relational to dummy with dummy user', function(done){
+				var User      = Parse.Object.extend('_User'),
+					userQuery = new Parse.Query(User);
+
+				userQuery.get('ElgbZFZGLh')
+				.then(function(user){
+					vid.set('author', user);
+					vid.save(null, {
+						success : function(data){
+							should.exist(data);
+							done();
+						}
+					});
+				});
+			});
+			it('get saved object, and dummy data == Retrieved data', function(done){
+				var q = new Parse.Query(Video);
+				q.get(dummy.id, {
+					success : function(data){
+						(data.id).should.equal(dummy.id);
+						done();
 					}
 				});
 			});
@@ -96,6 +122,9 @@ define([
 					}
 				})
 			});
+		});
+		describe('set relational datas', function () {
+			
 		});
 
 	});
