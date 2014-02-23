@@ -10,7 +10,7 @@
 			<h1 class="title">{{title}}</h1>
 			<p class="subtitle">{{subtitle}}</p>
 			<a class="author" href="/user/{{author.id}}">
-				<img class="avatar" src="{{author.avatar}}" alt="avatar">
+				<img class="avatar" src="{{author.avatar._url}}" alt="avatar">
 				<span class="name">{{author.name}}</span>
 			</a>
 		</div>
@@ -88,7 +88,7 @@
 							{{#each this.comments}}
 								<li class="comment">
 									<a class="author" href="/user/{{this.author.id}}">
-										<img class="avatar" src="{{this.author.avatar}}" alt="avatar">
+										<img class="avatar" src="{{this.author.avatar._url}}" alt="avatar">
 										<span class="name">{{this.author.name}}</span>
 									</a>
 									<p class="note">{{this.comment}}</p>
@@ -122,7 +122,7 @@
 				<p class="subtitle">{{relate.subtitle}}</p>
 			</a>
 			<a class="author" href="/user/{{relate.author.id}}">
-				<img class="avatar" src="{{relate.author.avatar}}" alt="avatar">
+				<img class="avatar" src="{{relate.author.avatar._url}}" alt="avatar">
 				<span class="name">{{relate.author.name}}</span>
 			</a>
 		</div>

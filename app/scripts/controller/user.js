@@ -12,14 +12,14 @@ define([
 ], function ($, _, Backbone, User, UserView, UserEditView) {
 	'use strict';
 
-	var UserController = Backbone.Controller.extend({
+	var Controller = Backbone.Controller.extend({
 		el          : $('section.user'),
 		model       : User,
-		// collections : Users,
+		// collection : Users,
 		readView    : UserView,
 		editView    : UserEditView
 	});
 
-	return UserController;
+	return Controller;
 
 });

@@ -13,18 +13,18 @@ define([
 ], function ($, _, Backbone, Class, Classes, ClassView, ClassEditView) {
 	'use strict';
 
-	var ClassController = Backbone.Controller.extend({
+	var Controller = Backbone.Controller.extend({
 		el          : $('section.class'),
 		initialize  : function(){
 			
 		},
 		model       : Class,
-		collections : Classes,
+		collection  : Classes,
 		readView    : ClassView,
 		editView    : ClassEditView
 	});
 
-	return ClassController;
+	return Controller;
 
 });
 

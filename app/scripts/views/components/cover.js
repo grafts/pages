@@ -85,7 +85,7 @@ define([
 			};
 
 			img = new Image();
-			img.src = this.cover.src;
+			img.src = this.cover._url;
 			img.onload = _addCover;
 
 			return this.$el;

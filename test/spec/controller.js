@@ -30,25 +30,28 @@ define([
 				should.exist(test.controller);
 			});
 		});
-		describe('extend and new controller', function () {
-			it('intro controller', function() {
-				$('body').append('<section class="intro"></section>');
-				test.introController = new IntroController();
-				should.exist(test.introController);
-			});
-			it('run intro controller, should not have views object', function() {
-				test.introController = new IntroController();
-				test.introController.run({ resource : 'intro' });
-				should.not.exist(test.introController.views['intro']);
-			});
-			it('video controller', function() {
-				$('body').append('<section class="video"></section>');
+		describe('run', function () {
+			var dummy = {
+				id : 'DVeefWllwN'
+			}
+			it('video controller', function(done) {
 				test.controller = new VideoController();
 				should.exist(test.controller);
+				done();
 			});
-			it('run video controller', function() {
-				test.controller.run({ id : 1, resource : 'video' });
-				should.exist($('section.video').children().length);
+			it('run video controller', function(done) {
+				test.controller.run({ resource : 'video', id : dummy.id })
+				.then(function(newView){
+					test.controller.views[dummy.id].id.should.equal(newView.id);
+					done();
+				});
+			});
+			it('run video controller for dummy view', function(done) {
+				test.controller.run({ resource : 'video', id : 1 })
+				.then(function(newView){
+					test.controller.views[1].id.should.equal(newView.id);
+					done();
+				});
 			});
 		});
 	});

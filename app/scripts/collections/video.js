@@ -7,9 +7,9 @@ define([
 ], function (_, Backbone, VideoModel) {
 	'use strict';
 
-	var VideoCollection = Backbone.Collection.extend({
+	var Collection = Backbone.Collection.extend({
 		model: VideoModel
 	});
 
-	return VideoCollection;
+	return Collection;
 });

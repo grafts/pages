@@ -24,13 +24,13 @@ define([
 			'click .anker'                           : 'gotoClickedScript',
 			'click .script'                          : 'gotoClickedScript'
 		},
-		initialize: function(id){
+		initialize: function(param){
 			var self = this,
 				data = this.model.toJSON();
 
 			_.bindAll(this);
 
-			id && (this.id = id);
+			// param.id && (this.id = id);
 			this.el.setAttribute('class', 'video-item');
 
 			data.contents = this.model.getContents();
@@ -39,7 +39,7 @@ define([
 			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
 			this.addPlayer();
 			this.addContents();
-			this.addCoverImage(this.$('.relate'), this.model.get('relate').coverImage);
+			// this.addCoverImage(this.$('.relate'), this.model.get('relate').coverImage);
 
 		},
 		render: function(){
@@ -290,7 +290,7 @@ define([
 			var self  = this,
 				name  = dom.attr('class');
 
-			if(!cover || !cover.src){
+			if(!cover || !cover._url){
 				return;
 			}
 

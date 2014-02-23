@@ -9,7 +9,7 @@ define([
 ], function ($, _, Backbone, IntroView) {
 	'use strict';
 
-	var IntroController = Backbone.Controller.extend({
+	var Controller = Backbone.Controller.extend({
 		el          : $('section.intro'),
 		initialize  : function(){
 			this.view = new IntroView({ el : 'section.intro' });
@@ -22,5 +22,5 @@ define([
 		}
 	});
 
-	return IntroController;
+	return Controller;
 });
