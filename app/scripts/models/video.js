@@ -96,7 +96,7 @@ define([
 			}
 
 			return contents.map(function(val, n){
-				val.position = _percent(self.get('duration'), val.time);
+				val.position = _percent(self.get('video').duration, val.time);
 				val.hhmmss = _hhmmss(val.time);
 				val.seq = n;
 
