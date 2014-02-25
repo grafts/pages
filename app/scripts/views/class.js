@@ -15,15 +15,16 @@ define([
 			'click a' : 'link'
 		},
 		initialize: function(id){
-			id && (this.id = id);
+			// id && (this.id = id);
 			this.el.setAttribute('class', 'class-item');
 			this.$el.append(this.template(this.model.toJSON()));
+			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
+			this.addCoverImage(this.$('.relate'), this.model.get('relate').coverImage);
 		},
 		render: function(){
 			console.log('class view render');
 			this.$el.show();
-			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
-			this.addCoverImage(this.$('.relate'), this.model.get('relate').coverImage);
+			this.delegateEvents();
 			return this.$el;
 		},
 		unrender: function(){

@@ -20,11 +20,12 @@ define([
 			// id && (this.id = id);
 			this.el.setAttribute('class', 'user-item');
 			this.$el.append(this.template(this.model.toJSON()));
+			this.addCoverImage(this.$('.head'), this.model.get('cover'));
 		},
 		render: function(){
 			console.log('user view render');
+			this.delegateEvents();
 			this.$el.show();
-			this.addCoverImage(this.$('.head'), this.model.get('cover'));
 			return this.$el;
 		},
 		unrender: function(){

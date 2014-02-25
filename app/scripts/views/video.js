@@ -85,6 +85,7 @@ define([
 
 			console.log('video view render');
 			this.$el.show();
+			this.delegateEvents();
 			return this.$el;
 		},
 		unrender: function(type){

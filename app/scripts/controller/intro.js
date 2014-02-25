@@ -15,10 +15,18 @@ define([
 			this.view = new IntroView({ el : 'section.intro' });
 		},
 		run : function(){
-			this.view.render();
+			var self = this;
+			this.status = true;
+			return new Promise(function(resolve, reject){
+				self.view.render();
+				resolve();
+			});
 		},
+		prepareStop : function(){},
 		stop : function(){
-			this.view.unrender();
+			this.el && this.el.hide();
+			this.el.removeClass('off');
+			this.status = false;
 		}
 	});
 

@@ -1,21 +1,46 @@
-<div class="container">
-	<div class="video-itemEdit-tool">
-			<a class="video-itemEdit-tool-done" href="/video/2">
-					<i class="icon-ok"></i>
-			</a>
-			<a class="video-itemEdit-tool-cancel" href="/video/2">
-					<i class="icon-cancel"></i>
-			</a>
-			<a class="video-itemEdit-tool-delete" href="/">
-					<i class="icon-trash"></i>
-			</a>
+<div class="head">
+	<div class="tool">
+		<a class="edit-tool-done" href="/video/2">
+				<i class="icon-ok"></i>
+		</a>
+		<a class="edit-tool-cancel" href="/video/2">
+				<i class="icon-cancel"></i>
+		</a>
+		<a class="edit-tool-delete" href="/">
+				<i class="icon-trash"></i>
+		</a>
+
 	</div>
-	<div class="video-itemEdit-input">
-		<div class="coverImage">
-			<i class="icon-picture"></i>
+
+	<div class="headline sans-serif">
+		<div class="container">
+			<h1 class="title input">{{title}}</h1>
+			<p class="subtitle input">{{subtitle}}</p>
 		</div>
-		<div class="input title" data-placeholder="Title"></div>
-		<div class="input subtitle" data-placeholder="Subtitle"></div>
-		<div class="input contents" data-placeholder="Type About This Video"></div>
+	</div>
+</div>
+
+<div class="contents">
+	
+	<div class="player">
+		<div class="container">
+			<div class="video"></div>
+		</div>
+	</div>
+
+	<div class="timeline-contents">
+		<div class="container">
+			<ul class="scripts">
+			{{#each contents}}
+				<li class="item" data-seq="{{@index}}">
+					<div class="clock">{{this.hhmmss}}</div>
+					<button class="anker"></button>
+					<div class="script">
+						<h5 class="sans-serif">{{this.script}}</h5>
+					</div>
+				</li>
+			{{/each}}
+			</ul>
+		</div>
 	</div>
 </div>

@@ -19,17 +19,25 @@ define([
 		collection  : Backbone.Collection,
 		readView    : Backbone.View,
 		editView    : Backbone.View,
+		history     : [],
 		initialize  : function(){},
 		run         : function(param){
-			var self = this;
+			var self = this,
+				loading = new Loading();
 
-			self.dummyLoading();
+			this.status = true;
+
+			loading.render();
+			loading.set();
 
 			return self.createView(param).then(function(view){
 				self.views[param.id] = view;
-				self.el.append(view.render());
+				self.history.push(param.id);
+				self.current = param.id;
 				self.el && self.el.show();
 				self.garbageCollect();
+				loading.done();
+				$('body').animate({scrollTop:0}, 100);
 				return view;
 			});
 
@@ -50,7 +58,7 @@ define([
 		},
 		createView : function(param){
 			var self = this,
-				View, edit;
+				View, edit, view;
 
 			if((param.action && param.action == 'update') || (param.id && param.id == 'create')){
 				View = this.editView;
@@ -62,29 +70,50 @@ define([
 			}
 
 			return new Promise(function(resolve, reject){
-				if(self.views[param.id]){
-					resolve(self.views[param.id]);
+				try {
+					if(self.views[param.id]){
+						view = self.views[param.id];
+						view.render();
+						setTimeout(function(){
+							resolve(view);
+						}, 1000);
+					}
+					else if(param.id == 1){
+						view = self.createDummyView(View);
+						self.el.append(view.render());
+						setTimeout(function(){
+							resolve(view);
+						}, 1000);
+					}
+					else {
+						self.pull(param.id).then(function(model){
+							view = new View({
+								model : model,
+								id    : self.el.attr('class') + '_' + edit + param.id
+							});
+							self.el.append(view.render())
+							resolve(view);
+						});
+					}
 				}
-				else if(param.id == 1){
-					resolve(self.createDummyView(View));
-				}
-				else {
-					self.pull(param.id).then(function(model){
-						resolve(new View({
-							model : model,
-							id    : self.el.attr('class') + '_' + edit + param.id
-						}));
-					});
+				catch(err){
+					console.log(err);
+					reject(err);
 				}
 			});
-
+		},
+		prepareStop : function(){
+			this.views[this.current].$el.addClass('off');
 		},
 		stop : function(param){
+			if(!this.status){
+				return;
+			}
 			console.log(this.el.attr('class') + ' view stop');
 			this.el && this.el.hide();
-			for(var current in this.views){
-				this.views[current].unrender();
-			}
+			this.views[this.current].$el.removeClass('off');
+			this.views[this.history[this.history.length-1]].unrender();
+			this.status = false;
 		},
 		garbageCollect : function(){
 			

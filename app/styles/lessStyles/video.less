@@ -430,6 +430,24 @@
 	}
 }
 
+.video-item.edit {
+	.contents {
+		.timeline-contents {
+			.container {
+				.scripts {
+					height: auto !important;
+					.item {
+						opacity: 1;
+						&:hover {
+							opacity: 1;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 .video_mediaquery(@screen, @width, @height){
 	@timeline_height: 12px;
 	@timeline_contents_height : @height - 115px;

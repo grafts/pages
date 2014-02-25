@@ -5,42 +5,46 @@ define([
 	'underscore',
 	'backbone',
 	'templates',
+	'views/video',
 	'editor'
-], function ($, _, Backbone, JST, editor) {
+], function ($, _, Backbone, JST, VideoView, editor) {
 	'use strict';
 
-	var VideoView = Backbone.View.extend({
-		tagName: 'div',
+	var View = Backbone.View.extend({
 		template: JST['app/scripts/templates/videoEdit.hbs'],
 		events: {
-			'click a' : 'link'
+			'click a'                                : 'link',
+			'click .scripts .item.on .comments-link' : 'commentToggle',
+			'click .reply'                           : 'replyFormToggle'
 		},
-		initialize : function(id){
-			var self = this;
+		initialize: function(param){
+			var self = this,
+				data = this.model.toJSON();
 
-			id && (this.id = id);
-			this.el.setAttribute('class', 'video-itemEdit');
-			this.$el.append(this.template(this.model.toJSON()));
+			_.bindAll(this);
 
-			this.input = new editor(self.el.getElementsByClassName('input'));
+			// param.id && (this.id = id);
+			this.el.setAttribute('class', 'video-item edit');
+
+			data.contents = this.model.getContents();
+			this.$el.append(this.template(data));
+
+			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
+			this.addPlayer();
+			this.addContents();
+
 		},
 		render: function(){
+			var self = this;
 			console.log('video edit view render');
-			return this.$el;
-		},
-		unrender: function(){
-			this.undelegateEvents();
-			this.$el.hide();
+			this.input = new editor(self.el.getElementsByClassName('input'));
 			console.log(this.input.serialize());
-		},
-		link : function(e){
-			e.preventDefault();
-			e.stopPropagation();
-			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
+			this.$el.show();
+			this.delegateEvents();
+			return this.$el;
 		}
-			
-
 	});
+	_.assign(VideoView.prototype, View.prototype);
 
 	return VideoView;
 });
