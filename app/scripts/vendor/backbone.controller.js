@@ -48,12 +48,12 @@ define([
 
 			return query.get(id);
 		},
-		createDummyView : function(View){
+		createDummyView : function(View, id){
 			var self = this;
 
 			return new View({
-				model : new self.model(),
-				id    : self.el.attr('class') + '_dummy'
+				model : (new self.model()).insertDummyData(),
+				id    : self.el.attr('class') + '_dummy' + id
 			});
 		},
 		createView : function(param){
@@ -62,7 +62,8 @@ define([
 
 			if((param.action && param.action == 'update') || (param.id && param.id == 'create')){
 				View = this.editView;
-				edit = 'edit_';
+				edit = '_edit';
+				param.id += edit;
 			}
 			else {
 				View = this.readView;
@@ -78,8 +79,8 @@ define([
 							resolve(view);
 						}, 1000);
 					}
-					else if(param.id == 1){
-						view = self.createDummyView(View);
+					else if(param.id.match(/^1/)){
+						view = self.createDummyView(View, param.id);
 						self.el.append(view.render());
 						setTimeout(function(){
 							resolve(view);
@@ -89,9 +90,9 @@ define([
 						self.pull(param.id).then(function(model){
 							view = new View({
 								model : model,
-								id    : self.el.attr('class') + '_' + edit + param.id
+								id    : self.el.attr('class') + '_' + param.id + edit
 							});
-							self.el.append(view.render())
+							self.el.append(view.render());
 							resolve(view);
 						});
 					}
@@ -102,17 +103,24 @@ define([
 				}
 			});
 		},
-		prepareStop : function(){
-			this.views[this.current].$el.addClass('off');
+		prepareStop : function(resourceChanged){
+			var self = this;
+			return new Promise(function(resolve, reject){
+				self.views[self.current].$el.addClass('off');
+				resolve();
+			});
 		},
-		stop : function(param){
-			if(!this.status){
-				return;
+		stop : function(resourceChanged){
+			console.log(this.el.attr('class') + ' ' + this.current + ' view stop');
+			if(resourceChanged){
+				this.el && this.el.hide();
 			}
-			console.log(this.el.attr('class') + ' view stop');
-			this.el && this.el.hide();
-			this.views[this.current].$el.removeClass('off');
-			this.views[this.history[this.history.length-1]].unrender();
+			for(view in this.views){
+				if(this.views[view].$el.hasClass('off')){
+					this.views[view].$el.removeClass('off');
+					this.views[view].unrender();
+				}
+			}
 			this.status = false;
 		},
 		garbageCollect : function(){

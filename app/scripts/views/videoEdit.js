@@ -10,12 +10,10 @@ define([
 ], function ($, _, Backbone, JST, VideoView, editor) {
 	'use strict';
 
-	var View = Backbone.View.extend({
+	var View = VideoView.extend({
 		template: JST['app/scripts/templates/videoEdit.hbs'],
 		events: {
-			'click a'                                : 'link',
-			'click .scripts .item.on .comments-link' : 'commentToggle',
-			'click .reply'                           : 'replyFormToggle'
+			'click a' : 'link'
 		},
 		initialize: function(param){
 			var self = this,
@@ -44,7 +42,7 @@ define([
 			return this.$el;
 		}
 	});
-	_.assign(VideoView.prototype, View.prototype);
 
-	return VideoView;
+	return View;
+
 });

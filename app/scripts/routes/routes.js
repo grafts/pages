@@ -51,8 +51,15 @@ define([
 		},
 
 		_router : function(resource, id, action){
-			var search = deParam(Backbone.history.location.search),
-				current;
+			var self = this,
+				search = deParam(Backbone.history.location.search),
+				param = { 
+					id       : id,
+					resource : resource,
+					action   : action,
+					search   : search
+				},
+				resourceChanged = (this.current && this.current != resource);
 
 			if(!resource || resource == ""){
 				resource = 'intro';
@@ -63,21 +70,16 @@ define([
 				return;
 			}
 
-			for(controller in this.controllers){
-				if(this.controllers[controller].status){
-					current = this.controllers[controller];
-					current.prepareStop();
-				}
+			if(this.current){
+				this.controllers[this.current].prepareStop(param);
 			}
 
-			this.controllers[resource].run({ 
-				id       : id,
-				resource : resource,
-				action   : action,
-				search   : search
-			})
+			this.controllers[resource].run(param)
 			.then(function(){
-				current.stop();
+				if(self.current){
+					self.controllers[self.current].stop(resourceChanged);
+				}
+				self.current = resource;
 			});
 			
 			function deParam(qs){
