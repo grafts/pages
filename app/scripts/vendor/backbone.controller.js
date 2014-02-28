@@ -103,10 +103,11 @@ define([
 				}
 			});
 		},
-		prepareStop : function(resourceChanged){
+		pause : function(resourceChanged){
 			var self = this;
 			return new Promise(function(resolve, reject){
-				self.views[self.current].$el.addClass('off');
+				self.pausedView = self.views[self.current];
+				self.pausedView.$el.addClass('off');
 				resolve();
 			});
 		},
@@ -115,12 +116,8 @@ define([
 			if(resourceChanged){
 				this.el && this.el.hide();
 			}
-			for(view in this.views){
-				if(this.views[view].$el.hasClass('off')){
-					this.views[view].$el.removeClass('off');
-					this.views[view].unrender();
-				}
-			}
+			this.pausedView.$el.removeClass('off');
+			this.pausedView.unrender();
 			this.status = false;
 		},
 		garbageCollect : function(){

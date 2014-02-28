@@ -310,6 +310,24 @@ define([
 			});
 
 			this.cover[name].render();
+		},
+		editMode : function(){
+			var self = this,
+				auth = getEditAuth();
+
+			if(!auth) return;
+
+			require('editor')
+
+			self.el.querySelectorAll('
+				.head .title, 
+				.head .subtitle,
+				.script h5
+			')
+
+		},
+		getEditAuth : function(){
+
 		}
 	});
 

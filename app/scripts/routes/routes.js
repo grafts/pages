@@ -59,7 +59,8 @@ define([
 					action   : action,
 					search   : search
 				},
-				resourceChanged = (this.current && this.current != resource);
+				resourceChanged = (this.current && this.current != resource),
+				pausedController;
 
 			if(!resource || resource == ""){
 				resource = 'intro';
@@ -71,33 +72,31 @@ define([
 			}
 
 			if(this.current){
-				this.controllers[this.current].prepareStop(param);
+				pausedController = this.controllers[this.current];
+				pausedController.pause(param);
 			}
 
 			this.controllers[resource].run(param)
-			.then(function(){
-				if(self.current){
-					self.controllers[self.current].stop(resourceChanged);
-				}
+			.then(function(currentView){
+				pausedController && pausedController.stop(resourceChanged);
 				self.current = resource;
 			});
-			
-			function deParam(qs){
-				if (qs == "") return {};
-				var param = {};
-				qs.match(/^\?/) && (function(){ qs = qs.substr(1); })();
-				qs = qs.replace('?').split('&');
-				for (var i = 0; i < qs.length; ++i){
-					var string = qs[i].split('=');
-					if (string.length != 2) continue;
-					param[string[0]] = decodeURIComponent(string[1].replace(/\+/g, " "));
-				}
-				return param;
-			}
 		}
-
 	});
 
+	function deParam(qs){
+		if (qs == "") return {};
+		var param = {};
+		qs.match(/^\?/) && (function(){ qs = qs.substr(1); })();
+		qs = qs.replace('?').split('&');
+		for (var i = 0; i < qs.length; ++i){
+			var string = qs[i].split('=');
+			if (string.length != 2) continue;
+			param[string[0]] = decodeURIComponent(string[1].replace(/\+/g, " "));
+		}
+		return param;
+	}
+	
 	return Router;
 
 });
