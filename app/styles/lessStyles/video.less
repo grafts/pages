@@ -32,6 +32,8 @@
 				position: relative;
 				text-align: center;
 				width: 100%;
+				.pointerAdder {
+				}
 				.track {
 					margin-top: @timeline_height - 2px;
 					height: @timeline_height;
@@ -40,6 +42,7 @@
 					.box-shadow(inset 0 0 0px rgba(0,0,0,0.1));
 					.rounded-corners(6px);
 					.progress {
+						position: relative;
 						width: 1%;
 						height: 100%;
 						background: #ed1207;
@@ -52,6 +55,7 @@
 					top: 0;
 					left: 0;
 					width: 100%;
+					z-index: 100;
 					.item {
 						position: absolute;
 						top: 0;
@@ -231,12 +235,13 @@
 							background: #fff;
 							cursor: pointer;
 							.transition(color 300ms linear);
-							h5 {
+							p {
 								display: block;
 								font-family: @sans_serif;
 								font-size: 1.1em;
 								font-weight: normal;
 								line-height: 2em;
+								min-height: 1em;
 							}
 						}
 						.comments-link {
@@ -272,6 +277,29 @@
 							i {
 								display: none;
 								font-size: 20px;
+							}
+						}
+						.script-delete {
+							display: none;
+							position: absolute;
+							top: 2px;
+							right: 0;
+							min-width: 20px;
+							padding: 4px;
+							background: @fill_color;
+							font-size: @small_font_size;
+							line-height: 1.1em;
+							color: #fff;
+							cursor: pointer;
+							.rounded-corners();
+							.transition(background-color 400ms linear);
+							&:hover {
+								background: @point_color;
+							}
+							i {
+								&:before {
+									width: auto;
+								}
 							}
 						}
 					}
@@ -432,15 +460,41 @@
 
 .video-item.edit {
 	.contents {
+		.player {
+			.timeline {
+				.script-add {
+					display: inline-block;
+				}
+			}
+		}
 		.timeline-contents {
 			.container {
 				.scripts {
 					height: auto !important;
 					.item {
-						opacity: 1;
+						opacity: 0.8;
 						&:hover {
 							opacity: 1;
 						}
+						.clock {
+							background: @common_color !important;
+							&:after {
+								border-left: 12px solid @common_color !important;
+							}
+						}
+						.anker {
+							background: @common_color !important;
+						}
+						.script {
+							color: @common_color !important;
+							cursor: text;
+						}
+					}
+					.item.on {
+						opacity: 1;
+					}
+					.script-delete {
+						display: inline-block;
 					}
 				}
 			}

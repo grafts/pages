@@ -7,7 +7,7 @@
 
 	<div class="headline sans-serif">
 		<div class="container">
-			<h1 class="title">{{title}}</h1>
+			<p class="title">{{title}}</p>
 			<p class="subtitle">{{subtitle}}</p>
 			<a class="author" href="/user/{{author.id}}">
 				<img class="avatar" src="{{author.avatar._url}}" alt="avatar">
@@ -33,10 +33,13 @@
 					<div class="clock">{{this.hhmmss}}</div>
 					<button class="anker"></button>
 					<div class="script">
-						<h5 class="sans-serif">{{this.script}}</h5>
+						<p class="sans-serif">{{this.script}}</p>
 					</div>
 					<button class="comments-link">
 						<span class="count">{{this.comments.length}}</span>
+						<i class="icon-cancel"></i>
+					</button>
+					<button class="script-delete">
 						<i class="icon-cancel"></i>
 					</button>
 				</li>
@@ -114,7 +117,7 @@
 	<div class="headline sans-serif">
 		<div class="container">
 			<a href="/video/{{relate.id}}">
-				<h1 class="title">{{relate.title}}</h1>
+				<p class="title">{{relate.title}}</p>
 				<p class="subtitle">{{relate.subtitle}}</p>
 			</a>
 			<a class="author" href="/user/{{relate.author.id}}">

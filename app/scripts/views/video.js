@@ -8,14 +8,19 @@ define([
 
 	'youtube!',
 	'views/components/cover',
-	'views/components/video_player_timeline'
-], function ($, _, Backbone, JST, YT, CoverView, TimelineView) {
+	'views/components/video_player_timeline',
+
+	'editor'
+], function ($, _, Backbone, JST, YT, CoverView, TimelineView, editor) {
 	'use strict';
 
 	var View = Backbone.View.extend({
 		// el: '.video-item',
 		tagName: 'div',
-		template: JST['app/scripts/templates/video.hbs'],
+		template : {
+			read : JST['app/scripts/templates/video.hbs'],
+			edit : JST['app/scripts/templates/videoedit.hbs']
+		},
 		events: {
 			'click a'                                : 'link',
 			'click .scripts .item.on .comments-link' : 'commentToggle',
@@ -34,7 +39,7 @@ define([
 			this.el.setAttribute('class', 'video-item');
 
 			data.contents = this.model.getContents();
-			this.$el.append(this.template(data));
+			this.$el.append(this.template.read(data));
 
 			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
 			this.addPlayer();
@@ -245,6 +250,9 @@ define([
 					Backbone.pubsub.on('videoUnrender:' + self.model.id, function(type){
 						_unrender.call(this, type, video);
 					}, self);
+					Backbone.pubsub.on('getVideoCurrentTime:' + self.model.id, function(callback){
+						callback(video.getCurrentTime());
+					}, self);
 					return video;
 				};
 
@@ -258,6 +266,7 @@ define([
 			.then(_setStateEvent)
 			.then(_setPlayEvent)
 			.then(function(){
+				self.edit();
 				// Backbone.pubsub.on('scroll', self.scrollEventBind, self);
 			});
 
@@ -272,9 +281,9 @@ define([
 					}
 
 					this.timeline = new TimelineView({
-						id : self.model.get('id'),
+						id : self.model.id,
 						contents : self.model.getContents(),
-						duration : self.model.get('duration')
+						duration : self.model.get('video').duration
 					});
 
 					this.$('.video').after(this.timeline.render());
@@ -311,25 +320,86 @@ define([
 
 			this.cover[name].render();
 		},
-		editMode : function(){
+		edit : function(){
 			var self = this,
-				auth = getEditAuth();
+				unnecessaryDom = this.$('.head .author, .contents .widget, .contents .comments-link, .relate');
 
-			if(!auth) return;
+			try {
+				this.editMode = new Edit(this);
 
-			require('editor')
+				if(!this.getEditAuth()) return;
 
-			self.el.querySelectorAll('
-				.head .title, 
-				.head .subtitle,
-				.script h5
-			')
+				this.$el.addClass('edit');
+				unnecessaryDom.hide();
 
+				this.editMode.input(this.el.querySelector('.head .title'), 'title');
+				this.editMode.input(this.el.querySelector('.head .subtitle'), 'subtitle');
+				this.editMode.input(this.el.querySelectorAll('.script'), 'script');
+
+				this.editMode.eventShift({
+					'click a' : 'link',
+					'click .script-delete' : 'deleteScript',
+					'click .script-add' : 'addScript'
+				});
+			}
+			catch(err){
+				console.log(err);
+			}
 		},
 		getEditAuth : function(){
-
+			return true;
+		},
+		addScript : function(){
+			Backbone.pubsub.trigger('getVideoCurrentTime:' + this.model.id, function(time){
+				
+			});
 		}
 	});
 
 	return View;
 });
+
+
+function Edit(context){
+	this.context = context;
+	this.editOption = {
+		debug: true
+	};
+	this.inputs = [];
+	this._input = function(dom, type){
+		this.inputs.push(
+			new editor(
+				_.defaults({
+					element : dom,
+					placeholder : type || 'Type your text.'
+				}, this.editOption)
+			)
+		);
+	};
+}
+Edit.prototype = {
+	input : function(dom, type){
+		var self = this;
+
+		if(!dom.length){
+			this._input(dom, type);
+		}
+		else {
+			[].forEach.call(dom, function(el){
+				self._input(el, type);
+			});
+		}
+	},
+	serialize : function(){
+		return this.inputs[0].serialize();
+	},
+	eventShift : function(events){
+		this.defaultEvent = this.context.events;
+		this.context.events = events;
+		this.context.undelegateEvents();
+		this.context.delegateEvents();
+	},
+	toggleDom : function(){
+
+	}
+}

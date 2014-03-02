@@ -394,3 +394,40 @@
 		}
 	}
 }
+
+.video-item {
+	@width : @video_small_width;
+	@height : @video_small_height;
+	@timeline_height: 10px;
+	@timeline_contents_height : @height - 115px;
+
+	.contents {
+		.container {
+		}
+		.player {
+			.timeline {
+				.script-add {
+					display: none;
+					position: absolute;
+					z-index: 1001;
+					background: #fff;
+					top: -3px;
+					right: -11px;
+					width: @timeline_height + 8px;
+					height: @timeline_height + 8px;
+					border: 1px solid @point_color;
+					cursor: pointer;
+					text-align: center;
+					.rounded-corners(1em);
+					i {
+						color: @point_color;
+						margin-left: -0.15em;
+					}
+					&:hover {
+						.transform(scale(1.3));
+					}
+				}
+			}
+		}
+	}
+}
