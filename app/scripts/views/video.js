@@ -11,8 +11,10 @@ define([
 	'views/components/cover',
 	'views/components/video_player_timeline',
 
+	'collections/video_contents',
+
 	'editor'
-], function ($, _, Backbone, JST, Handlebars, YT, CoverView, TimelineView, editor) {
+], function ($, _, Backbone, JST, Handlebars, YT, CoverView, TimelineView, Contents, editor) {
 	'use strict';
 
 	var View = Backbone.View.extend({
@@ -40,16 +42,13 @@ define([
 
 			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
 			this.addPlayer();
-			this.addContents();
+			// this.addContents();
 			// this.addCoverImage(this.$('.relate'), this.model.get('relate').coverImage);
-			var m = Backbone.Model.extend({
-					className : 'content'
-				});
-			this.collection = new (Backbone.Collection.extend({
-				model : m
-			}));
-			this.listenTo(this.collection, 'add', this.test);
-			this.collection.add(this.model.get('contents'));
+
+			this.contents = new Contents();
+			this.listenTo(this.contents, 'reset', this.addContents);
+			this.contents.add(this.model.get('contents'));
+			this.contents.sort();
 		},
 		render: function(){
 			// var self  = this,
@@ -270,7 +269,6 @@ define([
 			.then(_setStateEvent)
 			.then(_setPlayEvent)
 			.then(function(){
-				self.edit();
 				// Backbone.pubsub.on('scroll', self.scrollEventBind, self);
 			});
 
@@ -329,26 +327,53 @@ define([
 				unnecessaryDom = this.$('.head .author, .contents .widget, .contents .comments-link, .relate');
 
 			try {
-				this.editMode = new Edit(this);
-
+				// 1. check edit auth
 				if(!this.getEditAuth()) return;
-
+				// 2. tool class extend
+				this.editMode = new Edit(this);
+				// 3. class add to el for edit mode look css
 				this.$el.addClass('edit');
+				// 4. hide unnecessary Dom
 				unnecessaryDom.hide();
-
+				// 5. add tools for edit submit or cancel
+				this.editMode.addTool();
+				// 6. input area insert & save those to object collection
 				this.editMode.input(this.el.querySelector('.head .title'), 'title');
 				this.editMode.input(this.el.querySelector('.head .subtitle'), 'subtitle');
 				this.editMode.input(this.el.querySelectorAll('.script'), 'script');
-
+				// 7. event change for edit mode
 				this.editMode.eventShift({
-					'click a' : 'link',
-					'click .script-delete' : 'deleteScript',
-					'click .script-add' : 'addScript'
+					'click a'                       : 'link',
+					'click .script-delete'          : 'deleteScript',
+					'click .script-add'             : 'addScript',
+					'click .cover-manage > .upload' : 'coverUpload',
+					'click .cover-manage > .delete' : 'coverDelete',
+					'click a.edit-tool-save'        : 'save',
+					'click a.edit-tool-publish'     : 'publish'
 				});
+				// 8. 
 			}
 			catch(err){
 				console.log(err);
 			}
+		},
+		read : function(){
+			// 1. check current view mode
+			if(!this.editMode){
+				return;
+			}
+			// 2. destroy edit mode object
+			delete this.editMode;
+			// 3. remove 'edit' class 
+			this.$el.removeClass('edit');
+			// 4. show hided dom
+			this.$('.head .author, .contents .widget, .contents .comments-link, .relate').show();
+			// 5. remove tools
+			this.editMode.deleteTools();
+			// 6. remove input area & saved object collection
+			this.editMode.deleteInput();
+			// 7. event rollback
+			this.editMode.eventRollback();
 		},
 		getEditAuth : function(){
 			return true;
@@ -372,6 +397,25 @@ define([
 		deleteScript : function(){
 
 		},
+		save : function(){
+			var self = this;
+			// 1. serialize & save
+			this.editMode.save()
+			// 3. change view mode
+			.then(function(){
+				self.read();
+			});
+		},
+		publish : function(){
+			var self = this;
+
+			return this.model.save({
+				'publish' : true,
+				'publishedAt' : new Date()
+			}).then(function(){
+				return self.save();
+			});
+		},
 		test : function(){
 			console.log('test arg = ');
 			console.log(arguments);
@@ -383,13 +427,14 @@ define([
 
 
 function Edit(context){
+	var inputs = [];
+
 	this.context = context;
 	this.editOption = {
 		debug: true
 	};
-	this.inputs = [];
 	this._input = function(dom, type){
-		this.inputs.push(
+		inputs.push(
 			new editor(
 				_.defaults({
 					element : dom,
@@ -400,6 +445,12 @@ function Edit(context){
 	};
 }
 Edit.prototype = {
+	addTool : function(){
+
+	},
+	deleteTools : function(){
+
+	},
 	input : function(dom, type){
 		var self = this;
 
@@ -412,8 +463,13 @@ Edit.prototype = {
 			});
 		}
 	},
-	serialize : function(){
-		return this.inputs[0].serialize();
+	deleteInput : function(){
+
+	},
+	save : function(){
+		return new Promise(function(resolve, reject){
+			resolve();
+		});
 	},
 	eventShift : function(events){
 		this.defaultEvent = this.context.events;
@@ -421,7 +477,7 @@ Edit.prototype = {
 		this.context.undelegateEvents();
 		this.context.delegateEvents();
 	},
-	toggleDom : function(){
+	eventRollback : function(){
 
 	}
 }

@@ -30,12 +30,32 @@
 			}
 			.timeline {
 				position: relative;
+				display: inline-block;
 				text-align: center;
-				width: 100%;
-				.pointerAdder {
+				margin-top: @timeline_height - 2px;
+				width: @width - 16px;
+				.script-add {
+					display: none;
+					position: absolute;
+					z-index: 1001;
+					background: #fff;
+					top: -3px;
+					right: -11px;
+					width: @timeline_height + 8px;
+					height: @timeline_height + 8px;
+					border: 1px solid @point_color;
+					cursor: pointer;
+					text-align: center;
+					.rounded-corners(1em);
+					i {
+						color: @point_color;
+						margin-left: -0.15em;
+					}
+					&:hover {
+						.transform(scale(1.3));
+					}
 				}
 				.track {
-					margin-top: @timeline_height - 2px;
 					height: @timeline_height;
 					width: 100%;
 					background: @line_color;
@@ -43,7 +63,7 @@
 					.rounded-corners(6px);
 					.progress {
 						position: relative;
-						width: 1%;
+						width: 0;
 						height: 100%;
 						background: #ed1207;
 						.transition(width 200ms linear);
@@ -522,8 +542,9 @@
 						height: @height;
 					}
 					.timeline {
+						width: @width - 16px;
+						margin-top: @timeline_height - 2px;
 						.track {
-							margin-top: @timeline_height - 2px;
 							height: @timeline_height;
 						}
 						.pointers {
