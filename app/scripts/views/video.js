@@ -5,22 +5,20 @@ define([
 	'underscore',
 	'backbone',
 	'templates',
+	'handlebars',
 
 	'youtube!',
 	'views/components/cover',
 	'views/components/video_player_timeline',
 
 	'editor'
-], function ($, _, Backbone, JST, YT, CoverView, TimelineView, editor) {
+], function ($, _, Backbone, JST, Handlebars, YT, CoverView, TimelineView, editor) {
 	'use strict';
 
 	var View = Backbone.View.extend({
 		// el: '.video-item',
 		tagName: 'div',
-		template : {
-			read : JST['app/scripts/templates/video.hbs'],
-			edit : JST['app/scripts/templates/videoedit.hbs']
-		},
+		template : JST['app/scripts/templates/video.hbs'],
 		events: {
 			'click a'                                : 'link',
 			'click .scripts .item.on .comments-link' : 'commentToggle',
@@ -35,17 +33,23 @@ define([
 
 			_.bindAll(this);
 
-			// param.id && (this.id = id);
 			this.el.setAttribute('class', 'video-item');
 
 			data.contents = this.model.getContents();
-			this.$el.append(this.template.read(data));
+			this.$el.append(this.template(data));
 
 			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
 			this.addPlayer();
 			this.addContents();
 			// this.addCoverImage(this.$('.relate'), this.model.get('relate').coverImage);
-
+			var m = Backbone.Model.extend({
+					className : 'content'
+				});
+			this.collection = new (Backbone.Collection.extend({
+				model : m
+			}));
+			this.listenTo(this.collection, 'add', this.test);
+			this.collection.add(this.model.get('contents'));
 		},
 		render: function(){
 			// var self  = this,
@@ -350,9 +354,27 @@ define([
 			return true;
 		},
 		addScript : function(){
+			var self = this,
+				src   = '<li class="item"><div class="clock">{{hhmmss}}</div> <button class="anker"></button> <div class="script"> <p class="sans-serif">{{script}}</p> </div> <button class="script-delete"><i class="icon-cancel"></i></button></li>',
+				tmplt = Handlebars.compile(src),
+				el;
 			Backbone.pubsub.trigger('getVideoCurrentTime:' + this.model.id, function(time){
-				
+				self.model.addContents({
+					time : time,
+					script : ''
+				}).then(function(){
+					console.log(arguments);
+				}).then(null ,function(){
+					console.log(arguments);
+				});
 			});
+		},
+		deleteScript : function(){
+
+		},
+		test : function(){
+			console.log('test arg = ');
+			console.log(arguments);
 		}
 	});
 
