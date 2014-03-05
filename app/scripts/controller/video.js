@@ -8,17 +8,15 @@ define([
 	'models/video',
 	'collections/video',
 
-	'views/video',
-	'views/videoEdit'
-], function ($, _, Backbone, Video, Videos, VideoView, VideoEditView) {
+	'views/video'
+], function ($, _, Backbone, Video, Videos, VideoView) {
 	'use strict';
 
 	var Controller = Backbone.Controller.extend({
 		el          : $('section.video'),
 		model       : Video,
 		collection  : Videos,
-		readView    : VideoView,
-		editView    : VideoEditView,
+		view        : VideoView,
 		pull        : function(id){
 			var self  = this,
 				query = new Backbone.Query(self.model);

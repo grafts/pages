@@ -31,6 +31,11 @@ define([
 			loading.set();
 
 			return self.createView(param).then(function(view){
+				if((param.action && param.action == 'update') || (param.id && param.id == 'create')){
+					view.edit();
+				} else {
+					view.read();
+				}
 				self.views[param.id] = view;
 				self.history.push(param.id);
 				self.current = param.id;
@@ -39,6 +44,10 @@ define([
 				loading.done();
 				$('body').animate({scrollTop:0}, 100);
 				return view;
+			})
+			.then(null, function(err){
+				console.log(err);
+				console.log(arguments);
 			});
 
 		},
@@ -48,54 +57,42 @@ define([
 
 			return query.get(id);
 		},
-		createDummyView : function(View, id){
+		createDummyView : function(id){
 			var self = this;
 
-			return new View({
+			return new this.view({
 				model : (new self.model()).insertDummyData(),
 				id    : self.el.attr('class') + '_dummy' + id
 			});
 		},
 		createView : function(param){
-			var self = this,
-				View, edit, view;
-
-			if((param.action && param.action == 'update') || (param.id && param.id == 'create')){
-				View = this.editView;
-				edit = '_edit';
-				param.id += edit;
-			}
-			else {
-				View = this.readView;
-				edit = '';
-			}
+			var self = this;
 
 			return new Promise(function(resolve, reject){
+				var view;
+
 				try {
 					if(self.views[param.id]){
 						view = self.views[param.id];
 						view.render();
-						setTimeout(function(){
-							resolve(view);
-						}, 1000);
 					}
 					else if(param.id.match(/^1/)){
-						view = self.createDummyView(View, param.id);
+						view = self.createDummyView(param.id);
 						self.el.append(view.render());
-						setTimeout(function(){
-							resolve(view);
-						}, 1000);
 					}
 					else {
 						self.pull(param.id).then(function(model){
-							view = new View({
+							view = new self.view({
 								model : model,
 								id    : self.el.attr('class') + '_' + param.id + edit
 							});
 							self.el.append(view.render());
-							resolve(view);
 						});
 					}
+
+					setTimeout(function(){
+						resolve(view);
+					}, 1000);
 				}
 				catch(err){
 					console.log(err);
@@ -103,11 +100,13 @@ define([
 				}
 			});
 		},
-		pause : function(resourceChanged){
+		pause : function(resourceChanged, changedId){
 			var self = this;
 			return new Promise(function(resolve, reject){
-				self.pausedView = self.views[self.current];
-				self.pausedView.$el.addClass('off');
+				if(resourceChanged || (!resourceChanged && changedId != self.current)){
+					self.pausedView = self.views[self.current];
+					self.pausedView.$el.addClass('off');
+				}
 				resolve();
 			});
 		},
@@ -116,8 +115,11 @@ define([
 			if(resourceChanged){
 				this.el && this.el.hide();
 			}
-			this.pausedView.$el.removeClass('off');
-			this.pausedView.unrender();
+			if(this.pausedView){
+				this.pausedView.$el.removeClass('off');
+				this.pausedView.unrender();
+				delete this.pausedView;
+			}
 			this.status = false;
 		},
 		garbageCollect : function(){

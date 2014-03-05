@@ -59,7 +59,7 @@ define([
 					action   : action,
 					search   : search
 				},
-				resourceChanged = (this.current && this.current != resource),
+				resourceChanged = (!!this.current && this.current != resource),
 				pausedController;
 
 			if(!resource || resource == ""){
@@ -73,7 +73,7 @@ define([
 
 			if(this.current){
 				pausedController = this.controllers[this.current];
-				pausedController.pause(param);
+				pausedController.pause(resourceChanged, id);
 			}
 
 			this.controllers[resource].run(param)

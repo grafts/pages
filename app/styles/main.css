@@ -628,6 +628,10 @@ h4 {
   bottom: 32px;
   left: 50%;
 }
+.head.with-cover .headline .title,
+.head.with-dark-cover .headline .title {
+  margin-top: 20px;
+}
 .head.with-dark-cover .tool {
   color: white;
   color: rgba(255, 255, 255, 0.7);
@@ -696,6 +700,12 @@ h4 {
   position: relative;
   width: 100%;
   left: 0;
+}
+.head .headline .cover-manage button {
+  display: none;
+}
+.head .headline .cover-manage button.on {
+  display: inline-block;
 }
 .head .headline .title {
   margin-top: 120px;
@@ -3376,6 +3386,7 @@ h4 {
   transform: rotate(0) translateX(0);
 }
 .header ul.menu {
+  position: absolute;
   display: inline-block;
   margin-top: 48px;
   font-size: 20px;

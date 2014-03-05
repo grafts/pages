@@ -362,18 +362,18 @@ define([
 			if(!this.editMode){
 				return;
 			}
-			// 2. destroy edit mode object
-			delete this.editMode;
-			// 3. remove 'edit' class 
+			// 2. remove 'edit' class 
 			this.$el.removeClass('edit');
-			// 4. show hided dom
+			// 3. show hided dom
 			this.$('.head .author, .contents .widget, .contents .comments-link, .relate').show();
-			// 5. remove tools
+			// 4. remove tools
 			this.editMode.deleteTools();
-			// 6. remove input area & saved object collection
+			// 5. remove input area & saved object collection
 			this.editMode.deleteInput();
-			// 7. event rollback
+			// 6. event rollback
 			this.editMode.eventRollback();
+			// 7. destroy edit mode object
+			delete this.editMode;
 		},
 		getEditAuth : function(){
 			return true;
