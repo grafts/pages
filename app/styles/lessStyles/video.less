@@ -7,7 +7,9 @@
 	width: 100%;
 	height: 100%;
 	min-height: 100%;
-
+	.edit-tool {
+		display: none;
+	}
 	.contents {
 		width: 100%;
 		background: #fff;
@@ -16,6 +18,7 @@
 			width: @width;
 		}
 		.player {
+			position: relative;
 			text-align: center;
 			width: 100%;
 			.transition_all();
@@ -23,10 +26,25 @@
 				width: @width;
 				height: @height;
 			}
+			.edit-tool {
+				text-align: right;
+				margin-bottom: 12px;
+				&.on {
+					display: inline-block;
+				}
+				button {
+					display: none;
+					&.on {
+						display: inline-block;
+					}
+				}
+			}
+			.video-wrapper {
+				border: 1px solid @line_color;
+			}
 			.video {
 				width: @width;
 				height: @height;
-				background: #000;
 			}
 			.timeline {
 				position: relative;
@@ -35,7 +53,6 @@
 				margin-top: @timeline_height - 2px;
 				width: @width - 16px;
 				.script-add {
-					display: none;
 					position: absolute;
 					z-index: 1001;
 					background: #fff;
@@ -479,14 +496,10 @@
 }
 
 .video-item.edit {
+	.edit-tool {
+		display: block;
+	}
 	.contents {
-		.player {
-			.timeline {
-				.script-add {
-					display: inline-block;
-				}
-			}
-		}
 		.timeline-contents {
 			.container {
 				.scripts {

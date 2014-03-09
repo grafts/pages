@@ -25,25 +25,23 @@ define([
 			'click a'                                : 'link',
 			'click .scripts .item.on .comments-link' : 'commentToggle',
 			'click .reply'                           : 'replyFormToggle',
-			'click .clock'                           : 'gotoClickedScript',
-			'click .anker'                           : 'gotoClickedScript',
-			'click .script'                          : 'gotoClickedScript'
+			'click .clock, .anker, .script'          : 'gotoClickedScript'
 		},
 		initialize: function(param){
-			var self = this,
-				data = this.model.toJSON();
+			var self  = this,
+				data  = this.model.toJSON();
 
 			_.bindAll(this);
 
 			this.el.setAttribute('class', 'video-item');
 
-			data.contents = this.model.getContents();
+			data.contents = this.model.toData();
 			this.$el.append(this.template(data));
 
-			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
-			this.addPlayer();
-			// this.addContents();
-			// this.addCoverImage(this.$('.relate'), this.model.get('relate').coverImage);
+			this.addVideo();
+			this.addCoverImage();
+			this.listenTo(this.model, 'change:video', this.addVideo);
+			this.listenTo(this.model, 'change:coverImage', this.addCoverImage)
 
 			this.contents = new Contents();
 			this.listenTo(this.contents, 'reset', this.addContents);
@@ -154,46 +152,49 @@ define([
 			});
 			this.commentChange(scriptSeq);
 		},
-		addPlayer : function(){
+		addVideo : function(){
 			var self = this,
 				dom = self.$('.video'),
-				loadPlayer,
-				interval = function(video){
+				video = this.model.get('video'),
+				loadPlayer, interval, progressSync;
 
-					var currentTime      = video.getCurrentTime(),
-						contents         = self.model.get('contents'),
-						scriptSeq        = _.findIndex(contents, function(content) {
-							return content.time > currentTime;
-						});
+			if(!video) return;
 
-					if(scriptSeq < 0){
-						scriptSeq = contents.length - 1;
-					} else if(scriptSeq != 0){
-						scriptSeq -= 1;
-					}
+			interval = function(player){
 
-					Backbone.pubsub.trigger('videoSync:' + self.model.id, currentTime, scriptSeq);
-				},
-				progressSync;
+				var currentTime      = player.getCurrentTime(),
+					contents         = self.model.get('contents'),
+					scriptSeq        = _.findIndex(contents, function(content) {
+						return content.time > currentTime;
+					});
+
+				if(scriptSeq < 0){
+					scriptSeq = contents.length - 1;
+				} else if(scriptSeq != 0){
+					scriptSeq -= 1;
+				}
+
+				Backbone.pubsub.trigger('videoSync:' + self.model.id, currentTime, scriptSeq);
+			};
 
 			var on = {
-					'unstarted' : function(video){
+					'unstarted' : function(player){
 						console.log(arguments);
 					},
-					'ended' : function(video){
+					'ended' : function(player){
 						clearInterval(progressSync);
 					},
-					'playing' : function(video){
-						progressSync = setInterval(interval, 500, video);
+					'playing' : function(player){
+						progressSync = setInterval(interval, 500, player);
 					},
-					'paused' : function(video){
+					'paused' : function(player){
 						clearInterval(progressSync);
 						console.log(arguments);
 					},
-					'buffering' : function(video){
+					'buffering' : function(player){
 						console.log(arguments);
 					},
-					'video cued' : function(video){
+					'player cued' : function(player){
 						console.log(arguments);
 					}
 				};
@@ -203,46 +204,46 @@ define([
 					return YT;
 				},
 				_createPlayer = function(YT){
-					var video = new YT.Player(dom[0], {
-						videoId : '48auKg6es8E'
+					var player = new YT.Player(dom[0], {
+						videoId : video.id
 					});
-					return video;
+					return player;
 				},
-				_setStateEvent = function(video){
-					// unstarted (-1), ended (0), playing (1), paused (2), buffering (3), video cued (5).
+				_setStateEvent = function(player){
+					// unstarted (-1), ended (0), playing (1), paused (2), buffering (3), player cued (5).
 					var states = {
 							'-1' : 'unstarted',
 							'0'  : 'ended',
 							'1'  : 'playing',
 							'2'  : 'paused',
 							'3'  : 'buffering',
-							'5'  : 'video cued'
+							'5'  : 'player cued'
 						};
 
-					video.addEventListener('onStateChange', function(current, e){
-						on[states[current.data]](video);
+					player.addEventListener('onStateChange', function(current, e){
+						on[states[current.data]](player);
 					});
-					return video;
+					return player;
 				},
-				_setPlayEvent = function(video){
+				_setPlayEvent = function(player){
 					var currentScriptSeq = -1,
-						_findArtcle = function(scriptSeq, video){
+						_findArtcle = function(scriptSeq, player){
 							var script = this.model.get('contents')[scriptSeq],
 								time   = script.time;
 
-							video.seekTo(time);
+							player.seekTo(time);
 						},
-						_unrender = function(type, video){
+						_unrender = function(type, player){
 							if(type){
-								video.destroy();
+								player.destroy();
 							}
 							else {
-								video.stopVideo();
+								player.stopplayer();
 							}
 						};
 
 					Backbone.pubsub.on('videoTimelineLink:' + self.model.id, function(scriptSeq){
-						_findArtcle.call(this, scriptSeq, video);
+						_findArtcle.call(this, scriptSeq, player);
 					}, self);
 					Backbone.pubsub.on('videoSync:' + self.model.id, function(currentTime, scriptSeq){
 						if(currentScriptSeq != scriptSeq){
@@ -251,12 +252,23 @@ define([
 						}
 					});
 					Backbone.pubsub.on('videoUnrender:' + self.model.id, function(type){
-						_unrender.call(this, type, video);
+						_unrender.call(this, type, player);
 					}, self);
 					Backbone.pubsub.on('getVideoCurrentTime:' + self.model.id, function(callback){
-						callback(video.getCurrentTime());
+						callback(player.getCurrentTime());
 					}, self);
-					return video;
+					return player;
+				},
+				_saveVideo = function(player){
+					if(!video.duration){
+						self.model.set('video', {
+							id : video.id,
+							duration : player.getDuration()
+						});
+						self.model.save();
+					}
+
+					return player;
 				};
 
 			dom.empty();
@@ -268,13 +280,20 @@ define([
 			.then(_createPlayer)
 			.then(_setStateEvent)
 			.then(_setPlayEvent)
-			.then(function(){
-				// Backbone.pubsub.on('scroll', self.scrollEventBind, self);
+			.then(_saveVideo)
+			.then(null, function(){
+				console.log(arguments);
 			});
 
 		},
+		deleteVideo : function(){
+			Backbone.pubsub.trigger('videoUnrender:' + this.model.id, true);
+			this.$('.video-wrapper').empty();
+		},
 		addContents : function(){
-			var self = this,
+			var self     = this,
+				video    = this.model.get('video'),
+				duration = video ? video.duration : this.model.get('contents')[this.model.get('contents').length-1].time,
 				_addTimeline = function(){
 					if(this.timeline){
 						this.timeline.unrender();
@@ -284,11 +303,11 @@ define([
 
 					this.timeline = new TimelineView({
 						id : self.model.id,
-						contents : self.model.getContents(),
-						duration : self.model.get('video').duration
+						contents : self.model.toData(),
+						duration : duration
 					});
 
-					this.$('.video').after(this.timeline.render());
+					this.$('.video-wrapper').after(this.timeline.render());
 				},
 				_addScripts = function(){
 					this.$('.scripts').children(':eq(0)').addClass('on');
@@ -300,31 +319,22 @@ define([
 		},
 		addCoverImage : function(dom, cover){
 			var self  = this,
-				name  = dom.attr('class');
+				dom   = dom || this.$('.head'),
+				name  = dom.attr('class'),
+				cover = cover || this.model.get('coverImage');
 
 			if(!cover || !cover._url){
 				return;
 			}
 
-			if(!this.cover){
-				this.cover = {};
-			}
-
-			if(this.cover[name]){
-				this.cover[name].unrender();
-				delete this.cover;
-			}
-
-			this.cover[name] = new CoverView({
+			(new CoverView({
 				el       : dom,
 				cover    : cover
-			});
-
-			this.cover[name].render();
+			})).render();
 		},
 		edit : function(){
 			var self = this,
-				unnecessaryDom = this.$('.head .author, .contents .widget, .contents .comments-link, .relate');
+				unnecessaryDom = this.$('.head .author, .head .article-edit, .contents .widget, .contents .comments-link, .relate');
 
 			try {
 				// 1. check edit auth
@@ -335,8 +345,17 @@ define([
 				this.$el.addClass('edit');
 				// 4. hide unnecessary Dom
 				unnecessaryDom.hide();
-				// 5. add tools for edit submit or cancel
-				this.editMode.addTool();
+				// 5. refresh tools for edit submit or cancel
+				this.editMode.refreshTool([
+					{
+						dom   : self.$('.edit-tool[data-edit="cover"]'), 
+						exist : !!self.model.get('coverImage') 
+					},
+					{
+						dom   : self.$('.edit-tool[data-edit="video"]'), 
+						exist : !!self.model.get('video') 
+					}
+				]);
 				// 6. input area insert & save those to object collection
 				this.editMode.input(this.el.querySelector('.head .title'), 'title');
 				this.editMode.input(this.el.querySelector('.head .subtitle'), 'subtitle');
@@ -346,12 +365,10 @@ define([
 					'click a'                       : 'link',
 					'click .script-delete'          : 'deleteScript',
 					'click .script-add'             : 'addScript',
-					'click .cover-manage > .upload' : 'coverUpload',
-					'click .cover-manage > .delete' : 'coverDelete',
-					'click a.edit-tool-save'        : 'save',
-					'click a.edit-tool-publish'     : 'publish'
+					'click .edit-tool > .button'    : 'fileManage',
+					'click .edit-tool-save'         : 'save',
+					'click .edit-tool-publish'      : 'publish'
 				});
-				// 8. 
 			}
 			catch(err){
 				console.log(err);
@@ -365,14 +382,12 @@ define([
 			// 2. remove 'edit' class 
 			this.$el.removeClass('edit');
 			// 3. show hided dom
-			this.$('.head .author, .contents .widget, .contents .comments-link, .relate').show();
-			// 4. remove tools
-			this.editMode.deleteTools();
-			// 5. remove input area & saved object collection
+			this.$('.head .author, .head .article-edit, .contents .widget, .contents .comments-link, .relate').show();
+			// 4. remove input area & saved object collection
 			this.editMode.deleteInput();
-			// 6. event rollback
+			// 5. event rollback
 			this.editMode.eventRollback();
-			// 7. destroy edit mode object
+			// 6. destroy edit mode object
 			delete this.editMode;
 		},
 		getEditAuth : function(){
@@ -383,6 +398,7 @@ define([
 				src   = '<li class="item"><div class="clock">{{hhmmss}}</div> <button class="anker"></button> <div class="script"> <p class="sans-serif">{{script}}</p> </div> <button class="script-delete"><i class="icon-cancel"></i></button></li>',
 				tmplt = Handlebars.compile(src),
 				el;
+
 			Backbone.pubsub.trigger('getVideoCurrentTime:' + this.model.id, function(time){
 				self.model.addContents({
 					time : time,
@@ -416,6 +432,35 @@ define([
 				return self.save();
 			});
 		},
+		fileManage : function(e){
+			var self     = this,
+				resource = e.currentTarget.parentNode.dataset.edit,
+				action   = e.currentTarget.className.replace('button ', ''),
+				_manage  = {
+					upload : {
+						video : function(){
+							var url = prompt("Insert Video URL"),
+								id  = url;
+
+							console.log(id);
+
+						},
+						cover : function(){
+
+						}
+					},
+					delete : {
+						video : function(){
+							self.deleteVideo();
+						},
+						cover : function(){
+
+						}
+					}
+				};
+
+			_manage[action][resource]();
+		},
 		test : function(){
 			console.log('test arg = ');
 			console.log(arguments);
@@ -427,11 +472,15 @@ define([
 
 
 function Edit(context){
-	var inputs = [];
+	var inputs = [],
+		tools = context.$('.edit');
 
 	this.context = context;
 	this.editOption = {
-		debug: true
+		debug: false
+	};
+	this._tools = function(){
+		return tools;
 	};
 	this._input = function(dom, type){
 		inputs.push(
@@ -445,11 +494,11 @@ function Edit(context){
 	};
 }
 Edit.prototype = {
-	addTool : function(){
-
-	},
-	deleteTools : function(){
-
+	refreshTool : function(tools){
+		tools.forEach(function(tool){
+			var button = tool.exist ? '.delete' : '.upload';
+			tool.dom.children().hide().end().children(button).show();
+		});
 	},
 	input : function(dom, type){
 		var self = this;

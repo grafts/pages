@@ -59,13 +59,15 @@ define([
 		initialize: function(){
 
 		},
-		getContents : function(){
+		toData : function(){
 			var self = this,
 				contents = _.cloneDeep(this.get('contents')),
+				video    = this.get('video'),
+				duration = video ? video.duration : null,
 				_percent = function(total, current){
 					return current / total * 100;
 				},
-				_hhmmss = function(secs){
+				_hhmmss  = function(secs){
 					var hours = Math.floor(secs / (60 * 60));
 
 					var divisor_for_minutes = secs % (60 * 60);
@@ -94,9 +96,12 @@ define([
 			if(!contents){
 				return null;
 			}
+			if(!duration){
+				duration = contents[contents.length - 1].time;
+			}
 
 			return contents.map(function(val, n){
-				val.position = _percent(self.get('video').duration, val.time);
+				val.position = _percent(duration, val.time);
 				val.hhmmss = _hhmmss(val.time);
 				val.seq = n;
 
@@ -231,6 +236,7 @@ define([
 					dummy.contents.push(c);
 				})(i)
 			}
+			delete dummy.video;
 			this.set(dummy);
 			return this;
 		}

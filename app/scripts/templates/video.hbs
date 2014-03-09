@@ -1,21 +1,18 @@
 <div class="head">
-	<div class="tool">
-		<a class="tool-edit" href="/video/{{objectId}}/update">
-			<i class="icon-cog"></i>
-		</a>
+	<div class="tool article-edit">
+		<a class="button tool-edit" href="/video/{{objectId}}/update">Edit</a>
+	</div>
+	<div class="tool edit-tool" data-edit="article">
+		<button class="button edit-tool-save">Save</button>
+		<button class="button edit-tool-publish">Publish</button>
+		<button class="button edit-tool-delete">Delete</button>
 	</div>
 
 	<div class="headline sans-serif">
 		<div class="container">
-			<div class="cover-manage">
-				<button class="button upload">
-					<i class="icon-picture"></i>
-					<i class="icon-plus"></i>
-				</button>
-				<button class="button delete">
-					<i class="icon-picture"></i>
-					<i class="icon-cancel"></i>
-				</button>
+			<div class="edit-tool" data-edit="cover">
+				<button class="button upload">Add Cover Image</button>
+				<button class="button delete">Remove Cover Image</button>
 			</div>
 			<p class="title">{{title}}</p>
 			<p class="subtitle">{{subtitle}}</p>
@@ -31,7 +28,13 @@
 	
 	<div class="player">
 		<div class="container">
-			<div class="video"></div>
+			<div class="edit-tool" data-edit="video">
+				<button class="button upload">Add Video</button>
+				<button class="button delete">Remove Video</button>
+			</div>
+			<div class="video-wrapper">
+				<div class="video"></div>
+			</div>
 		</div>
 	</div>
 
