@@ -9,12 +9,13 @@ define([
 
 	'youtube!',
 	'views/components/cover',
+	'views/components/video_scripts',
 	'views/components/video_player_timeline',
 
 	'collections/video_contents',
 
 	'editor'
-], function ($, _, Backbone, JST, Handlebars, YT, CoverView, TimelineView, Contents, editor) {
+], function ($, _, Backbone, JST, Handlebars, YT, CoverView, ScriptsView, TimelineView, Contents, editor) {
 	'use strict';
 
 	var View = Backbone.View.extend({
@@ -28,67 +29,26 @@ define([
 			'click .clock, .anker, .script'          : 'gotoClickedScript'
 		},
 		initialize: function(param){
-			var self  = this,
-				data  = this.model.toJSON();
+			var self  = this;
 
 			_.bindAll(this);
 
 			this.el.setAttribute('class', 'video-item');
 
-			data.contents = this.model.toData();
-			this.$el.append(this.template(data));
+			this.$el.append(this.template(this.model.toJSON()));
+			this.contents = new Contents();
+			this.contents.add(this.model.get('contents'));
 
 			this.addVideo();
 			this.addCoverImage();
+			this.addContents();
 			this.listenTo(this.model, 'change:video', this.addVideo);
 			this.listenTo(this.model, 'change:coverImage', this.addCoverImage)
 
-			this.contents = new Contents();
-			this.listenTo(this.contents, 'reset', this.addContents);
-			this.contents.add(this.model.get('contents'));
-			this.contents.sort();
+			// this.listenTo(this.contents, 'reset', this.refreshScripts);
+			// this.contents.sort();
 		},
 		render: function(){
-			// var self  = this,
-			// 	startScroll = true,
-			// 	scrollStoped = true,
-			// 	_excuteAutoScroll = function(currentPosition){
-			// 		var windowHeight = $(window).height();
-			// 		if(!scrollStoped){
-			// 			return;
-			// 		}
-			// 		if(startScroll && currentPosition > (windowHeight*0.2)){
-			// 			scrollStoped = false;
-			// 			$('html').animate({
-			// 				scrollTop : windowHeight
-			// 			},
-			// 			200,
-			// 			function(){
-			// 				startScroll = false;
-			// 				scrollStoped = true;
-			// 			});
-			// 		}
-			// 		else if(!startScroll && currentPosition < (windowHeight*0.8)){
-			// 			scrollStoped = false;
-			// 			$('html').animate({
-			// 				scrollTop : 0
-			// 			},
-			// 			200,
-			// 			function(){
-			// 				startScroll = true;
-			// 				scrollStoped = true;
-			// 			});
-			// 		}
-			// 	};
-			
-
-			// this.scrollEventBind = _.debounce(function(){
-			// 	var currentPosition = self.$el.offset().top;
-
-			// 	_excuteAutoScroll(currentPosition);
-
-			// }, 1);
-
 			console.log('video view render');
 			this.$el.show();
 			this.delegateEvents();
@@ -238,7 +198,7 @@ define([
 								player.destroy();
 							}
 							else {
-								player.stopplayer();
+								player.stopVideo();
 							}
 						};
 
@@ -284,7 +244,6 @@ define([
 			.then(null, function(){
 				console.log(arguments);
 			});
-
 		},
 		deleteVideo : function(){
 			Backbone.pubsub.trigger('videoUnrender:' + this.model.id, true);
@@ -294,28 +253,32 @@ define([
 			var self     = this,
 				video    = this.model.get('video'),
 				duration = video ? video.duration : this.model.get('contents')[this.model.get('contents').length-1].time,
-				_addTimeline = function(){
-					if(this.timeline){
-						this.timeline.unrender();
-						this.$('.timeline').remove();
-						delete this.timeline;
+				_add = function(resource){
+					var View = {
+						scripts  : ScriptsView,
+						timeline : TimelineView
+					};
+					if(!this.components){
+						this.components = {};
+					}
+					if(this.components[resource]){
+						this.components[resource].unrender();
+						this.components[resource].remove();
+						delete this.components[resource];
 					}
 
-					this.timeline = new TimelineView({
-						id : self.model.id,
-						contents : self.model.toData(),
+					this.components[resource] = new View[resource]({
+						id       : 'video_' + self.model.id + '_' + resource,
+						videoId  : self.model.id,
+						contents : self.contents,
 						duration : duration
 					});
 
-					this.$('.video-wrapper').after(this.timeline.render());
-				},
-				_addScripts = function(){
-					this.$('.scripts').children(':eq(0)').addClass('on');
+					this.$('.'+resource+'-wrapper').append(this.components[resource].render());
 				};
 
-			_addTimeline.call(this);
-			_addScripts.call(this);
-			
+			_add.call(this, 'timeline');
+			_add.call(this, 'scripts');
 		},
 		addCoverImage : function(dom, cover){
 			var self  = this,

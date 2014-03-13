@@ -1,0 +1,16 @@
+{{#each scripts}}
+	<li class="item">
+		<div class="clock">{{this.hhmmss}}</div>
+		<button class="anker"></button>
+		<div class="script">
+			<p class="sans-serif">{{this.script}}</p>
+		</div>
+		<button class="comments-link">
+			<span class="count">{{this.comments.length}}</span>
+			<i class="icon-cancel"></i>
+		</button>
+		<button class="script-delete">
+			<i class="icon-cancel"></i>
+		</button>
+	</li>
+{{/each}}

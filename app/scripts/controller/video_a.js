@@ -10,15 +10,14 @@ define([
 
 	'views/video_a',
 	'views/videoEdit'
-], function ($, _, Backbone, Video, Videos, VideoView, VideoEditView) {
+], function ($, _, Backbone, Video, Videos, VideoView) {
 	'use strict';
 
 	var Controller = Backbone.Controller.extend({
 		el          : $('section.video_a'),
 		model       : Video,
 		collections : Videos,
-		readView    : VideoView,
-		editView    : VideoEditView
+		view        : VideoView,
 	});
 
 	return Controller;

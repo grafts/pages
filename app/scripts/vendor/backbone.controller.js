@@ -13,12 +13,19 @@ define([
 		return 1;
 	};
 
+	var viewProto = {
+		read : function(){
+		},
+		edit : function(){
+		}
+	}
+	_.extend(Backbone.View.prototype, viewProto);
+
  	_.extend(Controller.prototype, {
 		el          : $('div'),
 		model       : Backbone.Model,
 		collection  : Backbone.Collection,
-		readView    : Backbone.View,
-		editView    : Backbone.View,
+		view        : Backbone.View,
 		history     : [],
 		initialize  : function(){},
 		run         : function(param){
@@ -46,8 +53,13 @@ define([
 				return view;
 			})
 			.then(null, function(err){
+				//404
+				if(err.code == 101){
+					console.log(404);
+				}
 				console.log(err);
-				console.log(arguments);
+				loading.done();
+				return err;
 			});
 
 		},
@@ -75,24 +87,30 @@ define([
 					if(self.views[param.id]){
 						view = self.views[param.id];
 						view.render();
+						setTimeout(function(){
+							resolve(view);
+						}, 1000);
 					}
 					else if(param.id.match(/^1/)){
 						view = self.createDummyView(param.id);
 						self.el.append(view.render());
+						setTimeout(function(){
+							resolve(view);
+						}, 1000);
 					}
 					else {
 						self.pull(param.id).then(function(model){
 							view = new self.view({
 								model : model,
-								id    : self.el.attr('class') + '_' + param.id + edit
+								id    : self.el.attr('class') + '_' + param.id
 							});
 							self.el.append(view.render());
+							resolve(view);
+						})
+						.then(null, function(err){
+							reject(err);
 						});
 					}
-
-					setTimeout(function(){
-						resolve(view);
-					}, 1000);
 				}
 				catch(err){
 					console.log(err);
@@ -137,6 +155,8 @@ define([
 			}, 300);
 		}
  	});
+
+	
 
 	Controller.extend = Backbone.Model.extend;
 	Backbone.Controller = Controller;

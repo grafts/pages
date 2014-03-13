@@ -59,7 +59,7 @@ define([
 		initialize: function(){
 
 		},
-		toData : function(){
+		refineContents : function(){
 			var self = this,
 				contents = _.cloneDeep(this.get('contents')),
 				video    = this.get('video'),
@@ -108,7 +108,7 @@ define([
 				return val;
 			});
 		},
-		addContents  : function(data, option){
+		addContents : function(data, option){
 			var self    = this,
 				multi   = _.isArray(data),
 				_single, _multi;
@@ -236,7 +236,7 @@ define([
 					dummy.contents.push(c);
 				})(i)
 			}
-			delete dummy.video;
+
 			this.set(dummy);
 			return this;
 		}

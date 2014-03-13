@@ -43,7 +43,11 @@ define([
 
 	var Model = Backbone.Model.extend({
 		className: 'class',
-		defaults: dummy
+		defaults: {},
+		insertDummyData : function(){
+			this.set(dummy);
+			return this;
+		}
 	});
 
 	return Model;

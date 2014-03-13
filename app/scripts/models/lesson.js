@@ -6,9 +6,16 @@ define([
 ], function (_, Backbone) {
 	'use strict';
 
+	var dummy = {
+		
+	};
+
 	var Model = Backbone.Model.extend({
 		className : 'lesson',
-		defaults: {
+		defaults: {},
+		insertDummyData : function(){
+			this.set(dummy);
+			return this;
 		}
 	});
 

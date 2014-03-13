@@ -8,9 +8,8 @@ define([
 	'models/class',
 	'collections/class',
 
-	'views/class',
-	'views/classEdit'
-], function ($, _, Backbone, Class, Classes, ClassView, ClassEditView) {
+	'views/class'
+], function ($, _, Backbone, Class, Classes, ClassView) {
 	'use strict';
 
 	var Controller = Backbone.Controller.extend({
@@ -20,8 +19,7 @@ define([
 		},
 		model       : Class,
 		collection  : Classes,
-		readView    : ClassView,
-		editView    : ClassEditView
+		view        : ClassView
 	});
 
 	return Controller;

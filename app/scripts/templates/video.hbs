@@ -35,29 +35,13 @@
 			<div class="video-wrapper">
 				<div class="video"></div>
 			</div>
+			<div class="timeline-wrapper"></div>
 		</div>
 	</div>
 
 	<div class="timeline-contents">
 		<div class="container">
-			<ul class="scripts">
-			{{#each contents}}
-				<li class="item" data-seq="{{@index}}">
-					<div class="clock">{{this.hhmmss}}</div>
-					<button class="anker"></button>
-					<div class="script">
-						<p class="sans-serif">{{this.script}}</p>
-					</div>
-					<button class="comments-link">
-						<span class="count">{{this.comments.length}}</span>
-						<i class="icon-cancel"></i>
-					</button>
-					<button class="script-delete">
-						<i class="icon-cancel"></i>
-					</button>
-				</li>
-			{{/each}}
-			</ul>
+			<div class="scripts-wrapper"></div>
 		</div>
 	</div>
 

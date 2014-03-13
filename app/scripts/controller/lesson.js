@@ -14,7 +14,7 @@ define([
 	var Controller = Backbone.Controller.extend({
 		el          : $('section.lesson'),
 		model       : Lesson,
-		readView    : LessonView
+		view        : LessonView
 	});
 
 	return Controller;

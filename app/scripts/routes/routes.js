@@ -80,6 +80,9 @@ define([
 			.then(function(currentView){
 				pausedController && pausedController.stop(resourceChanged);
 				self.current = resource;
+			})
+			.then(null, function(err){
+				console.log(err);
 			});
 		}
 	});

@@ -9,14 +9,13 @@ define([
 
 	'views/live',
 	'views/liveEdit'
-], function ($, _, Backbone, Live, LiveView, LiveEditView) {
+], function ($, _, Backbone, Live, LiveView) {
 	'use strict';
 
 	var Controller = Backbone.Controller.extend({
 		el          : $('section.live'),
 		model       : Live,
-		readView    : LiveView,
-		editView    : LiveEditView
+		view        : LiveView,
 	});
 
 	return Controller;

@@ -23,10 +23,11 @@ define([
 		};
 
 	var Model = Backbone.Model.extend({
-		defaults: dummy,
 		className: '_User',
-		initialize: function(){
-			
+		defaults: {},
+		insertDummyData : function(){
+			this.set(dummy);
+			return this;
 		}
 	});
 

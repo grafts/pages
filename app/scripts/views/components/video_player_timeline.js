@@ -16,7 +16,7 @@ define([
 
 			_.bindAll(this);
 
-			this.id = data.id;
+			this.videoId = data.videoId;
 			this.contents = data.contents;
 			this.duration = data.duration;
 
@@ -26,7 +26,11 @@ define([
 
 			this.$el
 			.addClass('timeline')
-			.append(self.template({ pointers : self.contents }));
+			.append(self.template({
+				pointers : self.contents.refine({
+					duration : self.duration
+				})
+			}));
 
 			this.sync();
 
@@ -35,10 +39,10 @@ define([
 		unrender : function(){
 			Backbone.pubsub.off(null, null, this);
 			this.undelegateEvents();
-			this.$el.hide();
+			this.$el.remove();
 		},
 		sync : function(){
-			Backbone.pubsub.on('videoSync:' + this.id, this.updateProgress, this);
+			Backbone.pubsub.on('videoSync:' + this.videoId, this.updateProgress, this);
 		},
 		updateProgress : function(progress, scriptSeq){
 			var self = this;
@@ -46,7 +50,7 @@ define([
 			this.$('.item').removeClass('on').eq(scriptSeq).addClass('on');
 		},
 		link : function(e){
-			Backbone.pubsub.trigger('videoTimelineLink:' + this.id, $(e.currentTarget).data().seq);
+			Backbone.pubsub.trigger('videoTimelineLink:' + this.videoId, $(e.currentTarget).data().seq);
 		}
 	});
 
