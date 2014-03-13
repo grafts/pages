@@ -13,13 +13,103 @@ define([
 		return 1;
 	};
 
-	var viewProto = {
-		read : function(){
-		},
-		edit : function(){
+	function Edit(context){
+		var inputs = [],
+			editOption = {
+				debug: false
+			},
+			input = function(dom, type){
+				inputs.push(
+					new editor(
+						_.defaults({
+							element : dom,
+							placeholder : type || 'Type your text.'
+						}, editOption)
+					)
+				);
+			};
+
+		this.context = context;
+		this._createInputField = function(selector, type){
+			var self = this;
+
+			[].forEach.call(context.el.querySelectorAll(selector), function(el){
+				input(el, type);
+			});
+		}
+		this._deleteInputFields = function(){
+			inputs.forEach(function(field){
+				field.destroy();
+			});
 		}
 	}
-	_.extend(Backbone.View.prototype, viewProto);
+	Edit.prototype = {
+		createInputFields : function(inputs){
+			var self = this;
+			inputs.forEach(function(input){
+				self._createInputField(input.selector, input.type)
+			});
+		},
+		deleteInputFields : function(){
+
+		},
+		save : function(){
+			return new Promise(function(resolve, reject){
+				resolve();
+			});
+		},
+		eventShift : function(events){
+			this.defaultEvent = this.context.events;
+			this.context.events = events;
+			this.context.undelegateEvents();
+			this.context.delegateEvents();
+		},
+		eventRollback : function(){
+			this.context.events = this.defaultEvent;
+			this.context.undelegateEvents();
+			this.context.delegateEvents();
+		}
+	}
+	_.extend(Backbone.View.prototype, {
+		editConfig : {},
+		edit : function(){
+			var self = this;
+
+			try {
+				// 1. check edit auth
+				if(!this.getEditAuth()) return;
+				// 2. tool class extend
+				this.editMode = new Edit(this);
+				// 3. class add to el for edit mode look css
+				this.$el.addClass('edit');
+				// 4. hide unnecessary Dom
+				this.$('.uneditable').hide();
+				// 5. input area insert & save those to object collection
+				this.editMode.createInputFields(self.editConfig.fields);
+				// 6. event change for edit mode
+				this.editMode.eventShift(self.editConfig.event);
+			}
+			catch(err){
+				console.log(err);
+			}
+		},
+		read : function(){
+			// 1. check current view mode
+			if(!this.editMode){
+				return;
+			}
+			// 2. remove 'edit' class 
+			this.$el.removeClass('edit');
+			// 3. show hided dom
+			this.$('.uneditable').show();
+			// 4. remove input area & saved object collection
+			this.editMode.deleteInputFields();
+			// 5. event rollback
+			this.editMode.eventRollback();
+			// 6. destroy edit mode object
+			delete this.editMode;
+		}
+	});
 
  	_.extend(Controller.prototype, {
 		el          : $('div'),

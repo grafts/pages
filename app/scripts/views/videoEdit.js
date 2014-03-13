@@ -27,7 +27,7 @@ define([
 			data.contents = this.model.getContents();
 			this.$el.append(this.template(data));
 
-			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
+			this.addCover(this.$('.head'), this.model.get('cover'));
 			this.addPlayer();
 			this.addContents();
 

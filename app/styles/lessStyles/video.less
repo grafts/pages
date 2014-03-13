@@ -41,6 +41,8 @@
 			}
 			.video-wrapper {
 				border: 1px solid @line_color;
+				width: @width;
+				min-height: @height;
 			}
 			.video {
 				width: @width;
@@ -549,6 +551,10 @@
 					iframe, img {
 						width: @width;
 						height: @height;
+					}
+					.video-wrapper {
+						width: @width;
+						min-height: @height;
 					}
 					.video {
 						width: @width;

@@ -1,5 +1,5 @@
 <div class="head">
-	<div class="tool article-edit">
+	<div class="tool article-edit uneditable">
 		<a class="button tool-edit" href="/video/{{objectId}}/update">Edit</a>
 	</div>
 	<div class="tool edit-tool" data-edit="article">
@@ -16,7 +16,7 @@
 			</div>
 			<p class="title">{{title}}</p>
 			<p class="subtitle">{{subtitle}}</p>
-			<a class="author" href="/user/{{author.id}}">
+			<a class="author uneditable" href="/user/{{author.id}}">
 				<img class="avatar" src="{{author.avatar._url}}" alt="avatar">
 				<span class="name">{{author.name}}</span>
 			</a>
@@ -32,9 +32,7 @@
 				<button class="button upload">Add Video</button>
 				<button class="button delete">Remove Video</button>
 			</div>
-			<div class="video-wrapper">
-				<div class="video"></div>
-			</div>
+			<div class="video-wrapper"></div>
 			<div class="timeline-wrapper"></div>
 		</div>
 	</div>
@@ -45,7 +43,7 @@
 		</div>
 	</div>
 
-	<div class="widget">
+	<div class="widget uneditable">
 		<div class="container">
 			<div class="widget-counter">
 				<span class="like">
@@ -107,7 +105,7 @@
 	</div>
 </div>
 
-<div class="relate">
+<div class="relate uneditable">
 	<div class="container">
 		<h4>RELATED VIDEO</h4>
 	</div>

@@ -40,10 +40,10 @@ define([
 			this.contents.add(this.model.get('contents'));
 
 			this.addVideo();
-			this.addCoverImage();
+			this.addCover();
 			this.addContents();
 			this.listenTo(this.model, 'change:video', this.addVideo);
-			this.listenTo(this.model, 'change:coverImage', this.addCoverImage)
+			this.listenTo(this.model, 'change:cover', this.addCover)
 
 			// this.listenTo(this.contents, 'reset', this.refreshScripts);
 			// this.contents.sort();
@@ -91,7 +91,7 @@ define([
 			$(e.currentTarget.nextElementSibling).toggle();
 		},
 		gotoClickedScript : function(e){
-			var current = $(e.currentTarget.parentNode).data().seq;
+			var current = this.$(e.currentTarget.parentNode).index();
 			Backbone.pubsub.trigger('videoTimelineLink:' + this.model.id, current);
 		},
 		scrollToArticle : function(scriptSeq){
@@ -113,12 +113,14 @@ define([
 			this.commentChange(scriptSeq);
 		},
 		addVideo : function(){
-			var self = this,
-				dom = self.$('.video'),
+			var self  = this,
 				video = this.model.get('video'),
-				loadPlayer, interval, progressSync;
+				loadPlayer, interval, progressSync, dom;
 
 			if(!video) return;
+
+			dom = $('<div class="video"></div>');
+			self.$('.video-wrapper').append(dom);
 
 			interval = function(player){
 
@@ -159,15 +161,13 @@ define([
 					}
 				};
 
-			var _removeLoadingImage = function(){
-					dom.empty();
-					return YT;
-				},
-				_createPlayer = function(YT){
+			var _createPlayer = function(){
 					var player = new YT.Player(dom[0], {
 						videoId : video.id
 					});
-					return player;
+					return new Promise(function(resolve, reject){
+						resolve(player);
+					});
 				},
 				_setStateEvent = function(player){
 					// unstarted (-1), ended (0), playing (1), paused (2), buffering (3), player cued (5).
@@ -180,43 +180,49 @@ define([
 							'5'  : 'player cued'
 						};
 
-					player.addEventListener('onStateChange', function(current, e){
-						on[states[current.data]](player);
+					return new Promise(function(resolve, reject){
+						player.addEventListener('onReady', function(){
+							player.addEventListener('onStateChange', function(current, e){
+								on[states[current.data]](player);
+							});
+							resolve(player);
+						});
 					});
-					return player;
 				},
 				_setPlayEvent = function(player){
 					var currentScriptSeq = -1,
 						_findArtcle = function(scriptSeq, player){
-							var script = this.model.get('contents')[scriptSeq],
+							var script = self.model.get('contents')[scriptSeq],
 								time   = script.time;
 
 							player.seekTo(time);
 						},
-						_unrender = function(type, player){
+						_unrender = function(type, player, callback){
+							Backbone.pubsub.off(null, null, player);
 							if(type){
 								player.destroy();
 							}
 							else {
 								player.stopVideo();
 							}
+							callback && callback();
 						};
 
 					Backbone.pubsub.on('videoTimelineLink:' + self.model.id, function(scriptSeq){
 						_findArtcle.call(this, scriptSeq, player);
-					}, self);
+					}, player);
 					Backbone.pubsub.on('videoSync:' + self.model.id, function(currentTime, scriptSeq){
 						if(currentScriptSeq != scriptSeq){
 							currentScriptSeq = scriptSeq;
 							self.scrollToArticle(scriptSeq);
 						}
-					});
-					Backbone.pubsub.on('videoUnrender:' + self.model.id, function(type){
-						_unrender.call(this, type, player);
-					}, self);
+					}, player);
+					Backbone.pubsub.on('videoUnrender:' + self.model.id, function(type, callback){
+						_unrender.call(this, type, player, callback);
+					}, player);
 					Backbone.pubsub.on('getVideoCurrentTime:' + self.model.id, function(callback){
 						callback(player.getCurrentTime());
-					}, self);
+					}, player);
 					return player;
 				},
 				_saveVideo = function(player){
@@ -224,30 +230,37 @@ define([
 						self.model.set('video', {
 							id : video.id,
 							duration : player.getDuration()
-						});
-						self.model.save();
+						}, {silent:true});
 					}
-
+					return player;
+				},
+				_setEditTool = function(player){
+					self.$('.edit-tool[data-edit="video"]')
+					.children().hide().end()
+					.children('.delete').show();
 					return player;
 				};
 
 			dom.empty();
 
-			loadPlayer = Promise.resolve();
-
-			loadPlayer
-			.then(_removeLoadingImage)
-			.then(_createPlayer)
+			_createPlayer()
 			.then(_setStateEvent)
 			.then(_setPlayEvent)
 			.then(_saveVideo)
+			.then(_setEditTool)
 			.then(null, function(){
 				console.log(arguments);
 			});
 		},
 		deleteVideo : function(){
-			Backbone.pubsub.trigger('videoUnrender:' + this.model.id, true);
-			this.$('.video-wrapper').empty();
+			var self = this;
+
+			Backbone.pubsub.trigger('videoUnrender:' + this.model.id, true, function(){
+				self.$('.video-wrapper').empty();
+				self.$('.edit-tool[data-edit="video"]')
+				.children().hide().end()
+				.children('.upload').show();
+			});
 		},
 		addContents : function(){
 			var self     = this,
@@ -280,78 +293,39 @@ define([
 			_add.call(this, 'timeline');
 			_add.call(this, 'scripts');
 		},
-		addCoverImage : function(dom, cover){
+		addCover : function(dom, cover){
 			var self  = this,
 				dom   = dom || this.$('.head'),
 				name  = dom.attr('class'),
-				cover = cover || this.model.get('coverImage');
+				cover = cover || this.model.get('cover');
 
 			if(!cover || !cover._url){
 				return;
 			}
+
+			self.$('.edit-tool[data-edit="cover"]')
+			.children().hide().end()
+			.children('.delete').show();
 
 			(new CoverView({
 				el       : dom,
 				cover    : cover
 			})).render();
 		},
-		edit : function(){
-			var self = this,
-				unnecessaryDom = this.$('.head .author, .head .article-edit, .contents .widget, .contents .comments-link, .relate');
-
-			try {
-				// 1. check edit auth
-				if(!this.getEditAuth()) return;
-				// 2. tool class extend
-				this.editMode = new Edit(this);
-				// 3. class add to el for edit mode look css
-				this.$el.addClass('edit');
-				// 4. hide unnecessary Dom
-				unnecessaryDom.hide();
-				// 5. refresh tools for edit submit or cancel
-				this.editMode.refreshTool([
-					{
-						dom   : self.$('.edit-tool[data-edit="cover"]'), 
-						exist : !!self.model.get('coverImage') 
-					},
-					{
-						dom   : self.$('.edit-tool[data-edit="video"]'), 
-						exist : !!self.model.get('video') 
-					}
-				]);
-				// 6. input area insert & save those to object collection
-				this.editMode.input(this.el.querySelector('.head .title'), 'title');
-				this.editMode.input(this.el.querySelector('.head .subtitle'), 'subtitle');
-				this.editMode.input(this.el.querySelectorAll('.script'), 'script');
-				// 7. event change for edit mode
-				this.editMode.eventShift({
-					'click a'                       : 'link',
-					'click .script-delete'          : 'deleteScript',
-					'click .script-add'             : 'addScript',
-					'click .edit-tool > .button'    : 'fileManage',
-					'click .edit-tool-save'         : 'save',
-					'click .edit-tool-publish'      : 'publish'
-				});
-			}
-			catch(err){
-				console.log(err);
-			}
-		},
-		read : function(){
-			// 1. check current view mode
-			if(!this.editMode){
-				return;
-			}
-			// 2. remove 'edit' class 
-			this.$el.removeClass('edit');
-			// 3. show hided dom
-			this.$('.head .author, .head .article-edit, .contents .widget, .contents .comments-link, .relate').show();
-			// 4. remove input area & saved object collection
-			this.editMode.deleteInput();
-			// 5. event rollback
-			this.editMode.eventRollback();
-			// 6. destroy edit mode object
-			delete this.editMode;
+		editConfig : {
+			event : {
+				'click a'                       : 'link',
+				'click .script-delete'          : 'deleteScript',
+				'click .script-add'             : 'addScript',
+				'click .edit-tool > .button'    : 'fileManage',
+				'click .edit-tool-save'         : 'save',
+				'click .edit-tool-publish'      : 'publish'
+			},
+			fields : [
+				{ selector : '.head .title', type : 'title' },
+				{ selector : '.head .subtitle', type : 'subtitle' },
+				{ selector : '.script', type : 'script' }
+			]
 		},
 		getEditAuth : function(){
 			return true;
@@ -403,10 +377,11 @@ define([
 					upload : {
 						video : function(){
 							var url = prompt("Insert Video URL"),
-								id  = url;
+								id  = url.split('/').pop().split('=').pop();
 
-							console.log(id);
-
+							self.model.set('video', {
+								id : id
+							});
 						},
 						cover : function(){
 
@@ -432,64 +407,3 @@ define([
 
 	return View;
 });
-
-
-function Edit(context){
-	var inputs = [],
-		tools = context.$('.edit');
-
-	this.context = context;
-	this.editOption = {
-		debug: false
-	};
-	this._tools = function(){
-		return tools;
-	};
-	this._input = function(dom, type){
-		inputs.push(
-			new editor(
-				_.defaults({
-					element : dom,
-					placeholder : type || 'Type your text.'
-				}, this.editOption)
-			)
-		);
-	};
-}
-Edit.prototype = {
-	refreshTool : function(tools){
-		tools.forEach(function(tool){
-			var button = tool.exist ? '.delete' : '.upload';
-			tool.dom.children().hide().end().children(button).show();
-		});
-	},
-	input : function(dom, type){
-		var self = this;
-
-		if(!dom.length){
-			this._input(dom, type);
-		}
-		else {
-			[].forEach.call(dom, function(el){
-				self._input(el, type);
-			});
-		}
-	},
-	deleteInput : function(){
-
-	},
-	save : function(){
-		return new Promise(function(resolve, reject){
-			resolve();
-		});
-	},
-	eventShift : function(events){
-		this.defaultEvent = this.context.events;
-		this.context.events = events;
-		this.context.undelegateEvents();
-		this.context.delegateEvents();
-	},
-	eventRollback : function(){
-
-	}
-}

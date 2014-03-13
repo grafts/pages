@@ -174,7 +174,7 @@ define([
 							_url       : '/images/avatar.jpg'
 						}
 					},
-					coverImage : {
+					cover : {
 						_url       : "/images/cover_background.png" 
 					},
 					video      : {
@@ -195,7 +195,7 @@ define([
 								_url   : '/images/avatar.jpg'
 							}
 						},
-						coverImage : {
+						cover : {
 							_url       : "/images/light_cover_background.png" 
 						}
 					}

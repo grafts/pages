@@ -35,7 +35,7 @@ define([
 			data.contents = this.model.getContents();
 			this.$el.append(this.template(data));
 
-			this.model.on('change:coverImage', this.addCover);
+			this.model.on('change:cover', this.addCover);
 			this.model.on('change:video', this.addPlayer);
 			this.model.on('change:contents', this.addContents);
 
@@ -285,7 +285,7 @@ define([
 		},
 		addCover : function(){
 			var self = this,
-				cover = this.model.get('coverImage'),
+				cover = this.model.get('cover'),
 				img;
 
 			if(!cover){

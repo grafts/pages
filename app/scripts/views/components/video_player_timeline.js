@@ -50,7 +50,8 @@ define([
 			this.$('.item').removeClass('on').eq(scriptSeq).addClass('on');
 		},
 		link : function(e){
-			Backbone.pubsub.trigger('videoTimelineLink:' + this.videoId, $(e.currentTarget).data().seq);
+			var current = this.$(e.currentTarget.parentNode).index();
+			Backbone.pubsub.trigger('videoTimelineLink:' + this.videoId, current);
 		}
 	});
 

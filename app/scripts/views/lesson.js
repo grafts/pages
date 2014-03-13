@@ -22,7 +22,7 @@ define([
 			console.log('lesson view render');
 			this.$el.show();
 			// for prototype, dummy data input
-			this.model.set('coverImage', {
+			this.model.set('cover', {
 				src : "/images/light_cover_background.png"
 			});
 			// for prototype, dummy data input
@@ -42,7 +42,7 @@ define([
 		},
 		addCover : function(){
 			var self = this,
-				cover = this.model.get('coverImage');
+				cover = this.model.get('cover');
 
 			if(!cover){
 				return;

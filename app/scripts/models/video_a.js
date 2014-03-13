@@ -25,7 +25,7 @@ define([
 				name : '아만다 사이프리드',
 				avatar : 'images/avatar.jpg'
 			},
-			coverImage : { 
+			cover : { 
 				src : "/images/cover_background.png" 
 			},
 			video : {

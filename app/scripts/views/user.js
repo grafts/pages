@@ -20,7 +20,7 @@ define([
 			// id && (this.id = id);
 			this.el.setAttribute('class', 'user-item');
 			this.$el.append(this.template(this.model.toJSON()));
-			this.addCoverImage(this.$('.head'), this.model.get('cover'));
+			this.addCover(this.$('.head'), this.model.get('cover'));
 		},
 		render: function(){
 			console.log('user view render');
@@ -37,7 +37,7 @@ define([
 			e.stopPropagation();
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		},
-		addCoverImage : function(dom, cover){
+		addCover : function(dom, cover){
 			var self  = this,
 				name  = dom.attr('class');
 

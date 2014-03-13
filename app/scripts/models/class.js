@@ -32,8 +32,8 @@ define([
 					name   : '아만다 사이프리드',
 					avatar : '/images/avatar.jpg'
 				},
-				coverImage : {
-					src    : "/images/light_cover_background.png" 
+				cover : {
+					_url   : "/images/light_cover_background.png" 
 				}
 			}
 			// for prototype, dummy data input

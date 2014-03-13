@@ -18,8 +18,8 @@ define([
 			// id && (this.id = id);
 			this.el.setAttribute('class', 'class-item');
 			this.$el.append(this.template(this.model.toJSON()));
-			this.addCoverImage(this.$('.head'), this.model.get('coverImage'));
-			this.addCoverImage(this.$('.relate'), this.model.get('relate').coverImage);
+			this.addCover(this.$('.head'), this.model.get('cover'));
+			this.addCover(this.$('.relate'), this.model.get('relate').cover);
 		},
 		render: function(){
 			console.log('class view render');
@@ -36,7 +36,7 @@ define([
 			e.stopPropagation();
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		},
-		addCoverImage : function(dom, cover){
+		addCover : function(dom, cover){
 			var self  = this,
 				name  = dom.attr('class');
 
