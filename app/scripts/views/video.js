@@ -373,11 +373,28 @@ define([
 			var self     = this,
 				resource = e.currentTarget.parentNode.dataset.edit,
 				action   = e.currentTarget.className.replace('button ', ''),
+				_getYoutubeId = function(url){
+					try {
+						var id = url.split('/').pop().split('=').pop();
+						if(id.length != 11){
+							return null;
+						}
+						return id;
+					}
+					catch(err){
+						return null;
+					}
+				},
 				_manage  = {
 					upload : {
 						video : function(){
 							var url = prompt("Insert Video URL"),
-								id  = url.split('/').pop().split('=').pop();
+								id  = _getYoutubeId(url);
+
+							if(!id){
+								alert('Wrong URL');
+								return;
+							}
 
 							self.model.set('video', {
 								id : id
