@@ -8,10 +8,134 @@ define([
 	'use strict';
 
 	var Controller = function(){
-		this.views = {};
+		this.views   = {};
+		this.history = [];
+		this.$el     = $(this.el);
 		this.initialize.apply(this, arguments);
-		return 1;
+		return null;
 	};
+
+ 	_.extend(Controller.prototype, {
+ 		initialize  : function(){},
+ 		options     : {
+ 			query   : {
+ 				include : []
+ 			}
+ 		},
+		run         : function(param){
+			var self        = this,
+				loading     = new Loading();
+
+			this.status = true;
+
+			loading.render();
+			loading.set();
+
+			return self.createView(param).then(function(view){
+				if((param.action && param.action == 'update') || (param.id && param.id == 'create')){
+					view.edit();
+				} else {
+					view.read();
+				}
+				self.views[param.id] = view;
+				self.history.push(param.id);
+				self.current = param.id;
+				self.$el && self.$el.show();
+				self.garbageCollect();
+				loading.done();
+				$('body').animate({scrollTop:0}, 100);
+
+				return view;
+			})
+			.then(null, function(err){
+				//404
+				if(err.code == 101){
+					console.log(404);
+				}
+				console.log(err);
+				loading.done();
+				return err;
+			});
+
+		},
+		createView : function(param){
+			var self = this,
+				_pull = function(id){
+					var query = new Backbone.Query(self.model);
+					query.include(self.options.query.include);
+					return query.get(id);
+				},
+				_createDummyView = function(id){
+					return new self.view({
+						model : (new self.model()).insertDummyData(),
+						id    : self.$el.attr('class') + '_dummy_' + id
+					});
+				};
+
+			return new Promise(function(resolve, reject){
+				var view;
+
+				try {
+					if(self.views[param.id]){
+						view = self.views[param.id];
+						view.render();
+						resolve(view);
+						return;
+					}
+					
+					if(param.id == '1' || param.id == 'dummy'){
+						view = _createDummyView(param.id);
+						self.$el.append(view.render());
+						setTimeout(function(){
+							resolve(view);
+						}, 1000);
+					}
+					else {
+						_pull(param.id).then(function(model){
+							view = new self.view({
+								model : model,
+								id    : self.$el.attr('class') + '_' + param.id
+							});
+							self.$el.append(view.render());
+							resolve(view);
+						})
+						.then(null, function(err){
+							reject(err);
+						});
+					}
+				}
+				catch(err){
+					console.log(err);
+					reject(err);
+				}
+			});
+		},
+		pause : function(resourceChanged, changedId){
+			var self = this;
+			return new Promise(function(resolve, reject){
+				if(resourceChanged || (!resourceChanged && changedId != self.current)){
+					self.pausedView = self.views[self.current];
+					self.pausedView.$el.addClass('off');
+				}
+				resolve();
+			});
+		},
+		stop : function(resourceChanged){
+			console.log(this.$el.attr('class') + ' ' + this.current + ' view stop');
+			if(resourceChanged){
+				this.$el && this.$el.hide();
+			}
+			if(this.pausedView){
+				this.pausedView.$el.removeClass('off');
+				this.pausedView.unrender();
+				delete this.pausedView;
+			}
+			this.status = false;
+		},
+		garbageCollect : function(){
+			
+		}
+ 	});
 
 	function Edit(context){
 		var inputs = [],
@@ -51,7 +175,7 @@ define([
 			});
 		},
 		deleteInputFields : function(){
-
+			this._deleteInputFields();
 		},
 		save : function(){
 			return new Promise(function(resolve, reject){
@@ -65,6 +189,7 @@ define([
 			this.context.delegateEvents();
 		},
 		eventRollback : function(){
+			if(!this.defaultEvent) return;
 			this.context.events = this.defaultEvent;
 			this.context.undelegateEvents();
 			this.context.delegateEvents();
@@ -108,151 +233,114 @@ define([
 			this.editMode.eventRollback();
 			// 6. destroy edit mode object
 			delete this.editMode;
-		}
-	});
+		},
+		updateCover : function(){
+			if(this.model.get('cover')){
+				this.addCover();
+			}
+			else {
+				this.deleteCover();
+			}
+		},
+		addCover : function(dom, cover){
+			var self     = this,
+				dom      = dom || this.$('.head'),
+				cover    = cover || this.model.get('cover'),
+				coverDom = $('<div class="cover"></div>'),
+				img, _addCover, _is_dark, _getAverageRGB;
 
- 	_.extend(Controller.prototype, {
-		el          : $('div'),
-		model       : Backbone.Model,
-		collection  : Backbone.Collection,
-		view        : Backbone.View,
-		history     : [],
-		initialize  : function(){},
-		run         : function(param){
-			var self = this,
-				loading = new Loading();
+			if(!cover || !cover._url){
+				return;
+			}
 
-			this.status = true;
+			_addCover = function(){
+				var className = 'with-cover';
 
-			loading.render();
-			loading.set();
-
-			return self.createView(param).then(function(view){
-				if((param.action && param.action == 'update') || (param.id && param.id == 'create')){
-					view.edit();
-				} else {
-					view.read();
+				if(_is_dark(_getAverageRGB(this))){
+					className = 'with-dark-cover';
 				}
-				self.views[param.id] = view;
-				self.history.push(param.id);
-				self.current = param.id;
-				self.el && self.el.show();
-				self.garbageCollect();
-				loading.done();
-				$('body').animate({scrollTop:0}, 100);
-				return view;
-			})
-			.then(null, function(err){
-				//404
-				if(err.code == 101){
-					console.log(404);
+
+				coverDom.css('background-image', 'url(' + cover._url + ')').addClass('on');
+				dom.addClass(className);
+			};
+			_is_dark = function(averageRGB){
+				var max = 255 * 3 / 2,
+					avg = _.values(averageRGB).reduce(function(previousValue, currentValue){
+						return previousValue + currentValue;
+					});
+
+					return (max > avg);
+			};
+			_getAverageRGB = function(imgEl) {
+
+				var blockSize = 5, // only visit every 5 pixels
+					defaultRGB = {r:255,g:255,b:255}, // for non-supporting envs
+					canvas = document.createElement('canvas'),
+					context = canvas.getContext && canvas.getContext('2d'),
+					data, width, height,
+					i = -4,
+					length,
+					rgb = {r:0,g:0,b:0},
+					count = 0;
+
+				if (!context) {
+					return defaultRGB;
 				}
-				console.log(err);
-				loading.done();
-				return err;
-			});
 
-		},
-		pull : function(id){
-			var self  = this,
-				query = new Backbone.Query(self.model);
+				height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+				width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
 
-			return query.get(id);
-		},
-		createDummyView : function(id){
-			var self = this;
-
-			return new this.view({
-				model : (new self.model()).insertDummyData(),
-				id    : self.el.attr('class') + '_dummy' + id
-			});
-		},
-		createView : function(param){
-			var self = this;
-
-			return new Promise(function(resolve, reject){
-				var view;
+				context.drawImage(imgEl, 0, 0);
 
 				try {
-					if(self.views[param.id]){
-						view = self.views[param.id];
-						view.render();
-						setTimeout(function(){
-							resolve(view);
-						}, 1000);
-					}
-					else if(param.id.match(/^1/)){
-						view = self.createDummyView(param.id);
-						self.el.append(view.render());
-						setTimeout(function(){
-							resolve(view);
-						}, 1000);
-					}
-					else {
-						self.pull(param.id).then(function(model){
-							view = new self.view({
-								model : model,
-								id    : self.el.attr('class') + '_' + param.id
-							});
-							self.el.append(view.render());
-							resolve(view);
-						})
-						.then(null, function(err){
-							reject(err);
-						});
-					}
+					data = context.getImageData(0, 0, width, height);
+				} catch(e) {
+					/* security error, img on diff domain */
+					return defaultRGB;
 				}
-				catch(err){
-					console.log(err);
-					reject(err);
-				}
-			});
-		},
-		pause : function(resourceChanged, changedId){
-			var self = this;
-			return new Promise(function(resolve, reject){
-				if(resourceChanged || (!resourceChanged && changedId != self.current)){
-					self.pausedView = self.views[self.current];
-					self.pausedView.$el.addClass('off');
-				}
-				resolve();
-			});
-		},
-		stop : function(resourceChanged){
-			console.log(this.el.attr('class') + ' ' + this.current + ' view stop');
-			if(resourceChanged){
-				this.el && this.el.hide();
-			}
-			if(this.pausedView){
-				this.pausedView.$el.removeClass('off');
-				this.pausedView.unrender();
-				delete this.pausedView;
-			}
-			this.status = false;
-		},
-		garbageCollect : function(){
-			
-		},
-		dummyLoading : function(){
-			var loading = new Loading();
-			loading.render();
-			loading.set();
-			setTimeout(function(){
-				loading.done();
-				$('body').animate({scrollTop:0}, 100, function() { 
 
-				});
-			}, 300);
+				length = data.data.length;
+
+				while ( (i += blockSize * 4) < length ) {
+					++count;
+					rgb.r += data.data[i];
+					rgb.g += data.data[i+1];
+					rgb.b += data.data[i+2];
+				}
+
+				// ~~ used to floor values
+				rgb.r = ~~(rgb.r/count);
+				rgb.g = ~~(rgb.g/count);
+				rgb.b = ~~(rgb.b/count);
+
+				return rgb;
+			};
+
+			img             = new Image();
+			img.onload      = _addCover;
+			img.crossOrigin = "anonymous";
+			img.src         = cover._url;
+
+			dom
+			.prepend(coverDom)
+			.find('.edit-tool[data-edit="cover"]')
+			.children().hide().end()
+			.children('.delete').show();
+		},
+		deleteCover : function(){
+			this.$('.head')
+			.removeClass('with-cover').removeClass('with-dark-cover')
+			.find('.cover').remove().end()
+			.find('.edit-tool[data-edit="cover"]').children().hide().end()
+			.children('.upload').show();
 		}
- 	});
-
+	});
 	
-
 	Controller.extend = Backbone.Model.extend;
 	Backbone.Controller = Controller;
 	Backbone.pubsub = _.extend({}, Backbone.Events);
 
-	// override backbone mode, collection to parse's
+	// override backbone model, collection to parse's
 	Backbone.Model = Parse.Object;
 	Backbone.Collection = Parse.Collection;
 	Backbone.Query = Parse.Query;

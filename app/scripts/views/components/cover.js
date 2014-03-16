@@ -3,7 +3,7 @@
 define([
 	'jquery',
 	'underscore',
-	'backbone'
+	'backboneBase'
 ], function ($, _, Backbone) {
 	var View = Backbone.View.extend({
 		events : {
@@ -84,9 +84,14 @@ define([
 				return rgb;
 			};
 
-			img = new Image();
-			img.src = this.cover._url;
-			img.onload = _addCover;
+			img             = new Image();
+			img.onload      = _addCover;
+			img.crossOrigin = "anonymous";
+			img.src         = this.cover;
+
+			this.$('.edit-tool[data-edit="cover"]')
+			.children().hide().end()
+			.children('.delete').show();
 
 			return this.$el;
 		},

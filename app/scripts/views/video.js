@@ -10,18 +10,20 @@ define([
 	'youtube!',
 	'views/components/cover',
 	'views/components/video_scripts',
+	'views/components/video_comments',
 	'views/components/video_player_timeline',
 
 	'collections/video_contents',
 
 	'editor'
-], function ($, _, Backbone, JST, Handlebars, YT, CoverView, ScriptsView, TimelineView, Contents, editor) {
+], function ($, _, Backbone, JST, Handlebars, YT, CoverView, ScriptsView, CommentsView, TimelineView, Contents, editor) {
 	'use strict';
 
 	var View = Backbone.View.extend({
 		// el: '.video-item',
 		tagName: 'div',
 		template : JST['app/scripts/templates/video.hbs'],
+		components : {},
 		events: {
 			'click a'                                : 'link',
 			'click .scripts .item.on .comments-link' : 'commentToggle',
@@ -35,18 +37,16 @@ define([
 
 			this.el.setAttribute('class', 'video-item');
 
-			this.$el.append(this.template(this.model.toJSON()));
+			this.$el.append(this.template(this.model.JSON()));
 			this.contents = new Contents();
 			this.contents.add(this.model.get('contents'));
 
-			this.addVideo();
-			this.addCover();
 			this.addContents();
-			this.listenTo(this.model, 'change:video', this.addVideo);
-			this.listenTo(this.model, 'change:cover', this.addCover)
+			this.updateVideo();
+			this.updateCover();
 
-			// this.listenTo(this.contents, 'reset', this.refreshScripts);
-			// this.contents.sort();
+			this.listenTo(this.model, 'change:video', this.updateVideo);
+			this.listenTo(this.model, 'change:cover', this.updateCover);
 		},
 		render: function(){
 			console.log('video view render');
@@ -71,21 +71,19 @@ define([
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		},
 		commentToggle : function(e){
-			var seq      = e.currentTarget.parentNode.dataset.seq,
+			var seq      = this.$(e.currentTarget.parentNode).index(),
 				contents = this.$('.contents'),
-				comments = this.$('.script-comments-bundle');
+				comments = this.$('.comments-wrapper');
 			
-			if(contents.hasClass('comments-on')){
-				this.$('.script-comments-bundle').find('.item').removeClass('on');
-			}
-			else {
+			if(!contents.hasClass('comments-on')){
 				this.commentChange(seq);
 			}
+			this.$('.comments-wrapper').find('.item').toggleClass('on');
 			comments.toggle();
 			this.$('.contents').toggleClass('comments-on');
 		},
 		commentChange : function(seq){
-			this.$('.script-comments-bundle').find('.item').removeClass('on').eq(seq).addClass('on');
+			Backbone.pubsub.trigger('videoCommentsChange:' + this.model.id, seq);
 		},
 		replyFormToggle : function(e){
 			$(e.currentTarget.nextElementSibling).toggle();
@@ -112,6 +110,14 @@ define([
 			});
 			this.commentChange(scriptSeq);
 		},
+		updateVideo : function(){
+			if(this.model.get('video')){
+				this.addVideo();
+			}
+			else {
+				this.deleteVideo();
+			}
+		},
 		addVideo : function(){
 			var self  = this,
 				video = this.model.get('video'),
@@ -127,7 +133,7 @@ define([
 				var currentTime      = player.getCurrentTime(),
 					contents         = self.model.get('contents'),
 					scriptSeq        = _.findIndex(contents, function(content) {
-						return content.time > currentTime;
+						return content.get('time') > currentTime;
 					});
 
 				if(scriptSeq < 0){
@@ -193,9 +199,10 @@ define([
 					var currentScriptSeq = -1,
 						_findArtcle = function(scriptSeq, player){
 							var script = self.model.get('contents')[scriptSeq],
-								time   = script.time;
+								time   = script.get('time');
 
 							player.seekTo(time);
+							player.playVideo();
 						},
 						_unrender = function(type, player, callback){
 							Backbone.pubsub.off(null, null, player);
@@ -265,22 +272,20 @@ define([
 		addContents : function(){
 			var self     = this,
 				video    = this.model.get('video'),
-				duration = video ? video.duration : this.model.get('contents')[this.model.get('contents').length-1].time,
+				duration = video && video.duration ? video.duration : this.model.get('contents')[this.model.get('contents').length-1].get('time'),
 				_add = function(resource){
-					var View = {
+					var Components = {
 						scripts  : ScriptsView,
-						timeline : TimelineView
+						timeline : TimelineView,
+						comments : CommentsView
 					};
-					if(!this.components){
-						this.components = {};
-					}
 					if(this.components[resource]){
 						this.components[resource].unrender();
 						this.components[resource].remove();
 						delete this.components[resource];
 					}
 
-					this.components[resource] = new View[resource]({
+					this.components[resource] = new Components[resource]({
 						id       : 'video_' + self.model.id + '_' + resource,
 						videoId  : self.model.id,
 						contents : self.contents,
@@ -292,25 +297,7 @@ define([
 
 			_add.call(this, 'timeline');
 			_add.call(this, 'scripts');
-		},
-		addCover : function(dom, cover){
-			var self  = this,
-				dom   = dom || this.$('.head'),
-				name  = dom.attr('class'),
-				cover = cover || this.model.get('cover');
-
-			if(!cover || !cover._url){
-				return;
-			}
-
-			self.$('.edit-tool[data-edit="cover"]')
-			.children().hide().end()
-			.children('.delete').show();
-
-			(new CoverView({
-				el       : dom,
-				cover    : cover
-			})).render();
+			_add.call(this, 'comments');
 		},
 		editConfig : {
 			event : {
@@ -406,10 +393,10 @@ define([
 					},
 					delete : {
 						video : function(){
-							self.deleteVideo();
+							self.model.unset('video');
 						},
 						cover : function(){
-
+							self.model.unset('cover');
 						}
 					}
 				};

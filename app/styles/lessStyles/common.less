@@ -144,11 +144,12 @@ h4 {
 	-webkit-perspective: 1500px;
 	height: 100%;
 	min-height: 100%;
-	background: @background_color;
+	.transition_all(0.5s);
 	&.scrollable {
 		overflow: hidden;
 	}
 	&.off {
+		background: @background_color;
 		// .filter(blur(4px));
 		section {
 			.transform(translateX(300px) translateY(80px) rotate(-2deg));
@@ -276,9 +277,8 @@ h4 {
 		}
 	}
 	.headline {
-		.title {
-			margin-top: 20px;
-		}
+		position: absolute;
+		bottom: 80px;
 	}
 }
 .head.with-dark-cover {
@@ -287,8 +287,6 @@ h4 {
 		color: rgba(255, 255, 255, 0.7);
 	}
 	.headline {
-		position: absolute;
-		bottom: 80px;
 		.title {
 			color : #fff;
 		}
@@ -320,6 +318,7 @@ h4 {
 		position: relative;
 		width: 100%;
 		left: 0;
+		padding-top: 100px;
 		.edit-tool {
 			button {
 				display: none;
@@ -329,7 +328,7 @@ h4 {
 			}
 		}
 		.title {
-			margin-top: 120px;
+			margin-top: 20px;
 			margin-bottom: 20px;
 			letter-spacing: -0.02em;
 			font-size: @title_font_size;

@@ -1,0 +1,23 @@
+<div class="item">
+	<div class="wrapper">
+		<ul class="comments">
+			{{#each this.comments}}
+				<li class="comment">
+					<a class="author" href="/user/{{this.author.objectId}}">
+						<img class="avatar" src="{{this.author.avatar.url}}" alt="avatar">
+						<span class="name">{{this.author.name}}</span>
+					</a>
+					<p class="note">{{this.comment}}</p>
+					<div class="date">{{this.date}}</div>
+				</li>
+			{{/each}}
+		</ul>
+		<button class="reply button">
+			<i class="icon-plus"></i>
+			<span>Reply</span>
+		</button>
+		<div class="reply-form">
+			<div class="input" data-placeholder="Leave a comment"></div>
+		</div>
+	</div>
+</div>

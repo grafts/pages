@@ -6,7 +6,11 @@
 			<p class="sans-serif">{{this.script}}</p>
 		</div>
 		<button class="comments-link uneditable">
-			<span class="count">{{this.comments.length}}</span>
+			{{#if this.comments}}
+				<span class="count">{{this.comments.length}}</span>
+			{{else}}
+				<span class="count">0</span>
+			{{/if}}
 			<i class="icon-cancel"></i>
 		</button>
 		<button class="script-delete">

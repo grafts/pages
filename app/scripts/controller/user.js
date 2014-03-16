@@ -13,7 +13,7 @@ define([
 	'use strict';
 
 	var Controller = Backbone.Controller.extend({
-		el          : $('section.user'),
+		el          : 'section.user',
 		model       : User,
 		// collection : Users,
 		view        : UserView

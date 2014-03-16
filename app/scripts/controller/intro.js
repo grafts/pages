@@ -10,7 +10,7 @@ define([
 	'use strict';
 
 	var Controller = Backbone.Controller.extend({
-		el          : $('section.intro'),
+		el          : 'section.intro',
 		initialize  : function(){
 			this.view = new IntroView({ el : 'section.intro' });
 		},
@@ -24,8 +24,8 @@ define([
 		},
 		prepareStop : function(){},
 		stop : function(){
-			this.el && this.el.hide();
-			this.el.removeClass('off');
+			this.$el && this.$el.hide();
+			this.$el.removeClass('off');
 			this.status = false;
 		}
 	});

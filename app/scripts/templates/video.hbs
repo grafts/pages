@@ -16,8 +16,8 @@
 			</div>
 			<p class="title">{{title}}</p>
 			<p class="subtitle">{{subtitle}}</p>
-			<a class="author uneditable" href="/user/{{author.id}}">
-				<img class="avatar" src="{{author.avatar._url}}" alt="avatar">
+			<a class="author uneditable" href="/user/{{author.objectId}}">
+				<img class="avatar" src="{{author.avatar.url}}" alt="avatar">
 				<span class="name">{{author.name}}</span>
 			</a>
 		</div>
@@ -72,36 +72,10 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="script-comments-bundle">
+	<div class="comments-contents">
 		<div class="container">
-			{{#each contents}}
-				<div class="item">
-					<div class="comments-wrapper">
-						<ul class="comments">
-							{{#each this.comments}}
-								<li class="comment">
-									<a class="author" href="/user/{{this.author.id}}">
-										<img class="avatar" src="{{this.author.avatar._url}}" alt="avatar">
-										<span class="name">{{this.author.name}}</span>
-									</a>
-									<p class="note">{{this.comment}}</p>
-									<div class="date">{{this.date}}</div>
-								</li>
-							{{/each}}
-						</ul>
-						<button class="reply button">
-							<i class="icon-plus"></i>
-							<span>Reply</span>
-						</button>
-						<div class="reply-form">
-							<div class="input" data-placeholder="Leave a comment"></div>
-						</div>
-					</div>
-				</div>
-			{{/each}}
+			<div class="comments-wrapper"></div>
 		</div>
-		<div class="close"></div>
 	</div>
 </div>
 
@@ -115,8 +89,8 @@
 				<p class="title">{{relate.title}}</p>
 				<p class="subtitle">{{relate.subtitle}}</p>
 			</a>
-			<a class="author" href="/user/{{relate.author.id}}">
-				<img class="avatar" src="{{relate.author.avatar._url}}" alt="avatar">
+			<a class="author" href="/user/{{relate.author.objectId}}">
+				<img class="avatar" src="{{relate.author.avatar.url}}" alt="avatar">
 				<span class="name">{{relate.author.name}}</span>
 			</a>
 		</div>

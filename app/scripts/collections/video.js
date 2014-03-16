@@ -4,11 +4,11 @@ define([
 	'underscore',
 	'backbone',
 	'models/video'
-], function (_, Backbone, VideoModel) {
+], function (_, Backbone, Model) {
 	'use strict';
 
 	var Collection = Backbone.Collection.extend({
-		model: VideoModel
+		model: Model
 	});
 
 	return Collection;

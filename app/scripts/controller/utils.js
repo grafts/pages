@@ -10,7 +10,7 @@ define([
 	'use strict';
 
 	var UtilsController = Backbone.Controller.extend({
-		el : $('.header'),
+		el : '.header',
 		initialize : function(){
 			this.scrollWatch = function(){
 				$(window).scroll(function(e){

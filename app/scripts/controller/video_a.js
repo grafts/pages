@@ -14,7 +14,7 @@ define([
 	'use strict';
 
 	var Controller = Backbone.Controller.extend({
-		el          : $('section.video_a'),
+		el          : 'section.video_a',
 		model       : Video,
 		collections : Videos,
 		view        : VideoView,

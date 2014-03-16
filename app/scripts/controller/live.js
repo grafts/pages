@@ -13,7 +13,7 @@ define([
 	'use strict';
 
 	var Controller = Backbone.Controller.extend({
-		el          : $('section.live'),
+		el          : 'section.live',
 		model       : Live,
 		view        : LiveView,
 	});

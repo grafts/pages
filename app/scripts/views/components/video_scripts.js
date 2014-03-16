@@ -22,7 +22,8 @@ define([
 			this.delegateEvents();
 			this.$el
 			.addClass('scripts')
-			.append(self.template({ scripts : self.contents.refine() }));
+			.append(self.template({ scripts : self.contents.refine() }))
+			.children(':eq(0)').addClass('on');
 
 			return this.$el;
 		},
@@ -35,6 +36,9 @@ define([
 			
 		},
 		test : function(){
+			console.log(arguments);
+		},
+		reset : function(){
 			console.log(arguments);
 		}
 	});

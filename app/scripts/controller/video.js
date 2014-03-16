@@ -13,17 +13,15 @@ define([
 	'use strict';
 
 	var Controller = Backbone.Controller.extend({
-		el          : $('section.video'),
+		el          : 'section.video',
 		model       : Video,
 		collection  : Videos,
 		view        : VideoView,
-		pull        : function(id){
-			var self  = this,
-				query = new Backbone.Query(self.model);
-
-			query.include(['author', 'contents', 'contents.comments', 'contents.comments.author']);
-			return query.get(id);
-		}
+ 		options     : {
+ 			query   : {
+ 				include : ['author', 'contents', 'contents.comments', 'contents.comments.author']
+ 			}
+ 		}
 	});
 
 	return Controller;

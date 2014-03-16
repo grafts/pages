@@ -12,7 +12,7 @@ define([
 	'use strict';
 
 	var Controller = Backbone.Controller.extend({
-		el          : $('section.lesson'),
+		el          : 'section.lesson',
 		model       : Lesson,
 		view        : LessonView
 	});

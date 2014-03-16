@@ -35,32 +35,7 @@ define([
 			e.preventDefault();
 			e.stopPropagation();
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
-		},
-		addCover : function(dom, cover){
-			var self  = this,
-				name  = dom.attr('class');
-
-			if(!cover || !cover.src){
-				return;
-			}
-
-			if(!this.cover){
-				this.cover = {};
-			}
-
-			if(this.cover[name]){
-				this.cover[name].unrender();
-				delete this.cover;
-			}
-
-			this.cover[name] = new CoverView({
-				el       : dom,
-				cover    : cover
-			});
-
-			this.cover[name].render();
 		}
-
 	});
 
 	return VideoView;
