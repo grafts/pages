@@ -64,6 +64,7 @@ require.config({
 		loading            : '../scripts/views/loading',
 		
 		editor             : '../scripts/vendor/medium',
+		pen                : '../scripts/vendor/pen/pen',
 		youtube            : '../scripts/vendor/youtube',
 		parseBase          : '../scripts/vendor/parse-1.2.16',
 		parse              : '../scripts/vendor/parse'

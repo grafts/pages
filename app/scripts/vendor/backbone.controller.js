@@ -3,8 +3,9 @@ define([
 	'underscore',
 	'backboneBase',
 	'parse',
-	'loading'
-], function ($, _, Backbone, Parse, Loading) {
+	'loading',
+	'pen'
+], function ($, _, Backbone, Parse, Loading, Pen) {
 	'use strict';
 
 	var Controller = function(){
@@ -140,14 +141,15 @@ define([
 	function Edit(context){
 		var inputs = [],
 			editOption = {
-				debug: false
+				debug: false,
+				stay : false,
+				list : ['bold']
 			},
 			input = function(dom, type){
 				inputs.push(
-					new editor(
+					new Pen(
 						_.defaults({
-							element : dom,
-							placeholder : type || 'Type your text.'
+							editor : dom,
 						}, editOption)
 					)
 				);
@@ -173,9 +175,18 @@ define([
 			inputs.forEach(function(input){
 				self._createInputField(input.selector, input.type)
 			});
+			// this.editor = new Pen({
+			// 	editor: self.context.el.querySelector(inputs[0].selector), // {DOM Element} [required]
+			// 	class: 'pen', // {String} class of the editor,
+			// 	debug: false, // {Boolean} false by default
+			// 	stay : false,
+			// 	list: ['bold', 'italic', 'underline'] // editor menu list
+			// });
+
 		},
 		deleteInputFields : function(){
 			this._deleteInputFields();
+			// this.editor.destroy();
 		},
 		save : function(){
 			return new Promise(function(resolve, reject){
