@@ -5,8 +5,9 @@ define([
 	'backbone',
 
 	'parse',
-	'models/video'
-], function ($, _, Backbone, Parse, Video) {
+	'models/video',
+	'collections/video'
+], function ($, _, Backbone, Parse, Video, Videos) {
 	'use strict';
 
 	describe('Parse', function () {
@@ -148,129 +149,139 @@ define([
 		// 		});
 		// 	});
 		// });
-		describe('query mix', function () {
-				var vid     = new Video(),
-				dummy   = {
-					title      : '리신공략, 각 라인별 일반적인 갱킹방법',
-					subtitle   : '갱킹이 리신이며 리신이 갱킹이다!'
-				};
-			this.timeout(3000);
+		// describe('query mix', function () {
+		// 	var vid     = new Video(),
+		// 		dummy   = {
+		// 			title      : '리신공략, 각 라인별 일반적인 갱킹방법',
+		// 			subtitle   : '갱킹이 리신이며 리신이 갱킹이다!'
+		// 		};
+		// 	this.timeout(3000);
 
-			it('add video. use plain parse function', function(done){
-				var User      = Parse.Object.extend('_User'),
-					userQuery = new Parse.Query(User);
+		// 	it('add video. use plain parse function', function(done){
+		// 		var User      = Parse.Object.extend('_User'),
+		// 			userQuery = new Parse.Query(User);
 
-				userQuery.get('ElgbZFZGLh')
-				.then(function(user){
-					dummy.author = user;
-					vid.save(dummy, {
-						success : function(data){
-							should.exist(data);
-							done();
-						}
-					});
-				});
+		// 		userQuery.get('ElgbZFZGLh')
+		// 		.then(function(user){
+		// 			dummy.author = user;
+		// 			vid.save(dummy, {
+		// 				success : function(data){
+		// 					should.exist(data);
+		// 					done();
+		// 				}
+		// 			});
+		// 		});
+		// 	});
+		// 	it('add content with success/error callback', function(done){
+		// 		vid.addContents({
+		// 			time   : 100,
+		// 			script : 'test message'
+		// 		}, {
+		// 			success : function(data){
+		// 				should.exist(data.id);
+		// 				done();
+		// 			}
+		// 		});
+		// 	});
+		// 	it('add content with then method', function(done){
+		// 		vid.addContents({
+		// 			time   : 200,
+		// 			script : 'test message 2'
+		// 		})
+		// 		.then(function(data){
+		// 			data.get('time').should.equal(200);
+		// 			done();
+		// 		});
+		// 	});
+		// 	it('add mutiple content', function(done){
+		// 		vid.addContents([
+		// 			{ time   : 100, script : 'test message' },
+		// 			{ time   : 200, script : 'test message 2'}
+		// 		], {
+		// 			success : function(data){
+		// 				should.exist(data);
+		// 				data.should.have.length(2);
+		// 				done();
+		// 			}
+		// 		});
+		// 	});
+		// 	it('edit content', function(done){
+		// 		var content = vid.get('contents')[0];
+		// 		content.set('time', 600);
+		// 		content.save().then(function(data){
+		// 			data.get('time').should.equal(600);
+		// 			done();
+		// 		});
+		// 	});
+		// 	it('add comment', function(done){
+		// 		var dummyComment = {
+		// 				comment : 'test comment',
+		// 				author  : vid.get('author')
+		// 			};
+		// 		vid.get('contents')[0].addComments(dummyComment)
+		// 		.then(function(data){
+		// 			data.get('comment').should.equal(dummyComment.comment);
+		// 			done();
+		// 		});
+		// 	});
+		// 	it('delete first content', function(done){
+		// 		vid.delContents(vid.get('contents')[0])
+		// 		.then(function(data){
+		// 			should.exist(data);
+		// 			done();
+		// 		});
+		// 	});
+		// 	it('empty video contents', function(done){
+		// 		vid.empty()
+		// 		.then(function(data){
+		// 			should.exist(data);
+		// 			done();
+		// 		});
+		// 	});
+		// 	it('destroy video', function(){
+		// 		vid.destroy({
+		// 			success : function(data){
+		// 				should.exist(data);
+		// 			},
+		// 			error : function(){
+		// 			}
+		// 		});
+		// 	});
+		// });
+
+		describe('video collection test', function(){
+			var User      = Parse.Object.extend('_User'),
+				userQuery = new Parse.Query(User),
+				maknoonId = 'SB5ViyYmWV';
+
+
+			it('exist', function(){
+				should.exist(Videos);
 			});
-			it('add content with success/error callback', function(done){
-				vid.addContents({
-					time   : 100,
-					script : 'test message'
-				}, {
-					success : function(data){
-						should.exist(data.id);
-						done();
-					}
-				});
-			});
-			it('add content with then method', function(done){
-				vid.addContents({
-					time   : 200,
-					script : 'test message 2'
+			it('generate & fetch', function(done){
+				var collection;
+				userQuery.get(maknoonId).then(function(maknoon){
+					collection = new Videos({ author : maknoon });
+					return collection.fetch();
 				})
 				.then(function(data){
-					data.get('time').should.equal(200);
+					(maknoonId).should.equal(data.models[0].get('author').id);
 					done();
 				});
 			});
-			it('add mutiple content', function(done){
-				vid.addContents([
-					{ time   : 100, script : 'test message' },
-					{ time   : 200, script : 'test message 2'}
-				], {
-					success : function(data){
-						should.exist(data);
-						data.should.have.length(2);
-						done();
-					}
-				});
-			});
-			it('edit content', function(done){
-				var content = vid.get('contents')[0];
-				content.set('time', 600);
-				content.save().then(function(data){
-					data.get('time').should.equal(600);
-					done();
-				});
-			});
-			it('add comment', function(done){
-				var dummyComment = {
-						comment : 'test comment',
-						author  : vid.get('author')
-					};
-				vid.get('contents')[0].addComments(dummyComment)
+			it('generate & fetch', function(done){
+				var collection;
+				userQuery.get(maknoonId).then(function(maknoon){
+					collection = new Videos({ author : maknoon, title : '이블린 강좌' });
+					return collection.fetch();
+				})
 				.then(function(data){
-					data.get('comment').should.equal(dummyComment.comment);
+					(maknoonId).should.equal(data.models[0].get('author').id);
 					done();
-				});
-			});
-			// it('destroy relational comments', function(done){
-			// 	Parse.Object.destroyAll(
-			// 		_.compact(_.flatten(vid.get('contents').map(function(content){
-			// 			return content.get('comments');
-			// 		}))),
-			// 		{
-			// 			success : function(data){
-			// 				should.exist(data);
-			// 				done();
-			// 			},
-			// 			error : function(){
-			// 		}
-			// 	});
-			// });
-			// it('destroy relational timlines', function(done){
-			// 	Parse.Object.destroyAll(vid.get('contents'), {
-			// 		success : function(data){
-			// 			should.exist(data);
-			// 			done();
-			// 		},
-			// 		error : function(){
-			// 		}
-			// 	});
-			// });
-			it('delete first content', function(done){
-				vid.delContents(vid.get('contents')[0])
-				.then(function(data){
-					should.exist(data);
-					done();
-				});
-			});
-			it('empty video contents', function(done){
-				vid.empty()
-				.then(function(data){
-					should.exist(data);
-					done();
-				});
-			});
-			it('destroy video', function(){
-				vid.destroy({
-					success : function(data){
-						should.exist(data);
-					},
-					error : function(){
-					}
 				});
 			});
 		});
+
 	});
 });
 

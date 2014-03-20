@@ -3,6 +3,7 @@ define([
 	'spec/test',
 	'spec/controller',
 	'spec/parse'
+	// 'spec/parse_for_dummyData'
 ], function () {
 	'use strict';
 

@@ -6,8 +6,9 @@ define([
 	'backbone',
 	'templates',
 
-	'views/components/cover'
-], function ($, _, Backbone, JST, CoverView) {
+	'views/components/cover',
+	'collections/video'
+], function ($, _, Backbone, JST, CoverView, Videos) {
 	'use strict';
 
 	var UserView = Backbone.View.extend({
@@ -21,6 +22,9 @@ define([
 			this.el.setAttribute('class', 'user-item');
 			this.$el.append(this.template(this.model.toJSON()));
 			this.addCover(this.$('.head'), this.model.get('cover'));
+			this.videos = new Videos({ author : this.model });
+			this.listenTo(this.videos, 'sync', this.fetchVideo);
+			this.videos.fetch();
 		},
 		render: function(){
 			console.log('user view render');
@@ -36,6 +40,32 @@ define([
 			e.preventDefault();
 			e.stopPropagation();
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
+		},
+		fetchVideo : function(){
+			console.log(this.videos);
+		},
+		addContents : function(){
+			var self = this;
+				_add = function(resource){
+					var Components = {
+						videos  : VideosView
+					};
+					if(this.components[resource]){
+						this.components[resource].unrender();
+						this.components[resource].remove();
+						delete this.components[resource];
+					}
+
+					this.components[resource] = new Components[resource]({
+						id       : 'user_' + self.model.id + '_' + resource,
+						videoId  : self.model.id,
+						videos   : self.videos
+					});
+
+					this.$('.'+resource+'-wrapper').append(this.components[resource].render());
+				};
+
+			_add.call(this, 'videos');
 		}
 	});
 

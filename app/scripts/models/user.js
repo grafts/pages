@@ -15,7 +15,7 @@ define([
 				_url    : '/images/avatar.jpg',
 			},
 			avatar      : {
-				_url    : '/images/avatar_big.jpg',
+				url    : '/images/avatar_big.jpg',
 			},
 			cover       : {
 				_url    : '/images/cover_background.png'
