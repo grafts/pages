@@ -6,14 +6,15 @@ define([
 	'backbone',
 	'templates',
 
-	'views/components/cover',
+	'views/components/user_videos',
 	'collections/video'
-], function ($, _, Backbone, JST, CoverView, Videos) {
+], function ($, _, Backbone, JST, VideosView, Videos) {
 	'use strict';
 
 	var UserView = Backbone.View.extend({
 		tagName: 'div',
 		template: JST['app/scripts/templates/user.hbs'],
+		components : {},
 		events: {
 			'click a' : 'link'
 		},
@@ -25,6 +26,8 @@ define([
 			this.videos = new Videos({ author : this.model });
 			this.listenTo(this.videos, 'sync', this.fetchVideo);
 			this.videos.fetch();
+			this.addComponents();
+
 		},
 		render: function(){
 			console.log('user view render');
@@ -44,8 +47,8 @@ define([
 		fetchVideo : function(){
 			console.log(this.videos);
 		},
-		addContents : function(){
-			var self = this;
+		addComponents : function(){
+			var self = this,
 				_add = function(resource){
 					var Components = {
 						videos  : VideosView
@@ -58,8 +61,8 @@ define([
 
 					this.components[resource] = new Components[resource]({
 						id       : 'user_' + self.model.id + '_' + resource,
-						videoId  : self.model.id,
-						videos   : self.videos
+						userId  : self.model.id,
+						contents : self.videos
 					});
 
 					this.$('.'+resource+'-wrapper').append(this.components[resource].render());

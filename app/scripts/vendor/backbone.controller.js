@@ -143,7 +143,7 @@ define([
 			editOption = {
 				debug: false,
 				stay : false,
-				list : ['bold']
+				list : ['bold', 'italic']
 			},
 			input = function(dom, type){
 				inputs.push(
@@ -156,11 +156,10 @@ define([
 			};
 
 		this.context = context;
-		this._createInputField = function(selector, type){
+		this._createInputField = function(el, type){
 			var self = this;
-
-			[].forEach.call(context.el.querySelectorAll(selector), function(el){
-				input(el, type);
+			[].forEach.call(el, function(dom){
+				input(dom, type);
 			});
 		}
 		this._deleteInputFields = function(){
@@ -170,19 +169,8 @@ define([
 		}
 	}
 	Edit.prototype = {
-		createInputFields : function(inputs){
-			var self = this;
-			inputs.forEach(function(input){
-				self._createInputField(input.selector, input.type)
-			});
-			// this.editor = new Pen({
-			// 	editor: self.context.el.querySelector(inputs[0].selector), // {DOM Element} [required]
-			// 	class: 'pen', // {String} class of the editor,
-			// 	debug: false, // {Boolean} false by default
-			// 	stay : false,
-			// 	list: ['bold', 'italic', 'underline'] // editor menu list
-			// });
-
+		createInputFields : function(el){
+			this._createInputField(el);
 		},
 		deleteInputFields : function(){
 			this._deleteInputFields();
@@ -221,7 +209,7 @@ define([
 				// 4. hide unnecessary Dom
 				this.$('.uneditable').hide();
 				// 5. input area insert & save those to object collection
-				this.editMode.createInputFields(self.editConfig.fields);
+				this.editMode.createInputFields(this.$('.editable'));
 				// 6. event change for edit mode
 				this.editMode.eventShift(self.editConfig.event);
 			}

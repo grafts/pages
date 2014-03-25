@@ -306,7 +306,10 @@ define([
 				'click .script-add'             : 'addScript',
 				'click .edit-tool > .button'    : 'fileManage',
 				'click .edit-tool-save'         : 'save',
-				'click .edit-tool-publish'      : 'publish'
+				'click .edit-tool-publish'      : 'publish',
+				'keydown .head .title'          : 'modelSync',
+				'keydown .head .subtitle'       : 'modelSync',
+				'keydown .script p'             : 'modelSync'
 			},
 			fields : [
 				{ selector : '.head .title', type : 'title' },
@@ -314,6 +317,13 @@ define([
 				{ selector : '.script', type : 'script' }
 			]
 		},
+		modelSync : _.debounce(function(e){
+			var self = this,
+				attr = e.currentTarget.dataset.attr,
+				val  = e.currentTarget.textContent;
+			self.model.set(attr, val);
+			console.log(self.model.get(attr));
+		}, 1000),
 		getEditAuth : function(){
 			return true;
 		},
@@ -359,7 +369,7 @@ define([
 		fileManage : function(e){
 			var self     = this,
 				resource = e.currentTarget.parentNode.dataset.edit,
-				action   = e.currentTarget.className.replace('button ', ''),
+				action   = e.currentTarget.className.replace('button ', '').replace('edit-tool-', ''),
 				_getYoutubeId = function(url){
 					try {
 						var id = url.split('/').pop().split('=').pop();
@@ -397,6 +407,14 @@ define([
 						},
 						cover : function(){
 							self.model.unset('cover');
+						},
+						article : function(){
+
+						}
+					},
+					save : {
+						article : function(){
+
 						}
 					}
 				};
@@ -406,6 +424,11 @@ define([
 		test : function(){
 			console.log('test arg = ');
 			console.log(arguments);
+		},
+		test1 : {
+			a : function(){
+				console.log(arguments);
+			}
 		}
 	});
 
