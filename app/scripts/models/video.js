@@ -101,7 +101,7 @@ define([
 					cover : {
 						_url       : "/images/cover_background.png" 
 					},
-					video      : {
+					videoInfo  : {
 						id         : '48auKg6es8E',
 						duration   : 3051,
 					},
@@ -145,7 +145,7 @@ define([
 
 			this.set(dummy);
 
-			for(var i=100, time=dummy.video.duration; i<time; i+=parseInt(Math.random(10)/1*200+1)){
+			for(var i=100, time=dummy.videoInfo.duration; i<time; i+=parseInt(Math.random(10)/1*200+1)){
 				(function(t){
 					var c = new Content(dummyContent), cmmnts = [], cmmnt;
 					c.id = id();

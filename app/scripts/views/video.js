@@ -44,9 +44,11 @@ define([
 			this.addContents();
 			this.updateVideo();
 			this.updateCover();
-
-			this.listenTo(this.model, 'change:video', this.updateVideo);
+			// this.listenTo(this.model, 'change:videoInfo', this.updateVideo);
 			this.listenTo(this.model, 'change:cover', this.updateCover);
+			this.listenTo(this.model, 'change:videoInfo', function(){
+				console.log(1);
+			});
 		},
 		render: function(){
 			console.log('video view render');
@@ -111,16 +113,19 @@ define([
 			this.commentChange(scriptSeq);
 		},
 		updateVideo : function(){
-			if(this.model.get('video')){
-				this.addVideo();
+			var self = this;
+			if(this.$('iframe.video').length){
+				this.deleteVideo(function(){
+					self.addVideo();
+				});
 			}
 			else {
-				this.deleteVideo();
+				self.addVideo();
 			}
 		},
 		addVideo : function(){
 			var self  = this,
-				video = this.model.get('video'),
+				video = this.model.get('videoInfo'),
 				loadPlayer, interval, progressSync, dom;
 
 			if(!video) return;
@@ -234,7 +239,7 @@ define([
 				},
 				_saveVideo = function(player){
 					if(!video.duration){
-						self.model.set('video', {
+						self.model.set('videoInfo', {
 							id : video.id,
 							duration : player.getDuration()
 						}, {silent:true});
@@ -259,7 +264,7 @@ define([
 				console.log(arguments);
 			});
 		},
-		deleteVideo : function(){
+		deleteVideo : function(callback){
 			var self = this;
 
 			Backbone.pubsub.trigger('videoUnrender:' + this.model.id, true, function(){
@@ -267,11 +272,12 @@ define([
 				self.$('.edit-tool[data-edit="video"]')
 				.children().hide().end()
 				.children('.upload').show();
+				callback && callback();
 			});
 		},
 		addContents : function(){
 			var self     = this,
-				video    = this.model.get('video'),
+				video    = this.model.get('videoInfo'),
 				duration = video && video.duration ? video.duration : this.model.get('contents')[this.model.get('contents').length-1].get('time'),
 				_add = function(resource){
 					var Components = {
@@ -392,7 +398,7 @@ define([
 								return;
 							}
 
-							self.model.set('video', {
+							self.model.set('videoInfo', {
 								id : id
 							});
 						},
@@ -402,7 +408,7 @@ define([
 					},
 					delete : {
 						video : function(){
-							self.model.unset('video');
+							self.model.unset('videoInfo');
 						},
 						cover : function(){
 							self.model.unset('cover');

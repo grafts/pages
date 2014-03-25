@@ -28,7 +28,7 @@ define([
 		// 		dummy   = {
 		// 			title      : '리신공략, 각 라인별 일반적인 갱킹방법',
 		// 			subtitle   : '갱킹이 리신이며 리신이 갱킹이다!',
-		// 			video      : {
+		// 			videoInfo  : {
 		// 				id : 'yL9i5OXUhg4'
 		// 			}
 		// 		};
