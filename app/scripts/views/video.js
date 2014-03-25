@@ -304,25 +304,24 @@ define([
 				'click a'                       : 'link',
 				'click .script-delete'          : 'deleteScript',
 				'click .script-add'             : 'addScript',
-				'click .edit-tool > .button'    : 'fileManage',
-				'click .edit-tool-save'         : 'save',
-				'click .edit-tool-publish'      : 'publish',
+				'click .edit-tool > .button'    : 'crud',
 				'keydown .head .title'          : 'modelSync',
 				'keydown .head .subtitle'       : 'modelSync',
 				'keydown .script p'             : 'modelSync'
-			},
-			fields : [
-				{ selector : '.head .title', type : 'title' },
-				{ selector : '.head .subtitle', type : 'subtitle' },
-				{ selector : '.script', type : 'script' }
-			]
+			}
 		},
 		modelSync : _.debounce(function(e){
 			var self = this,
 				attr = e.currentTarget.dataset.attr,
-				val  = e.currentTarget.textContent;
-			self.model.set(attr, val);
-			console.log(self.model.get(attr));
+				val  = e.currentTarget.textContent,
+				model = self.model;
+
+			if(attr == 'script'){
+				model = self.model.get('contents')[$(e.currentTarget.parentNode.parentNode).index()];
+			}
+			model.set(attr, val);
+			this.editMode.changed ? null : this.editMode.changed = [];
+			this.editMode.changed.push(model);
 		}, 1000),
 		getEditAuth : function(){
 			return true;
@@ -366,7 +365,7 @@ define([
 				return self.save();
 			});
 		},
-		fileManage : function(e){
+		crud : function(e){
 			var self     = this,
 				resource = e.currentTarget.parentNode.dataset.edit,
 				action   = e.currentTarget.className.replace('button ', '').replace('edit-tool-', ''),
@@ -414,7 +413,13 @@ define([
 					},
 					save : {
 						article : function(){
-
+							if(!self.editMode.changed || self.editMode.changed.length < 1) return;
+							Backbone.Model.saveAll(self.editMode.changed).then(function(){
+								Backbone.history.navigate('/video/' + self.model.id, { trigger : true });
+							})
+							.then(null, function(err){
+								console.log(err);
+							});
 						}
 					}
 				};
