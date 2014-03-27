@@ -41,6 +41,14 @@ define([
 			this.undelegateEvents();
 			this.$el.remove();
 		},
+		read : function(){
+			if(!this.editFields) return;
+			this.editFields.forEach(function(field){
+				field.destroy();
+			});
+		},
+		edit : function(){
+		},
 		sync : function(){
 			Backbone.pubsub.on('videoSync:' + this.videoId, this.updateProgress, this);
 		},

@@ -24,6 +24,14 @@ define([
 			this.updateDom();
 			return this.$el;
 		},
+		read : function(){
+			if(!this.editFields) return;
+			this.editFields.forEach(function(field){
+				field.destroy();
+			});
+		},
+		edit : function(){
+		},
 		updateDom : function(){
 			var self = this;
 			this.$el.empty();

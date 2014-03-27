@@ -2988,34 +2988,6 @@ img {
   margin-top: 8px;
   width: 544px;
 }
-.video-item .contents .player .timeline .script-add {
-  position: absolute;
-  z-index: 1001;
-  background: white;
-  top: -3px;
-  right: -11px;
-  width: 18px;
-  height: 18px;
-  border: 1px solid #ed1207;
-  cursor: pointer;
-  text-align: center;
-  -webkit-border-radius: 1em;
-  -moz-border-radius: 1em;
-  -ms-border-radius: 1em;
-  -o-border-radius: 1em;
-  border-radius: 1em;
-}
-.video-item .contents .player .timeline .script-add i {
-  color: #ed1207;
-  margin-left: -0.15em;
-}
-.video-item .contents .player .timeline .script-add:hover {
-  -webkit-transform: scale(1.3);
-  -moz-transform: scale(1.3);
-  -ms-transform: scale(1.3);
-  -o-transform: scale(1.3);
-  transform: scale(1.3);
-}
 .video-item .contents .player .timeline .track {
   height: 10px;
   width: 100%;
@@ -3043,6 +3015,38 @@ img {
   -ms-border-radius: 6px;
   -o-border-radius: 6px;
   border-radius: 6px;
+}
+.video-item .contents .player .timeline .track .progress .edit-tool {
+  z-index: 1000;
+  position: absolute;
+  top: -3px;
+  right: -11px;
+}
+.video-item .contents .player .timeline .track .progress .edit-tool button {
+  display: inline-block;
+  z-index: 1001;
+  background: white;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #ed1207;
+  cursor: pointer;
+  text-align: center;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  -ms-border-radius: 1em;
+  -o-border-radius: 1em;
+  border-radius: 1em;
+}
+.video-item .contents .player .timeline .track .progress .edit-tool button i {
+  color: #ed1207;
+  margin-left: -0.15em;
+}
+.video-item .contents .player .timeline .track .progress .edit-tool button:hover {
+  -webkit-transform: scale(1.3);
+  -moz-transform: scale(1.3);
+  -ms-transform: scale(1.3);
+  -o-transform: scale(1.3);
+  transform: scale(1.3);
 }
 .video-item .contents .player .timeline .pointers {
   position: absolute;
@@ -3156,7 +3160,6 @@ img {
 .video-item .contents .timeline-contents .container .scripts .item {
   position: relative;
   min-height: 31.5px;
-  max-height: 63px;
   overflow: hidden;
   margin-top: 19.6875px;
   padding: 0 40px 0 95.2px;
@@ -3315,6 +3318,8 @@ img {
   position: absolute;
   top: 2px;
   right: 0;
+}
+.video-item .contents .timeline-contents .container .scripts .item .script-delete button {
   min-width: 20px;
   padding: 4px;
   background: #b1b3b6;
@@ -3333,10 +3338,10 @@ img {
   -o-transition: background-color 400ms linear;
   transition: background-color 400ms linear;
 }
-.video-item .contents .timeline-contents .container .scripts .item .script-delete:hover {
+.video-item .contents .timeline-contents .container .scripts .item .script-delete button:hover {
   background: #ed1207;
 }
-.video-item .contents .timeline-contents .container .scripts .item .script-delete i:before {
+.video-item .contents .timeline-contents .container .scripts .item .script-delete button i:before {
   width: auto;
 }
 .video-item .contents .timeline-contents .container .scripts .item.on {
@@ -3510,7 +3515,7 @@ img {
   display: inline-block;
 }
 .video-item.edit .edit-tool {
-  display: block;
+  display: inline-block;
 }
 .video-item.edit .contents .timeline-contents .container .scripts {
   height: auto !important;
@@ -3578,7 +3583,6 @@ img {
   }
   .video-item .contents .timeline-contents .container .scripts .item {
     min-height: 24px;
-    max-height: 48px;
     margin-top: 15px;
     padding: 0 40px 0 72.59px;
   }
@@ -3670,7 +3674,6 @@ img {
   }
   .video-item .contents .timeline-contents .container .scripts .item {
     min-height: 31.5px;
-    max-height: 63px;
     margin-top: 19.6875px;
     padding: 0 40px 0 95.2px;
   }
@@ -3762,7 +3765,6 @@ img {
   }
   .video-item .contents .timeline-contents .container .scripts .item {
     min-height: 36px;
-    max-height: 72px;
     margin-top: 22.5px;
     padding: 0 40px 0 108.8px;
   }
@@ -3854,7 +3856,6 @@ img {
   }
   .video-item .contents .timeline-contents .container .scripts .item {
     min-height: 48px;
-    max-height: 96px;
     margin-top: 30px;
     padding: 0 40px 0 145.01px;
   }

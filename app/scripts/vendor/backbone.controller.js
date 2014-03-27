@@ -93,6 +93,8 @@ define([
 					}
 					else {
 						_pull(param.id).then(function(model){
+							model._silent = {};
+							model.changed = {};
 							view = new self.view({
 								model : model,
 								id    : self.$el.attr('class') + '_' + param.id
@@ -209,7 +211,10 @@ define([
 				// 4. hide unnecessary Dom
 				this.$('.uneditable').hide();
 				// 5. input area insert & save those to object collection
-				this.editMode.createInputFields(this.$('.editable'));
+				// this.editMode.createInputFields(this.$('.editable'));
+				Object.keys(this.components).forEach(function(key){
+					self.components[key].edit();
+				});
 				// 6. event change for edit mode
 				this.editMode.eventShift(self.editConfig.event);
 			}
@@ -218,20 +223,30 @@ define([
 			}
 		},
 		read : function(){
-			// 1. check current view mode
-			if(!this.editMode){
-				return;
+			var self = this;
+
+			try {
+				// 1. check current view mode
+				if(!this.editMode){
+					return;
+				}
+				// 2. remove 'edit' class 
+				this.$el.removeClass('edit');
+				// 3. show hided dom
+				this.$('.uneditable').show();
+				// 4. remove input area & saved object collection
+				this.editMode.deleteInputFields();
+				Object.keys(this.components).forEach(function(key){
+					self.components[key].read();
+				});
+				// 5. event rollback
+				this.editMode.eventRollback();
+				// 6. destroy edit mode object
+				delete this.editMode;
 			}
-			// 2. remove 'edit' class 
-			this.$el.removeClass('edit');
-			// 3. show hided dom
-			this.$('.uneditable').show();
-			// 4. remove input area & saved object collection
-			this.editMode.deleteInputFields();
-			// 5. event rollback
-			this.editMode.eventRollback();
-			// 6. destroy edit mode object
-			delete this.editMode;
+			catch(err){
+				console.log(err);
+			}
 		},
 		updateCover : function(){
 			if(this.model.get('cover')){

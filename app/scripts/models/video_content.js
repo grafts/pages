@@ -8,29 +8,12 @@ define([
 			return current / total * 100;
 		},
 		hhmmss  = function(secs){
-			var hours = Math.floor(secs / (60 * 60));
-
-			var divisor_for_minutes = secs % (60 * 60);
-			var minutes = Math.floor(divisor_for_minutes / 60) || '00';
-
-			var divisor_for_seconds = divisor_for_minutes % 60;
-			var seconds = Math.ceil(divisor_for_seconds) || '00';
-
-			var hhmmss = '';
-
-			if(hours != 0){
-				hhmmss += (hours + ':'); 
-			}
-			if(minutes<10){
-				minutes = '0' + minutes;
-			}
-			if(seconds<10){
-				// seconds = '0' + minutes;
-			}
-			hhmmss += (minutes + ':'); 
-			hhmmss += (seconds);
-
-			return hhmmss;
+			var t = new Date(1970,0,1);
+			t.setSeconds(secs);
+			var s = t.toTimeString().substr(0,8);
+			if(secs > 86399)
+				s = Math.floor((t - Date.parse("1/1/70")) / 3600000) + s.substr(2);
+			return s.replace(/^00:/, '');
 		};
 
 	var Model = Backbone.Model.extend({
@@ -83,7 +66,7 @@ define([
 					time = this.get('time');
 
 				if(options && options.duration) val.position = percent(options.duration, time);
-				if(time) val.hhmmss   = hhmmss(time);
+				val.hhmmss = hhmmss(time);
 
 				return val;
 			}

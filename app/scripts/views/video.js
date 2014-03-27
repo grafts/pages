@@ -41,14 +41,12 @@ define([
 			this.contents = new Contents();
 			this.contents.add(this.model.get('contents'));
 
-			this.addContents();
+			this.addComponents();
 			this.updateVideo();
 			this.updateCover();
-			// this.listenTo(this.model, 'change:videoInfo', this.updateVideo);
+			this.listenTo(this.model, 'change:videoInfo', this.updateVideo);
 			this.listenTo(this.model, 'change:cover', this.updateCover);
-			this.listenTo(this.model, 'change:videoInfo', function(){
-				console.log(1);
-			});
+			this.listenTo(this.model, 'change:contents', this.updateContents);
 		},
 		render: function(){
 			console.log('video view render');
@@ -111,6 +109,27 @@ define([
 				// self.$('.scripts').removeClass('moving');
 			});
 			this.commentChange(scriptSeq);
+		},
+		updateContents : function(){
+			var self = this,
+				// after = _.pluck(this.model.get('contents'), 'id'),
+				// before = _.pluck(this.contents.models, 'id'),
+				after = this.model.get('contents'),
+				before = this.contents.models,
+				event = 'change',
+				changed;
+
+			if(before.length < after.length){
+				event = 'add';
+				changed = _.difference(after, before);
+			}
+			else if(before.length > after.length){
+				event = 'del';
+				changed = _.difference(before, after);
+			}
+				
+			this.contents.reset(this.model.get('contents'), { silent : true });
+			this.contents.trigger(event, changed);
 		},
 		updateVideo : function(){
 			var self = this;
@@ -275,7 +294,7 @@ define([
 				callback && callback();
 			});
 		},
-		addContents : function(){
+		addComponents : function(){
 			var self     = this,
 				video    = this.model.get('videoInfo'),
 				duration = video && video.duration ? video.duration : this.model.get('contents')[this.model.get('contents').length-1].get('time'),
@@ -308,9 +327,7 @@ define([
 		editConfig : {
 			event : {
 				'click a'                       : 'link',
-				'click .script-delete'          : 'deleteScript',
-				'click .script-add'             : 'addScript',
-				'click .edit-tool > .button'    : 'crud',
+				'click .edit-tool > button'     : 'crud',
 				'keydown .head .title'          : 'modelSync',
 				'keydown .head .subtitle'       : 'modelSync',
 				'keydown .script p'             : 'modelSync'
@@ -328,7 +345,7 @@ define([
 			model.set(attr, val);
 			this.editMode.changed ? null : this.editMode.changed = [];
 			this.editMode.changed.push(model);
-		}, 1000),
+		}, 100),
 		getEditAuth : function(){
 			return true;
 		},
@@ -352,25 +369,6 @@ define([
 		deleteScript : function(){
 
 		},
-		save : function(){
-			var self = this;
-			// 1. serialize & save
-			this.editMode.save()
-			// 3. change view mode
-			.then(function(){
-				self.read();
-			});
-		},
-		publish : function(){
-			var self = this;
-
-			return this.model.save({
-				'publish' : true,
-				'publishedAt' : new Date()
-			}).then(function(){
-				return self.save();
-			});
-		},
 		crud : function(e){
 			var self     = this,
 				resource = e.currentTarget.parentNode.dataset.edit,
@@ -388,6 +386,18 @@ define([
 					}
 				},
 				_manage  = {
+					create : {
+						script : function(){
+							Backbone.pubsub.trigger('getVideoCurrentTime:' + self.model.id, function(time){
+								self.model.addContents({
+									time : time,
+									script : ''
+								}).then(function(){
+									return self.model.save();
+								});
+							});
+						}
+					},
 					upload : {
 						video : function(){
 							var url = prompt("Insert Video URL"),
@@ -415,6 +425,11 @@ define([
 						},
 						article : function(){
 
+						},
+						script : function(e){
+							self.model.delContents(_.find(self.model.get('contents'), { id : e.currentTarget.parentNode.parentNode.id })).then(function(){
+								return self.model.save();
+							});
 						}
 					},
 					save : {
@@ -430,16 +445,11 @@ define([
 					}
 				};
 
-			_manage[action][resource]();
+			_manage[action][resource](e);
 		},
 		test : function(){
 			console.log('test arg = ');
 			console.log(arguments);
-		},
-		test1 : {
-			a : function(){
-				console.log(arguments);
-			}
 		}
 	});
 

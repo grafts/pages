@@ -1,20 +1,20 @@
-{{#each scripts}}
-	<li class="item">
-		<div class="clock">{{this.hhmmss}}</div>
-		<button class="anker"></button>
-		<div class="script">
-			<p class="sans-serif editable" data-attr="script">{{this.script}}</p>
-		</div>
-		<button class="comments-link uneditable">
-			{{#if this.comments}}
-				<span class="count">{{this.comments.length}}</span>
-			{{else}}
-				<span class="count">0</span>
-			{{/if}}
+<li class="item" id="{{this.objectId}}" data-time="{{this.time}}">
+	<div class="clock">{{this.hhmmss}}</div>
+	<button class="anker"></button>
+	<div class="script">
+		<p class="sans-serif editable" data-attr="script">{{this.script}}</p>
+	</div>
+	<button class="comments-link uneditable">
+		{{#if this.comments}}
+			<span class="count">{{this.comments.length}}</span>
+		{{else}}
+			<span class="count">0</span>
+		{{/if}}
+		<i class="icon-cancel"></i>
+	</button>
+	<div class="edit-tool script-delete" data-edit="script">
+		<button class="edit-tool-delete">
 			<i class="icon-cancel"></i>
 		</button>
-		<button class="script-delete">
-			<i class="icon-cancel"></i>
-		</button>
-	</li>
-{{/each}}
+	</div>
+</li>
