@@ -74,23 +74,23 @@ define([
 			return Parse.Object.destroyAll(contents.concat(comments), option);
 		},
 		insertDummyData : function(){
-			var _id = 1,
+			var _id = 1000,
 				id  = function(){
-					return ++_id;
+					return (_id++) + '';
 				},
 				User = Backbone.Model.extend({ className : 'User' }),
 				Comment = Backbone.Model.extend({ className : 'comment' });
 
 			var dUser = new User({
-					id         : 1,
+					id         : "1",
 					name       : '아만다 사이프리드',
 					avatar     : {
 						url    : '/images/avatar.jpg'
 					}
 				}),
 				dummy = {
-					id         : 1,
-					objectId   : 1,
+					id         : "1",
+					objectId   : "1",
 					title      : '리신공략, 각 라인별 일반적인 갱킹방법',
 					subtitle   : '갱킹이 리신이며 리신이 갱킹이다!',
 					createdAt  : "2014-02-23T17:53:00.272Z",

@@ -39,7 +39,7 @@ define([
 
 			this.$el.append(this.template(this.model.JSON()));
 			this.contents = new Contents();
-			this.contents.add(this.model.get('contents'));
+			this.model.get('contents') && this.contents.add(this.model.get('contents'));
 
 			this.addComponents();
 			this.updateVideo();
@@ -71,44 +71,42 @@ define([
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		},
 		commentToggle : function(e){
-			var seq      = this.$(e.currentTarget.parentNode).index(),
+			var id       = e.currentTarget.parentNode.id,
 				contents = this.$('.contents'),
 				comments = this.$('.comments-wrapper');
 			
 			if(!contents.hasClass('comments-on')){
-				this.commentChange(seq);
+				this.commentChange(id);
 			}
 			this.$('.comments-wrapper').find('.item').toggleClass('on');
 			comments.toggle();
 			this.$('.contents').toggleClass('comments-on');
 		},
-		commentChange : function(seq){
-			Backbone.pubsub.trigger('videoCommentsChange:' + this.model.id, seq);
+		commentChange : function(id){
+			Backbone.pubsub.trigger('videoCommentsChange:' + this.model.id, id);
 		},
 		replyFormToggle : function(e){
 			$(e.currentTarget.nextElementSibling).toggle();
 		},
 		gotoClickedScript : function(e){
-			var current = this.$(e.currentTarget.parentNode).index();
+			var current = e.currentTarget.parentNode.id;
 			Backbone.pubsub.trigger('videoTimelineLink:' + this.model.id, current);
 		},
-		scrollToArticle : function(scriptSeq){
+		scrollToArticle : function(id){
 			var self         = this,
 				timeline     = this.$('.timeline-contents').find('.scripts'),
 				items        = timeline.children(),
-				item         = items.eq(scriptSeq);
+				item         = $(document.getElementById(id));
 
 			items.removeClass('on');
-			// this.$('.scripts').addClass('moving');
 			timeline.animate({
 				scrollTop : timeline.scrollTop() + item.position().top
 			},
 			500,
 			function(){
 				item.addClass('on');
-				// self.$('.scripts').removeClass('moving');
 			});
-			this.commentChange(scriptSeq);
+			this.commentChange(id);
 		},
 		updateContents : function(){
 			var self = this,
@@ -154,19 +152,13 @@ define([
 
 			interval = function(player){
 
-				var currentTime      = player.getCurrentTime(),
-					contents         = self.model.get('contents'),
-					scriptSeq        = _.findIndex(contents, function(content) {
-						return content.get('time') > currentTime;
-					});
+				var currentTime      = player.getCurrentTime() || 0,
+					scriptId         = self.contents.reduce(function(before, after, i){
+						if(currentTime <= after.get('time')) return before;
+						return after;
+					}).id;
 
-				if(scriptSeq < 0){
-					scriptSeq = contents.length - 1;
-				} else if(scriptSeq != 0){
-					scriptSeq -= 1;
-				}
-
-				Backbone.pubsub.trigger('videoSync:' + self.model.id, currentTime, scriptSeq);
+				Backbone.pubsub.trigger('videoSync:' + self.model.id, currentTime, scriptId);
 			};
 
 			var on = {
@@ -220,9 +212,9 @@ define([
 					});
 				},
 				_setPlayEvent = function(player){
-					var currentScriptSeq = -1,
-						_findArtcle = function(scriptSeq, player){
-							var script = self.model.get('contents')[scriptSeq],
+					var currentScriptId,
+						_findArtcle = function(id, player){
+							var script = _.find(self.model.get('contents'), { 'id' : id}),
 								time   = script.get('time');
 
 							player.seekTo(time);
@@ -239,13 +231,13 @@ define([
 							callback && callback();
 						};
 
-					Backbone.pubsub.on('videoTimelineLink:' + self.model.id, function(scriptSeq){
-						_findArtcle.call(this, scriptSeq, player);
+					Backbone.pubsub.on('videoTimelineLink:' + self.model.id, function(scriptId){
+						_findArtcle.call(this, scriptId, player);
 					}, player);
-					Backbone.pubsub.on('videoSync:' + self.model.id, function(currentTime, scriptSeq){
-						if(currentScriptSeq != scriptSeq){
-							currentScriptSeq = scriptSeq;
-							self.scrollToArticle(scriptSeq);
+					Backbone.pubsub.on('videoSync:' + self.model.id, function(currentTime, scriptId){
+						if((!currentScriptId) || (currentScriptId != scriptId)){
+							currentScriptId = scriptId;
+							self.scrollToArticle(scriptId);
 						}
 					}, player);
 					Backbone.pubsub.on('videoUnrender:' + self.model.id, function(type, callback){
@@ -254,6 +246,10 @@ define([
 					Backbone.pubsub.on('getVideoCurrentTime:' + self.model.id, function(callback){
 						callback(player.getCurrentTime());
 					}, player);
+
+					// for first time.
+					interval(player);
+
 					return player;
 				},
 				_saveVideo = function(player){
@@ -297,7 +293,7 @@ define([
 		addComponents : function(){
 			var self     = this,
 				video    = this.model.get('videoInfo'),
-				duration = video && video.duration ? video.duration : this.model.get('contents')[this.model.get('contents').length-1].get('time'),
+				duration = video && video.duration ? video.duration : 0,
 				_add = function(resource){
 					var Components = {
 						scripts  : ScriptsView,
@@ -340,7 +336,7 @@ define([
 				model = self.model;
 
 			if(attr == 'script'){
-				model = self.model.get('contents')[$(e.currentTarget.parentNode.parentNode).index()];
+				model = _.find(self.model.get('contents'), {id:e.currentTarget.parentNode.parentNode.id});
 			}
 			model.set(attr, val);
 			this.editMode.changed ? null : this.editMode.changed = [];
@@ -434,7 +430,10 @@ define([
 					},
 					save : {
 						article : function(){
-							if(!self.editMode.changed || self.editMode.changed.length < 1) return;
+							if((self.model.id == 1) || (!self.editMode.changed || self.editMode.changed.length < 1)){
+								Backbone.history.navigate('/video/1', { trigger : true });
+								return
+							}
 							Backbone.Model.saveAll(self.editMode.changed).then(function(){
 								Backbone.history.navigate('/video/' + self.model.id, { trigger : true });
 							})

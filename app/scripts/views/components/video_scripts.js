@@ -25,6 +25,7 @@ define([
 			this.delegateEvents();
 			this.$el.addClass('scripts');
 			this.addAll(this.contents);
+			// this.$('.item:eq(0)').addClass('on');
 			return this.$el;
 		},
 		unrender : function(){

@@ -7,9 +7,10 @@ define([
 	'templates'
 ], function ($, _, Backbone, JST) {
 	var View = Backbone.View.extend({
-		tagName : 'div',
+		tagName  : 'div',
 		template : JST['app/scripts/templates/video_player_timeline.hbs'],
-		events : {
+		pntrTemp : JST['app/scripts/templates/video_player_timeline_pointer.hbs'],
+		events   : {
 			'click .pointer' : 'link'
 		},
 		initialize : function(data){
@@ -19,19 +20,15 @@ define([
 			this.videoId = data.videoId;
 			this.contents = data.contents;
 			this.duration = data.duration;
-
+			this.listenTo(this.contents, 'add', this.addAll);
+			this.listenTo(this.contents, 'del', this.delAll);
+			this.listenTo(this.contents, 'change', this.update);
 		},
 		render : function(){
 			var self = this;
-
-			this.$el
-			.addClass('timeline')
-			.append(self.template({
-				pointers : self.contents.refine({
-					duration : self.duration
-				})
-			}));
-
+			this.delegateEvents();
+			this.$el.addClass('timeline').append(self.template());
+			this.addAll(this.contents);
 			this.sync();
 
 			return this.$el;
@@ -49,16 +46,54 @@ define([
 		},
 		edit : function(){
 		},
+		addAll : function(contents){
+			var self = this;
+			contents.forEach(function(content){
+				self.add(content);
+			});
+		},
+		add : function(obj){
+			var self = this;
+			this.$('.pointers').append(this.pntrTemp(obj.refine({
+				duration : self.getDuration()
+			})));
+		},
+		delAll : function(contents){
+			var self = this;
+			contents.forEach(function(content){
+				self.del(content);
+			});
+		},
+		del : function(obj){
+			this.$('.item[data-id="'+obj.id+'"]').remove();
+		},
+		getDuration : function(){
+			var d = this.duration,
+				last;
+			if(!d){
+				last = this.contents.last();
+				if(last){
+					d = last;
+				}
+				else {
+					d = 3600;
+				}
+				this.duration = d;
+			}
+
+			return d;
+		},
 		sync : function(){
 			Backbone.pubsub.on('videoSync:' + this.videoId, this.updateProgress, this);
 		},
-		updateProgress : function(progress, scriptSeq){
+		updateProgress : function(progress, scriptId){
 			var self = this;
-			this.$('.progress').css('width', (progress/this.duration*100) + '%');
-			this.$('.item').removeClass('on').eq(scriptSeq).addClass('on');
+			this.$('.progress').css('width', (progress/this.getDuration()*100) + '%');
+			this.$('.item').removeClass('on');
+			this.$('.item[data-id="'+scriptId+'"]').addClass('on');
 		},
 		link : function(e){
-			var current = this.$(e.currentTarget.parentNode).index();
+			var current = e.currentTarget.parentNode.dataset.id;
 			Backbone.pubsub.trigger('videoTimelineLink:' + this.videoId, current);
 		}
 	});

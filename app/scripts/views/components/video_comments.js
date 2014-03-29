@@ -15,7 +15,7 @@ define([
 		initialize : function(data){
 			this.videoId    = data.videoId;
 			this.contents   = data.contents;
-			this.collection = new Collection(this.contents.models[0].get('comments'));
+			this.collection = new Collection();
 			this.listenTo(this.collection, 'reset', this.updateDom);
 			Backbone.pubsub.on('videoCommentsChange:' + this.videoId, this.set, this);
 		},
@@ -43,8 +43,8 @@ define([
 			this.undelegateEvents();
 			this.$el.remove();
 		},
-		set : function(seq){
-			this.collection.reset(this.contents.models[seq].get('comments'));
+		set : function(id){
+			this.collection.reset(this.contents.get(id).get('comments'));
 		},
 		link : function(e){
 			
