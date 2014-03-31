@@ -8,7 +8,7 @@ define([
 ], function ($, _, Backbone, JST, CoverView) {
 	'use strict';
 
-	var VideoView = Backbone.View.extend({
+	var VideoView = Backbone.Page.extend({
 		tagName: 'div',
 		template: JST['app/scripts/templates/class.hbs'],
 		events: {

@@ -2,9 +2,9 @@
 	<div class="clock">{{this.hhmmss}}</div>
 	<button class="anker"></button>
 	<div class="script">
-		<p class="sans-serif editable" data-attr="script">{{this.script}}</p>
+		<p class="sans-serif editable" data-attr="script" data-id="{{this.objectId}}">{{this.script}}</p>
 	</div>
-	<button class="comments-link uneditable">
+	<button class="comments-link" data-id="{{this.objectId}}>
 		{{#if this.comments}}
 			<span class="count">{{this.comments.length}}</span>
 		{{else}}

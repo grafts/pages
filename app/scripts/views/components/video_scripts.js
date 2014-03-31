@@ -7,7 +7,7 @@ define([
 	'templates',
 	'pen'
 ], function ($, _, Backbone, JST, Pen) {
-	var View = Backbone.View.extend({
+	var View = Backbone.Component.extend({
 		tagName : 'ul',
 		template : JST['app/scripts/templates/video_scripts.hbs'],
 		events : {
@@ -33,33 +33,6 @@ define([
 			this.undelegateEvents();
 			this.$el.remove();
 		},
-		read : function(){
-			if(!this.editFields) return;
-			this.editFields.forEach(function(field){
-				field.destroy();
-			});
-			delete this.editFields;
-		},
-		edit : function(){
-			var self = this,
-				editOption = {
-					debug: false,
-					stay : false,
-					list : ['bold', 'italic']
-				};
-
-			if(this.editFields) return;
-			this.editFields = [];
-			[].forEach.call(this.$('.editable'), function(dom){
-				var field = new Pen(
-						_.defaults({
-							editor : dom,
-						}, editOption)
-					);
-				if(dom.id) field.id = dom.id;
-				self.editFields.push(field);
-			});
-		},
 		reset : function(){
 			var seq = this.$el.children('.on').index();
 			seq==-1?seq=0:null;
@@ -73,7 +46,11 @@ define([
 			});
 		},
 		add : function(obj){
-			this.$el.append(this.template(obj.refine()));
+			var item = $(this.template(obj.refine()))[0];
+			if(this.editFields){
+				this.addEditField(item.querySelector('.editable'));
+			}
+			this.$el.append(item);
 			this.sort();
 		},
 		delAll : function(contents){
@@ -83,6 +60,10 @@ define([
 			});
 		},
 		del : function(obj){
+			if(this.editFields){
+				var target = _.find(this.editFields, { id : obj.id });
+				target && target.destroy();
+			}
 			this.$('#'+obj.id).remove();
 			this.sort();
 		},

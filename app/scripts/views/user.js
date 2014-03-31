@@ -11,7 +11,7 @@ define([
 ], function ($, _, Backbone, JST, VideosView, Videos) {
 	'use strict';
 
-	var UserView = Backbone.View.extend({
+	var UserView = Backbone.Page.extend({
 		tagName: 'div',
 		template: JST['app/scripts/templates/user.hbs'],
 		components : {},

@@ -6,7 +6,7 @@ define([
 ], function ($, _, Backbone, JST) {
 	'use strict';
 
-	var View = Backbone.View.extend({
+	var View = Backbone.Page.extend({
 		tagName: 'div',
 		template: JST['app/scripts/templates/lesson.hbs'],
 		events: {

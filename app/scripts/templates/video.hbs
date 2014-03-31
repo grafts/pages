@@ -11,10 +11,17 @@
 	<div class="headline sans-serif">
 		<div class="container">
 			<div class="edit-tool" data-edit="cover">
+				<input type="file" id="video_{{objectId}}_cover_file" class="cover-file-input" data-attr="cover">
 				<button class="button upload">Add Cover Image</button>
 				<button class="button delete">Remove Cover Image</button>
 			</div>
-			<p class="title editable" data-attr="title">{{title}}</p>
+			<p class="title editable" data-attr="title">
+				{{#if title}}
+					{{title}}
+				{{else}}
+					Untitled Video
+				{{/if}}
+			</p>
 			<p class="subtitle editable" data-attr="subtitle">{{subtitle}}</p>
 			<a class="author uneditable" href="/user/{{author.objectId}}">
 				<img class="avatar" src="{{author.avatar.url}}" alt="avatar">
@@ -78,14 +85,14 @@
 		</div>
 	</div>
 </div>
-
+{{#if relate}}
 <div class="relate uneditable">
 	<div class="container">
 		<h4>RELATED VIDEO</h4>
 	</div>
 	<div class="headline sans-serif">
 		<div class="container">
-			<a href="/video/{{relate.id}}">
+			<a href="/video/{{#if relate.id}}{{relate.id}}{{else}}1{{/if}}">
 				<p class="title">{{relate.title}}</p>
 				<p class="subtitle">{{relate.subtitle}}</p>
 			</a>
@@ -96,3 +103,4 @@
 		</div>
 	</div>
 </div>
+{{/if}}

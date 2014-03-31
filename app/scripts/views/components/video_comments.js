@@ -7,7 +7,7 @@ define([
 	'templates',
 	'collections/video_contents_comments'
 ], function ($, _, Backbone, JST, Collection) {
-	var View = Backbone.View.extend({
+	var View = Backbone.Component.extend({
 		tagName : 'div',
 		template : JST['app/scripts/templates/video_comments.hbs'],
 		events : {
@@ -23,12 +23,6 @@ define([
 			this.delegateEvents();
 			this.updateDom();
 			return this.$el;
-		},
-		read : function(){
-			if(!this.editFields) return;
-			this.editFields.forEach(function(field){
-				field.destroy();
-			});
 		},
 		edit : function(){
 		},

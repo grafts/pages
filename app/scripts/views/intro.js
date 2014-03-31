@@ -7,7 +7,7 @@ define([
 ], function ($, _, Backbone) {
 	'use strict';
 
-	var View = Backbone.View.extend({
+	var View = Backbone.Page.extend({
 		events: {
 			'click a' : 'link'
 		},

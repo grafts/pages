@@ -19,7 +19,7 @@ define([
 ], function ($, _, Backbone, JST, Handlebars, YT, CoverView, ScriptsView, CommentsView, TimelineView, Contents, editor) {
 	'use strict';
 
-	var View = Backbone.View.extend({
+	var View = Backbone.Page.extend({
 		// el: '.video-item',
 		tagName: 'div',
 		template : JST['app/scripts/templates/video.hbs'],
@@ -30,6 +30,15 @@ define([
 			'click .reply'                           : 'replyFormToggle',
 			'click .clock, .anker, .script'          : 'gotoClickedScript'
 		},
+		editModeEvents : {
+			'click a'                                : 'link',
+			'click .edit-tool > button'              : 'crud',
+			'keydown .head .title'                   : 'modelSync',
+			'keydown .head .subtitle'                : 'modelSync',
+			'keydown .script p'                      : 'modelSync',
+			'change  input.cover-file-input'         : 'modelSync'
+		},
+		editFields : ['.head .title', '.head .subtitle'],
 		initialize: function(param){
 			var self  = this;
 
@@ -47,6 +56,30 @@ define([
 			this.listenTo(this.model, 'change:videoInfo', this.updateVideo);
 			this.listenTo(this.model, 'change:cover', this.updateCover);
 			this.listenTo(this.model, 'change:contents', this.updateContents);
+
+			// Backbone.pubsub.on('scroll', function(){
+			// 	if(!self.editMode) return;
+
+			// 	var scroll  = $(window).scrollTop();
+			// 	if(this._limit && this._limit >= scroll){
+			// 		self.$('.contents').removeClass('fix');
+			// 		self.$('.dummy').remove();
+			// 		delete this._limit;
+			// 		delete this._fix;
+			// 		return;
+			// 	}
+
+			// 	var video   = self.$('.player'),
+			// 		limit   = video.offset().top;
+
+			// 	if(scroll >= limit && !this._fix){
+			// 		self.$('.contents').addClass('fix');
+			// 		video.after($('<div class="dummy"></div>').css('height', video.height()));
+			// 		this._limit = limit;
+			// 		this._fix = true;
+			// 	}
+			// });
+
 		},
 		render: function(){
 			console.log('video view render');
@@ -64,6 +97,41 @@ define([
 		destroy : function(){
 			this.unrender(true);
 			this.remove();
+		},
+		getEditAuth : function(){
+			return new Promise(function(resolve, reject){
+				resolve();
+			});
+		},
+		addComponents : function(){
+			var self     = this,
+				video    = this.model.get('videoInfo'),
+				duration = video && video.duration ? video.duration : 0,
+				_add = function(resource){
+					var Components = {
+						scripts  : ScriptsView,
+						timeline : TimelineView,
+						comments : CommentsView
+					};
+					if(this.components[resource]){
+						this.components[resource].unrender();
+						this.components[resource].remove();
+						delete this.components[resource];
+					}
+
+					this.components[resource] = new Components[resource]({
+						id       : 'video_' + self.model.id + '_' + resource,
+						videoId  : self.model.id,
+						contents : self.contents,
+						duration : duration
+					});
+
+					this.$('.'+resource+'-wrapper').append(this.components[resource].render());
+				};
+
+			_add.call(this, 'timeline');
+			_add.call(this, 'scripts');
+			_add.call(this, 'comments');
 		},
 		link : function(e){
 			e.preventDefault();
@@ -130,7 +198,10 @@ define([
 			this.contents.trigger(event, changed);
 		},
 		updateVideo : function(){
-			var self = this;
+			var self       = this,
+				video      = this.model.get('videoInfo'),
+				editButton = this.$('.edit-tool[data-edit="video"]');
+
 			if(this.$('iframe.video').length){
 				this.deleteVideo(function(){
 					self.addVideo();
@@ -139,6 +210,16 @@ define([
 			else {
 				self.addVideo();
 			}
+
+			editButton.children().hide();
+
+			if(video){
+				editButton.children('.delete').show();
+			}
+			else {
+				editButton.children('.upload').show();
+			}
+
 		},
 		addVideo : function(){
 			var self  = this,
@@ -265,6 +346,8 @@ define([
 					self.$('.edit-tool[data-edit="video"]')
 					.children().hide().end()
 					.children('.delete').show();
+
+					self.$('.player').addClass('on');
 					return player;
 				};
 
@@ -290,81 +373,29 @@ define([
 				callback && callback();
 			});
 		},
-		addComponents : function(){
-			var self     = this,
-				video    = this.model.get('videoInfo'),
-				duration = video && video.duration ? video.duration : 0,
-				_add = function(resource){
-					var Components = {
-						scripts  : ScriptsView,
-						timeline : TimelineView,
-						comments : CommentsView
-					};
-					if(this.components[resource]){
-						this.components[resource].unrender();
-						this.components[resource].remove();
-						delete this.components[resource];
-					}
-
-					this.components[resource] = new Components[resource]({
-						id       : 'video_' + self.model.id + '_' + resource,
-						videoId  : self.model.id,
-						contents : self.contents,
-						duration : duration
-					});
-
-					this.$('.'+resource+'-wrapper').append(this.components[resource].render());
-				};
-
-			_add.call(this, 'timeline');
-			_add.call(this, 'scripts');
-			_add.call(this, 'comments');
-		},
-		editConfig : {
-			event : {
-				'click a'                       : 'link',
-				'click .edit-tool > button'     : 'crud',
-				'keydown .head .title'          : 'modelSync',
-				'keydown .head .subtitle'       : 'modelSync',
-				'keydown .script p'             : 'modelSync'
-			}
-		},
 		modelSync : _.debounce(function(e){
 			var self = this,
 				attr = e.currentTarget.dataset.attr,
 				val  = e.currentTarget.textContent,
 				model = self.model;
 
+			if(!this.changed) this.changed = [];
 			if(attr == 'script'){
 				model = _.find(self.model.get('contents'), {id:e.currentTarget.parentNode.parentNode.id});
 			}
-			model.set(attr, val);
-			this.editMode.changed ? null : this.editMode.changed = [];
-			this.editMode.changed.push(model);
-		}, 100),
-		getEditAuth : function(){
-			return true;
-		},
-		addScript : function(){
-			var self = this,
-				src   = '<li class="item"><div class="clock">{{hhmmss}}</div> <button class="anker"></button> <div class="script"> <p class="sans-serif">{{script}}</p> </div> <button class="script-delete"><i class="icon-cancel"></i></button></li>',
-				tmplt = Handlebars.compile(src),
-				el;
+			else if(attr == 'cover'){
+				val = new Backbone.File('cover', e.currentTarget.files[0]);
 
-			Backbone.pubsub.trigger('getVideoCurrentTime:' + this.model.id, function(time){
-				self.model.addContents({
-					time : time,
-					script : ''
-				}).then(function(){
-					console.log(arguments);
-				}).then(null ,function(){
-					console.log(arguments);
+				val.save().then(function(){
+					model.set(attr, val);
+					model.save();
+					if(!_.find(self.changed, function(c){ return c.id == model.id; })) self.changed.push(model);
 				});
-			});
-		},
-		deleteScript : function(){
-
-		},
+				return;
+			}
+			model.set(attr, val);
+			if(!_.find(this.changed, function(c){ return c.id == model.id; })) this.changed.push(model);
+		}, 100),
 		crud : function(e){
 			var self     = this,
 				resource = e.currentTarget.parentNode.dataset.edit,
@@ -409,7 +440,7 @@ define([
 							});
 						},
 						cover : function(){
-
+							self.$('#video_' + self.model.id + '_cover_file').click();
 						}
 					},
 					delete : {
@@ -430,11 +461,15 @@ define([
 					},
 					save : {
 						article : function(){
-							if((self.model.id == 1) || (!self.editMode.changed || self.editMode.changed.length < 1)){
+							if((self.model.id == 1)){
 								Backbone.history.navigate('/video/1', { trigger : true });
 								return
 							}
-							Backbone.Model.saveAll(self.editMode.changed).then(function(){
+							if(!self.changed || self.changed.length < 1){
+								Backbone.history.navigate('/video/' + self.model.id, { trigger : true });
+								return
+							}
+							Backbone.Model.saveAll(self.changed).then(function(){
 								Backbone.history.navigate('/video/' + self.model.id, { trigger : true });
 							})
 							.then(null, function(err){
@@ -445,10 +480,6 @@ define([
 				};
 
 			_manage[action][resource](e);
-		},
-		test : function(){
-			console.log('test arg = ');
-			console.log(arguments);
 		}
 	});
 

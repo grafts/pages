@@ -9,12 +9,14 @@ define([
 	'use strict';
 
 	var Controller = function(){
-		this.views   = {};
-		this.history = [];
-		this.$el     = $(this.el);
-		this.initialize.apply(this, arguments);
-		return null;
-	};
+			this.views   = {};
+			this.history = [];
+			this.$el     = $(this.el);
+			this.initialize.apply(this, arguments);
+			return null;
+		},
+		Page      = Backbone.View.extend(),
+		Component = Backbone.View.extend();
 
  	_.extend(Controller.prototype, {
  		initialize  : function(){},
@@ -140,113 +142,68 @@ define([
 		}
  	});
 
-	function Edit(context){
-		var inputs = [],
-			editOption = {
-				debug: false,
-				stay : false,
-				list : ['bold', 'italic']
-			},
-			input = function(dom, type){
-				inputs.push(
-					new Pen(
-						_.defaults({
-							editor : dom,
-						}, editOption)
-					)
+	_.extend(Page.prototype, {
+		setEditModeEvents : function(){
+			if(!this.editModeEvents) return false;
+			this.defaultEvents = this.events;
+			this.undelegateEvents();
+			this.events = this.editModeEvents;
+			this.delegateEvents();
+			return true;
+		},
+		setDefaultEvents : function(){
+			if(!this.defaultEvents) return false;
+			this.undelegateEvents();
+			this.events = this.defaultEvents;
+			this.delegateEvents();
+			delete this.defaultEvent;
+			return true;
+		},
+		editOption : {
+			debug: false,
+			stay : false,
+			list : ['bold', 'italic']
+		},
+		addEditField : function(dom, id){
+			var self = this,
+				field = new Pen(
+					_.defaults({
+						editor : dom,
+					}, this.editOption)
 				);
-			};
-
-		this.context = context;
-		this._createInputField = function(el, type){
-			var self = this;
-			[].forEach.call(el, function(dom){
-				input(dom, type);
-			});
-		}
-		this._deleteInputFields = function(){
-			inputs.forEach(function(field){
-				field.destroy();
-			});
-		}
-	}
-	Edit.prototype = {
-		createInputFields : function(el){
-			this._createInputField(el);
+			field.id = dom.dataset.attr;
+			this._editFields.push(field);
 		},
-		deleteInputFields : function(){
-			this._deleteInputFields();
-			// this.editor.destroy();
-		},
-		save : function(){
-			return new Promise(function(resolve, reject){
-				resolve();
-			});
-		},
-		eventShift : function(events){
-			this.defaultEvent = this.context.events;
-			this.context.events = events;
-			this.context.undelegateEvents();
-			this.context.delegateEvents();
-		},
-		eventRollback : function(){
-			if(!this.defaultEvent) return;
-			this.context.events = this.defaultEvent;
-			this.context.undelegateEvents();
-			this.context.delegateEvents();
-		}
-	}
-	_.extend(Backbone.View.prototype, {
-		editConfig : {},
 		edit : function(){
 			var self = this;
+			if(this.editMode) return;
 
-			try {
-				// 1. check edit auth
-				if(!this.getEditAuth()) return;
-				// 2. tool class extend
-				this.editMode = new Edit(this);
-				// 3. class add to el for edit mode look css
-				this.$el.addClass('edit');
-				// 4. hide unnecessary Dom
-				this.$('.uneditable').hide();
-				// 5. input area insert & save those to object collection
-				// this.editMode.createInputFields(this.$('.editable'));
-				Object.keys(this.components).forEach(function(key){
-					self.components[key].edit();
+			this.editMode = true;
+			this.$el.addClass('edit');
+			if(this.editFields){
+				this._editFields = [];
+				this.editFields.forEach(function(selector){
+					self.addEditField(self.el.querySelector(selector));
 				});
-				// 6. event change for edit mode
-				this.editMode.eventShift(self.editConfig.event);
 			}
-			catch(err){
-				console.log(err);
-			}
+			this.components && Object.keys(this.components).forEach(function(key){
+				self.components[key].edit();
+			});
+			this.setEditModeEvents();
 		},
 		read : function(){
 			var self = this;
 
-			try {
-				// 1. check current view mode
-				if(!this.editMode){
-					return;
-				}
-				// 2. remove 'edit' class 
-				this.$el.removeClass('edit');
-				// 3. show hided dom
-				this.$('.uneditable').show();
-				// 4. remove input area & saved object collection
-				this.editMode.deleteInputFields();
-				Object.keys(this.components).forEach(function(key){
-					self.components[key].read();
-				});
-				// 5. event rollback
-				this.editMode.eventRollback();
-				// 6. destroy edit mode object
-				delete this.editMode;
-			}
-			catch(err){
-				console.log(err);
-			}
+			if(!this.editMode) return;
+			this.editMode = null;
+			this.$el.removeClass('edit');
+			this._editFields && this._editFields.forEach(function(field){
+				field.destroy();
+			});
+			this.components && Object.keys(this.components).forEach(function(key){
+				self.components[key].read();
+			});
+			this.setDefaultEvents();
 		},
 		updateCover : function(){
 			if(this.model.get('cover')){
@@ -347,17 +304,59 @@ define([
 			.find('.cover').remove().end()
 			.find('.edit-tool[data-edit="cover"]').children().hide().end()
 			.children('.upload').show();
+		},
+		test : function(){
+			console.log('test arg = ');
+			console.log(arguments);
 		}
 	});
-	
-	Controller.extend = Backbone.Model.extend;
-	Backbone.Controller = Controller;
-	Backbone.pubsub = _.extend({}, Backbone.Events);
+	_.extend(Component.prototype, {
+		read : function(){
+			if(!this.editFields) return;
+			this.editFields.forEach(function(field){
+				field.destroy();
+			});
+			delete this.editFields;
+		},
+		edit : function(){
+			var self = this;
 
-	// override backbone model, collection to parse's
-	Backbone.Model = Parse.Object;
+			if(this.editFields) return;
+			this.editFields = [];
+			[].forEach.call(this.$('.editable'), function(dom){
+				self.addEditField(dom);
+			});
+		},
+		editOption : {
+			debug: false,
+			stay : false,
+			list : ['bold', 'italic']
+		},
+		addEditField : function(dom){
+			var self = this,
+				field = new Pen(
+					_.defaults({
+						editor : dom,
+					}, this.editOption)
+				);
+			if(dom.id) field.id = dom.dataset.id;
+			this.editFields.push(field);
+		},
+		test : function(){
+			console.log('test arg = ');
+			console.log(arguments);
+		}
+	});
+
+	Controller.extend   = Backbone.Model.extend;
+	Backbone.Controller = Controller;
+	Backbone.pubsub     = _.extend({}, Backbone.Events);
+	Backbone.Model      = Parse.Object;
 	Backbone.Collection = Parse.Collection;
-	Backbone.Query = Parse.Query;
+	Backbone.Query      = Parse.Query;
+	Backbone.File       = Parse.File;
+	Backbone.Page       = Page;
+	Backbone.Component  = Component;
 
 	return Backbone;
 });
