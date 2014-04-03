@@ -23,13 +23,6 @@
 			text-align: center;
 			width: 100%;
 			background: #fff;
-			&.on {
-				.timeline-wrapper {
-					.edit-tool {
-						display: inline-block !important;
-					}
-				}
-			}
 			.container:first-child {
 				.box-shadow(0 32px 32px -32px rgba(0, 0, 0, 0.15));
 				text-align: left;
@@ -524,6 +517,15 @@
 		display: none;
 	}
 	.contents {
+		.player {
+			&.on {
+				.timeline-wrapper {
+					.edit-tool {
+						display: inline-block;
+					}
+				}
+			}
+		}
 		.timeline-contents {
 			.container {
 				.scripts {
