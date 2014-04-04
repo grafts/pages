@@ -38,16 +38,15 @@ define([
 		initialize : function(){
 
 			var self = this;
+			
+			this.util = new UtilsController();
 
 			_.bindAll(this);
-
-			(new UtilsController).run();
 
 			require(['font!custom,families:[NanumBarunGothic, Nanum Myeongjo],urls:[/styles/fonts/NanumBarunGothic.css, //fonts.googleapis.com/earlyaccess/nanummyeongjo.css]'], function(){
 				$('.serif').css('font-family', 'Nanum Myeongjo');
 				$('.sans-serif').css('font-family', 'NanumBarunGothic');
 			});
-
 		},
 
 		_router : function(resource, id, action){
@@ -76,13 +75,37 @@ define([
 				pausedController.pause(resourceChanged, id);
 			}
 
-			this.controllers[resource].run(param)
-			.then(null, function(err){
-				console.log(err);
+			this.auth().then(function(user){
+				self.util.run(user);
+				return self.controllers[resource].run(param);
 			})
 			.then(function(currentView){
 				pausedController && pausedController.stop(resourceChanged);
 				self.current = resource;
+			});
+		},
+		auth : function(){
+			var result = Backbone.Auth.parseHash(location.hash);
+			location.hash = '';
+
+			return new Promise(function(resolve, reject){
+				var user = Parse.User.current();
+				if(user){
+					resolve(user);
+				}
+				else if(result){
+					Backbone.Auth.getProfile(result.id_token, function (err, profile) {
+						// store result.id_token and profile in local storage or cookie
+						Parse.User.become(profile.parse_session_token).then(function(user) {
+							resolve(user);
+						})
+						.then(null, function (err) {
+							reject(err);
+						});
+					});
+				} else {
+					resolve();
+				}
 			});
 		}
 	});

@@ -67,6 +67,8 @@ require.config({
 		pen                : '../scripts/vendor/pen/pen',
 		youtube            : '../scripts/vendor/youtube',
 		parseBase          : '../scripts/vendor/parse-1.2.16',
-		parse              : '../scripts/vendor/parse'
+		parse              : '../scripts/vendor/parse',
+
+		auth               : '../scripts/vendor/auth'
 	}
 });

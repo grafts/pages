@@ -3,21 +3,34 @@
 define([
 	'jquery',
 	'underscore',
-	'backbone'
-], function ($, _, Backbone) {
+	'backbone',
+
+	'models/video',
+	'models/class'
+], function ($, _, Backbone, Video, Class) {
 	'use strict';
 
 	var GNB = Backbone.View.extend({
 		el: '.header',
+		template : JST['app/scripts/templates/gnb.hbs'],
 		events: {
 			// 'click a' : 'link',
 			'click .logo' : 'toggle',
-			"submit form" : "submit"
+			"submit form" : "submit",
+			'click .create' : 'create'
 		},
 		initialize: function(id){
 		},
-		render: function(){
+		render: function(user){
 			console.log('gnb view render');
+				
+			if(this.currentUser != user){
+				this.currentUser = user;
+				this.$el.html(this.template({
+					user : this.currentUser.toJSON()
+				}));
+			}
+
 			return this.$el;
 		},
 		unrender: function(){
@@ -52,6 +65,7 @@ define([
 		},
 		toggle : function(e){
 			e.preventDefault();
+			e.stopPropagation();
 			if(Backbone.history.fragment == '' || Backbone.history.fragment.split('/')[0] == 'search'){
 				return;
 			}
@@ -60,6 +74,21 @@ define([
 			} else {
 				this._on();
 			}
+		},
+		create : function(e){
+			e.preventDefault();
+			var self  = this,
+				user  = Backbone.User.current(),
+				attr  = e.currentTarget.dataset.attr,
+				Model = attr == 'video' ? Video : Class,
+				model = new Model({
+					author : user
+				});
+
+			model.save().then(function(model){
+				self._off();
+				Backbone.history.navigate('/'+attr+'/' + model.id + '/update', { trigger : true });
+			});
 		},
 		link : function(e){
 			e.preventDefault();

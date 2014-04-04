@@ -1,16 +1,16 @@
 <div class="head">
 	<div class="tool">
-		<a class="tool-edit" href="/user/{{id}}/update">
-			<i class="icon-cog"></i>
-		</a>
+		<a class="button tool-edit" href="/user/{{id}}/update">Edit</a>
 	</div>
 
 	<div class="headline sans-serif">
 		<div class="container">
 			<div class="avatar">
+				{{#if avatar.url}}
 				<img class="avatar-image" src="{{avatar.url}}" alt="avatar">
+				{{/if}}
 			</div>
-			<h1 class="name title">{{name}}</h1>
+			<h1 class="name title">{{username}}</h1>
 			<span class="description subtitle">{{description}}</span>
 		</div>
 	</div>

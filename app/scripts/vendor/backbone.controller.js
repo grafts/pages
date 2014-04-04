@@ -4,8 +4,9 @@ define([
 	'backboneBase',
 	'parse',
 	'loading',
-	'pen'
-], function ($, _, Backbone, Parse, Loading, Pen) {
+	'pen',
+	'auth'
+], function ($, _, Backbone, Parse, Loading, Pen, Auth) {
 	'use strict';
 
 	var Controller = function(){
@@ -348,6 +349,13 @@ define([
 		}
 	});
 
+	var auth = new Auth({
+			domain                 : 'minwoo.auth0.com',
+			clientID               : 'X6ALJOYKU8roZ7AOjk7UurFd981foDqQ', 
+			callbackURL            : location.origin + '/highlight' || (window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + '/highlight'),
+			callbackOnLocationHash : true
+		});
+
 	Controller.extend   = Backbone.Model.extend;
 	Backbone.Controller = Controller;
 	Backbone.pubsub     = _.extend({}, Backbone.Events);
@@ -357,6 +365,8 @@ define([
 	Backbone.File       = Parse.File;
 	Backbone.Page       = Page;
 	Backbone.Component  = Component;
+	Backbone.User       = Parse.User;
+	Backbone.Auth       = auth;
 
 	return Backbone;
 });

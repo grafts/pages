@@ -1,0 +1,76 @@
+<div class="container">
+	<a class="logo" href="/">
+		<!-- Grafts -->
+		<img src="/images/logo.png" alt="logo">
+		<div class="hamburger"></div>
+	</a>
+
+	<ul class="menu">
+		<li>
+			<a href="/">
+				<i class="icon-home"></i>
+				<span>Home</span>
+			</a>
+		</li>
+		<li>
+			<i class="icon-search"></i>
+			<form name="search" action="/search" method="GET">
+				<input type="text" placeholder="Search"/ name="q">
+			</form>
+		</li>
+
+		{{#if user}}
+			<li>
+				<a href="/user/{{#if user}}{{user.objectId}}{{else}}1{{/if}}">
+					<img src="/images/avatar.jpg" alt="avatar">
+					<span>{{user.username}}</span>
+				</a>
+			</li>
+		{{else}}
+			<li>
+				<a href="/user/1">
+					<img src="/images/avatar.jpg" alt="avatar">
+					<span>아만다 사이프리드</span>
+				</a>
+			</li>
+		{{/if}}
+ 		<li>
+			<a href="/" class="create" data-attr="class">
+				<i class="icon-desktop"></i>
+				<span>New Class</span>
+			</a>
+		</li>
+		<li>
+			<a href="/" class="create" data-attr="video">
+				<i class="icon-videocam"></i>
+				<span>New Video</span>
+			</a>
+		</li>
+
+			<li>
+			<a href="/class/1">
+				<i class="icon-export"></i>
+				<span>My Classes</span>
+			</a>
+		</li>
+			<li>
+			<a href="/lesson/1">
+				<i class="icon-export"></i>
+				<span>Registered Lessons</span>
+			</a>
+		</li>
+
+			<li>
+			<a href="/video/1">
+				<i class="icon-export"></i>
+				<span>My Videos</span>
+			</a>
+		</li>
+		<li>
+			<a href="/">
+				<i class="icon-logout"></i>
+				<span>Logout</span>
+			</a>
+		</li>
+	</ul>
+</div>

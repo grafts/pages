@@ -12,6 +12,8 @@ define([
 	var UtilsController = Backbone.Controller.extend({
 		el : '.header',
 		initialize : function(){
+			var self = this;
+
 			this.scrollWatch = function(){
 				$(window).scroll(function(e){
 					Backbone.pubsub.trigger('scroll');
@@ -35,11 +37,9 @@ define([
 					}
 				}
 			}
-		},
-		run : function(){
-
-			var gnb = new GNB;
-			gnb.render();
+			
+			this.gnb = new GNB;
+			this.gnb.render();
 
 			this.scrollWatch();
 			this.resizeWatch();
@@ -50,6 +50,9 @@ define([
 			function toggleView(){
 				$('.screen').toggleClass('scrollable').toggleClass('off');
 			}
+		},
+		run : function(user){
+			this.gnb.render(user);
 		},
 		stop : function(){
 
