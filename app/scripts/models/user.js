@@ -9,8 +9,9 @@ define([
 	// for prototype, dummy data input
 	var dummy = {
 			id          : 1,
-			name        : '아만다 사이프리드',
-			description : '펜실베니아 갱킹의 제왕. 리신 정글 하드캐리합니다',
+			name        : 'Amanda Michelle Seyfried',
+			username    : 'Amanda Michelle Seyfried',
+			description : 'Lord of pennsylvanian ganking. Hard carring with junggle Lee Sin',
 			thumb       : {
 				_url    : '/images/avatar.jpg',
 			},

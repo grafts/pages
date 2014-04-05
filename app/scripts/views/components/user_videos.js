@@ -14,19 +14,19 @@ define([
 			'click a' : 'link'
 		},
 		initialize : function(data){
-			this.userId    = data.userId;
+			this.user       = data.user;
 			this.collection = data.contents;
 			this.listenTo(this.collection, 'sync', this.updateDom);
 			this.listenTo(this.collection, 'change', this.updateDom);
-			Backbone.pubsub.on('userVideoAdd:' + this.userId, this.add, this);
 		},
 		render : function(id){
 			this.delegateEvents();
 			return this.$el;
 		},
 		updateDom : function(){
-			var self = this,
+			var self   = this,
 				videos = this.collection.JSON(),
+				user   = this.user.toJSON(),
 				published, drafts;
 
 
@@ -46,7 +46,10 @@ define([
 
 			this.empty();
 			this.$el
-			.append(self.template(videos));
+			.append(self.template({
+				videos : videos,
+				user   : user
+			}));
 		},
 		empty : function(){
 			this.$el.empty();
@@ -63,7 +66,7 @@ define([
 			this.collection.add(model);
 		},
 		getEditAuth : function(){
-			if(this.userId == Backbone.User.current().id){
+			if(this.user == Backbone.User.current()){
 				return true;
 			}
 			else {

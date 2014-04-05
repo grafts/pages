@@ -1,11 +1,11 @@
-{{#if drafts}}
+{{#if videos.drafts}}
 <div class="grid-r">
 	<div class="grid-c-7-10">
 		<div class="wrapper">
 			<hr/>
 			<h4>Published Videos</h4>
 			<ul class="published list">
-				{{#each published}}
+				{{#each videos.published}}
 				<li>
 					<a href="/video/{{this.objectId}}">
 						<span>
@@ -23,7 +23,7 @@
 			<hr/>
 			<h4>Drafts</h4>
 			<ul class="drafts list">
-				{{#each drafts}}
+				{{#each videos.drafts}}
 				<li>
 					<a href="/video/{{this.objectId}}">
 						<span>
@@ -37,21 +37,29 @@
 	</div>
 </div>
 {{else}}
-<hr/>
-<h4>Videos</h4>
-<ul class="published list">
-	{{#each published}}
-	<li>
-		<a href="/video/{{this.objectId}}">
-{{!-- 			<div class="thumb">
-				<img class="thumb" src="http://img.youtube.com/vi/{{this.objectId}}/1.jpg" alt="class_cover">
-			</div>
- --}}			<span>
-				<p class="title">{{this.title}}</p>
-				<p class="subtitle">{{this.subtitle}}</p>
-			</span>
-		</a>
-	</li>
-	{{/each}}
-</ul>
+	{{#if videos.published}}
+	<hr/>
+	<h4>Videos</h4>
+	<ul class="published list">
+		{{#each videos.published}}
+		<li>
+			<a href="/video/{{this.objectId}}">
+	{{!-- 			<div class="thumb">
+					<img class="thumb" src="http://img.youtube.com/vi/{{this.objectId}}/1.jpg" alt="class_cover">
+				</div>
+	 --}}			
+				<span>
+					<p class="title">{{this.title}}</p>
+					<p class="subtitle">{{this.subtitle}}</p>
+				</span>
+			</a>
+		</li>
+		{{/each}}
+	</ul>
+	{{else}}
+	<div class="notice">
+		<p>{{user.username}} has no videos.</p>
+		<p>See discoveries from another prometheus.</p>
+	</div>
+	{{/if}}
 {{/if}}

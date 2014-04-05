@@ -15,27 +15,40 @@ define([
 		template : JST['app/scripts/templates/gnb.hbs'],
 		events: {
 			// 'click a' : 'link',
-			'click .logo' : 'toggle',
-			"submit form" : "submit",
-			'click .create' : 'create'
+			'click .logo'   : 'toggle',
+			"submit form"   : "submit",
+			'click .create' : 'create',
+			'click .signin'  : 'signin'
 		},
 		initialize: function(id){
 		},
 		render: function(user){
 			console.log('gnb view render');
-				
-			if(this.currentUser != user){
-				this.currentUser = user;
-				this.$el.html(this.template({
-					user : this.currentUser.toJSON()
-				}));
+			var data;
+
+			if(!user && !this.currentUser){
 			}
+			else if(this.currentUser != user){
+				this.currentUser = user;
+				data = this.currentUser.toJSON();
+			}
+			else {
+				data = this.currentUser.toJSON();
+			}
+			this.$el.html(this.template({
+				user : data
+			}));
 
 			return this.$el;
 		},
 		unrender: function(){
 			this.undelegateEvents();
 			this.$el.hide();
+		},
+		signin : function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			Backbone.Auth.siginin();
 		},
 		_on : function(){
 			var bg,

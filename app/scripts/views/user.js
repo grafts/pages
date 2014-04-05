@@ -61,8 +61,8 @@ define([
 
 					this.components[resource] = new Components[resource]({
 						id       : 'user_' + self.model.id + '_' + resource,
-						userId  : self.model.id,
-						contents : self.videos
+						contents : self.videos,
+						user     : self.model
 					});
 
 					this.$('.'+resource+'-wrapper').append(this.components[resource].render());
