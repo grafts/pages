@@ -34,6 +34,8 @@
 @author_font_size: 1em;
 @default_font_size: 1em;
 @small_font_size: 0.9em;
+@list_title_font_size: 1.8em;
+@list_subtitle_font_size: 1.3em;
 @sans_serif: 'HelveticaNeue', 'NanumBarunGothic', 'PT sans', sans-serif;
 @serif: 'FF Meta Serif Web Pro', 'Nanum Myeongjo', serif;
 
@@ -157,3 +159,53 @@
 @import "lessStyles/keyframes.less";
 
 
+.user-item {
+	.contents {
+		.videos-wrapper {
+			margin-bottom: 60px;
+			.grid-c-7-10 {
+				.wrapper {
+					padding-right: 3em;
+				}
+			}
+			ul.list {
+				list-style: disc;
+				list-style-position: inside;
+				li {
+					padding-bottom: 12px;
+					&:hover {
+						.title {
+							color: @point_color;
+						}
+					}
+					span {
+						display: block;
+						vertical-align: top;
+						.title {
+							font-size: @list_title_font_size;
+							font-weight: bold;
+							width: 100%;
+							overflow: hidden;
+							margin-left: -0.5em;
+							padding-top: 8px;
+							.ellipsis();
+							.transition_all();
+						}
+						.subtitle {
+							font-size: @list_subtitle_font_size;
+						}
+					}
+				}
+			}
+			ul.list.drafts {
+				li {
+					span {
+						.title {
+							font-size: @list_subtitle_font_size;
+						}
+					}
+				}
+			}
+		}
+	}
+}
