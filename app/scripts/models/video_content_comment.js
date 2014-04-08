@@ -11,6 +11,6 @@ define([
 			json.author = author;
 
 			return json;
-		},
+		}
 	});
 });

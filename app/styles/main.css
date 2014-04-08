@@ -4312,15 +4312,12 @@ img {
 }
 .user-item .contents .videos-wrapper ul.list li {
   padding-bottom: 12px;
+  font-family: 'HelveticaNeue', 'NanumBarunGothic', 'PT sans', sans-serif;
 }
 .user-item .contents .videos-wrapper ul.list li:hover .title {
   color: #ed1207;
 }
-.user-item .contents .videos-wrapper ul.list li span {
-  display: block;
-  vertical-align: top;
-}
-.user-item .contents .videos-wrapper ul.list li span .title {
+.user-item .contents .videos-wrapper ul.list li .title {
   font-size: 1.8em;
   font-weight: bold;
   width: 100%;
@@ -4336,7 +4333,7 @@ img {
   -o-transition: all 0.25s ease-out;
   transition: all 0.25s ease-out;
 }
-.user-item .contents .videos-wrapper ul.list li span .subtitle {
+.user-item .contents .videos-wrapper ul.list li .subtitle {
   font-size: 1.3em;
 }
 .user-item .contents .videos-wrapper ul.list.drafts li span .title {

@@ -8,10 +8,8 @@
 				{{#each videos.published}}
 				<li>
 					<a href="/video/{{this.objectId}}">
-						<span>
-							<p class="title">{{this.title}}</p>
-							<p class="subtitle">{{this.subtitle}}</p>
-						</span>
+						<p class="title">{{this.title}}</p>
+						<p class="subtitle">{{this.subtitle}}</p>
 					</a>
 				</li>
 				{{/each}}
@@ -26,9 +24,7 @@
 				{{#each videos.drafts}}
 				<li>
 					<a href="/video/{{this.objectId}}">
-						<span>
-							<p class="title">{{this.title}}</p>
-						</span>
+						<p class="title">{{this.title}}</p>
 					</a>
 				</li>
 				{{/each}}
@@ -44,14 +40,8 @@
 		{{#each videos.published}}
 		<li>
 			<a href="/video/{{this.objectId}}">
-	{{!-- 			<div class="thumb">
-					<img class="thumb" src="http://img.youtube.com/vi/{{this.objectId}}/1.jpg" alt="class_cover">
-				</div>
-	 --}}			
-				<span>
-					<p class="title">{{this.title}}</p>
-					<p class="subtitle">{{this.subtitle}}</p>
-				</span>
+				<p class="title">{{this.title}}</p>
+				<p class="subtitle">{{this.subtitle}}</p>
 			</a>
 		</li>
 		{{/each}}
@@ -59,7 +49,7 @@
 	{{else}}
 	<div class="notice">
 		<p>{{user.username}} has no videos.</p>
-		<p>See discoveries from another prometheus.</p>
+		<p>See <a href="/discoveries">discoveries</a> from another prometheus.</p>
 	</div>
 	{{/if}}
 {{/if}}

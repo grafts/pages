@@ -73,9 +73,9 @@ define([
 
 			return Parse.Object.destroyAll(contents.concat(comments), option);
 		},
-		insertDummyData : function(){
-			var _id = 1000,
-				id  = function(){
+		insertDummyData : function(id){
+			var _id    = id * 1000,
+				newId  = function(){
 					return (_id++) + '';
 				},
 				User = Backbone.Model.extend({ className : 'User' }),
@@ -89,8 +89,8 @@ define([
 					}
 				}),
 				dummy = {
-					id         : "1",
-					objectId   : "1",
+					id         : id+'' || "1",
+					objectId   : id+'' || "1",
 					title      : '리신공략, 각 라인별 일반적인 갱킹방법',
 					subtitle   : '갱킹이 리신이며 리신이 갱킹이다!',
 					createdAt  : "2014-02-23T17:53:00.272Z",
@@ -102,8 +102,8 @@ define([
 						_url       : "/images/cover_background.png" 
 					},
 					videoInfo  : {
-						id         : '48auKg6es8E',
-						duration   : 3051,
+						id         : 'CNjwJ1OSpE8',
+						duration   : 3051
 					},
 					contents   : [],
 					view       : 123123,
@@ -121,6 +121,15 @@ define([
 					//
 					//
 				},
+				dummyTitle = [
+					{ title : '리신공략, 각 라인별 일반적인 갱킹방법', subtitle : '갱킹이 리신이며 리신이 갱킹이다!' },
+					{ title : 'Basic Mechanics Leaguecraft', subtitle : 'Traiding, Lane Positioning, Type of Traiding, Last Hitting' },
+					{ title : 'Venture Beyond Gold ADC Leaguecraft', subtitle : 'In Diamond, Everyone knows how to play' },
+					{ title : 'UNSW LoLSoc Event Recap: OWeek 2014', subtitle : '' },
+					{ title : 'LoL MASTERS 2014 Masters vs AllStars Game', subtitle : '' },
+					{ title : 'TSM Bjergsen - Zed vs Scarra Syndra (Challenger)', subtitle : 'Poor Scarra...﻿' },
+					{ title : 'Orianna Dictionary', subtitle : 'Orianna Reveck, the Lady of Clockwork' }
+				],
 				dummyContent = { 
 					time : 100, script : '룬 설정 방법', comments : []
 				},
@@ -143,17 +152,19 @@ define([
 					{ author : dUser, comment : '님 동영상보구 감탄함 ㅋㅋ 녹턴 빠돌이 됨 ㅋㅋ', updatedAt : "2014-02-23T17:53:02.047Z"}
 				];
 
+			_.assign(dummy, dummyTitle[parseInt(Math.random(dummyTitle.length)*dummyTitle.length)]);
+
 			this.set(dummy);
 
 			for(var i=100, time=dummy.videoInfo.duration; i<time; i+=parseInt(Math.random(10)/1*200+1)){
 				(function(t){
 					var c = new Content(dummyContent), cmmnts = [], cmmnt;
-					c.id = id();
+					c.id = newId();
 					c.set('time', t);
 					c.set('script', dummyContentTitle[parseInt(Math.random(dummyContentTitle.length+1)*10)]);
 					for(var j=0; j<10;j+=parseInt(Math.random(10)*10)){
-						cmmnt = new Comment(dummyContentComments[parseInt(Math.random(dummyContentComments.length)*10)]);
-						cmmnt.id = id();
+						cmmnt = new Comment(dummyContentComments[parseInt(Math.random(dummyContentComments.length)*dummyContentComments.length)]);
+						cmmnt.id = newId();
 						cmmnts.push(cmmnt);
 					}
 					c.set('comments', cmmnts)

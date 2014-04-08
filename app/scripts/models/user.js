@@ -13,10 +13,10 @@ define([
 			username    : 'Amanda Michelle Seyfried',
 			description : 'Lord of pennsylvanian ganking. Hard carring with junggle Lee Sin',
 			thumb       : {
-				_url    : '/images/avatar.jpg',
+				_url    : '/images/avatar.jpg'
 			},
 			avatar      : {
-				url    : '/images/avatar_big.jpg',
+				url    : '/images/avatar_big.jpg'
 			},
 			cover       : {
 				_url    : '/images/cover_background.png'

@@ -29,7 +29,7 @@ define([
 				src : "/images/cover_background.png" 
 			},
 			video : {
-				id : '48auKg6es8E',
+				id : '48auKg6es8E'
 			},
 			duration : 3051,
 			contents : [

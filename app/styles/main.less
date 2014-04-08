@@ -173,27 +173,24 @@
 				list-style-position: inside;
 				li {
 					padding-bottom: 12px;
+					font-family: @sans_serif;
 					&:hover {
 						.title {
 							color: @point_color;
 						}
 					}
-					span {
-						display: block;
-						vertical-align: top;
-						.title {
-							font-size: @list_title_font_size;
-							font-weight: bold;
-							width: 100%;
-							overflow: hidden;
-							margin-left: -0.5em;
-							padding-top: 8px;
-							.ellipsis();
-							.transition_all();
-						}
-						.subtitle {
-							font-size: @list_subtitle_font_size;
-						}
+					.title {
+						font-size: @list_title_font_size;
+						font-weight: bold;
+						width: 100%;
+						overflow: hidden;
+						margin-left: -0.5em;
+						padding-top: 8px;
+						.ellipsis();
+						.transition_all();
+					}
+					.subtitle {
+						font-size: @list_subtitle_font_size;
 					}
 				}
 			}

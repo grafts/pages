@@ -9,7 +9,8 @@ define([
 
 	var View = Backbone.Page.extend({
 		events: {
-			'click a' : 'link'
+			// 'click a' : 'link',
+			'click .signin' : 'signin'
 		},
 		initialize: function(id){
 		},
@@ -34,6 +35,11 @@ define([
 
 			video.css('margin-left', -marginLeft + 'px');
 		}, 200),
+		signin : function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			Backbone.Auth.signin();
+		},
 		link : function(e){
 			e.preventDefault();
 			e.stopPropagation();

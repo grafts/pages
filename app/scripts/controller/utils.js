@@ -37,6 +37,8 @@ define([
 					}
 				}
 			}
+			this.token = Backbone.Auth.parseHash(location.hash);
+			location.hash = '';
 			
 			this.gnb = new GNB;
 			this.gnb.render();
@@ -52,10 +54,35 @@ define([
 			}
 		},
 		run : function(user){
-			this.gnb.render(user);
+
 		},
 		stop : function(){
 
+		},
+		auth : function(){
+			var self = this;
+
+			return new Promise(function(resolve, reject){
+				var user = Backbone.User.current();
+				if(user){
+					self.gnb.render(user);
+					resolve(user);
+				}
+				else if(self.token){
+					Backbone.Auth.getProfile(self.token.id_token, function (err, profile) {
+						// store result.id_token and profile in local storage or cookie
+						Backbone.User.become(profile.parse_session_token).then(function(user) {
+							self.gnb.render(user);
+							resolve(user);
+						})
+						.then(null, function (err) {
+							reject(err);
+						});
+					});
+				} else {
+					resolve(null);
+				}
+			});
 		}
 	});
 

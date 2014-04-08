@@ -17,7 +17,7 @@ define([
 		el          : 'section.video_a',
 		model       : Video,
 		collections : Videos,
-		view        : VideoView,
+		view        : VideoView
 	});
 
 	return Controller;

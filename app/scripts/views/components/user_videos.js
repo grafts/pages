@@ -7,7 +7,7 @@ define([
 	'templates',
 	'collections/video'
 ], function ($, _, Backbone, JST, Collection) {
-	var View = Backbone.View.extend({
+	var View = Backbone.Component.extend({
 		tagName : 'div',
 		template : JST['app/scripts/templates/user_videos.hbs'],
 		events : {
@@ -16,6 +16,7 @@ define([
 		initialize : function(data){
 			this.user       = data.user;
 			this.collection = data.contents;
+			this.updateDom();
 			this.listenTo(this.collection, 'sync', this.updateDom);
 			this.listenTo(this.collection, 'change', this.updateDom);
 		},
@@ -44,9 +45,7 @@ define([
 				videos.drafts = drafts;
 			}
 
-			this.empty();
-			this.$el
-			.append(self.template({
+			this.$el.html(self.template({
 				videos : videos,
 				user   : user
 			}));
@@ -66,7 +65,8 @@ define([
 			this.collection.add(model);
 		},
 		getEditAuth : function(){
-			if(this.user == Backbone.User.current()){
+			var currentUser = Backbone.User.current();
+			if(currentUser && this.user.id == currentUser.id){
 				return true;
 			}
 			else {

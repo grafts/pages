@@ -18,7 +18,8 @@ define([
 			'click .logo'   : 'toggle',
 			"submit form"   : "submit",
 			'click .create' : 'create',
-			'click .signin'  : 'signin'
+			'click .signin' : 'signin',
+			'click .logout' : 'logout'
 		},
 		initialize: function(id){
 		},
@@ -48,7 +49,12 @@ define([
 		signin : function(e){
 			e.preventDefault();
 			e.stopPropagation();
-			Backbone.Auth.siginin();
+			Backbone.Auth.signin();
+		},
+		logout : function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			Backbone.User.logOut();
 		},
 		_on : function(){
 			var bg,

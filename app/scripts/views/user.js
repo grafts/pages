@@ -18,16 +18,14 @@ define([
 		events: {
 			'click a' : 'link'
 		},
-		initialize: function(id){
-			// id && (this.id = id);
+		initialize: function(){
+			_.bindAll(this);
 			this.el.setAttribute('class', 'user-item');
 			this.$el.append(this.template(this.model.toJSON()));
-			this.addCover(this.$('.head'), this.model.get('cover'));
-			this.videos = new Videos({ author : this.model });
-			this.listenTo(this.videos, 'sync', this.fetchVideo);
-			this.videos.fetch();
+			this.addCover();
+			// this.videos = new Videos({ author : this.model });
+			// this.videos.fetch();
 			this.addComponents();
-
 		},
 		render: function(){
 			console.log('user view render');
@@ -44,9 +42,6 @@ define([
 			e.stopPropagation();
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		},
-		fetchVideo : function(){
-			console.log(this.videos);
-		},
 		addComponents : function(){
 			var self = this,
 				_add = function(resource){
@@ -61,7 +56,7 @@ define([
 
 					this.components[resource] = new Components[resource]({
 						id       : 'user_' + self.model.id + '_' + resource,
-						contents : self.videos,
+						contents : self.attributes.videos,
 						user     : self.model
 					});
 

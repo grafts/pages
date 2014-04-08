@@ -62,19 +62,22 @@ define([
 			});
 
 		},
-		createView : function(param){
+		createDummyView : function(id){
+			var self = this;
+			return new self.view({
+				model : (new self.model()).insertDummyData(),
+				id    : self.$el.attr('class') + '_dummy_' + id
+			});
+		},
+		pull : function(id){
 			var self = this,
-				_pull = function(id){
-					var query = new Backbone.Query(self.model);
-					query.include(self.options.query.include);
-					return query.get(id);
-				},
-				_createDummyView = function(id){
-					return new self.view({
-						model : (new self.model()).insertDummyData(),
-						id    : self.$el.attr('class') + '_dummy_' + id
-					});
-				};
+				query = new Backbone.Query(self.model);
+
+			query.include(self.options.query.include);
+			return query.get(id);
+		},
+		createView : function(param){
+			var self = this;
 
 			return new Promise(function(resolve, reject){
 				var view;
@@ -88,19 +91,28 @@ define([
 					}
 					
 					if(param.id == '1' || param.id == 'dummy'){
-						view = _createDummyView(param.id);
+						view = self.createDummyView(param.id);
 						self.$el.append(view.render());
 						setTimeout(function(){
 							resolve(view);
 						}, 1000);
 					}
 					else {
-						_pull(param.id).then(function(model){
+						self.pull(param.id).then(function(data){
+							var model, attr;
+							if(data.id == param.id){
+								model = data;
+							}
+							else {
+								model = data.model;
+								attr  = data.attributes;
+							}
 							model._silent = {};
 							model.changed = {};
 							view = new self.view({
-								model : model,
-								id    : self.$el.attr('class') + '_' + param.id
+								model       : model,
+								id          : self.$el.attr('class') + '_' + param.id,
+								attributes  : attr
 							});
 							self.$el.append(view.render());
 							resolve(view);
@@ -169,7 +181,7 @@ define([
 			var self = this,
 				field = new Pen(
 					_.defaults({
-						editor : dom,
+						editor : dom
 					}, this.editOption)
 				);
 			field.id = dom.dataset.attr;
@@ -337,7 +349,7 @@ define([
 			var self = this,
 				field = new Pen(
 					_.defaults({
-						editor : dom,
+						editor : dom
 					}, this.editOption)
 				);
 			if(dom.id) field.id = dom.dataset.id;
@@ -352,7 +364,7 @@ define([
 	var auth = new Auth({
 			domain                 : 'minwoo.auth0.com',
 			clientID               : 'X6ALJOYKU8roZ7AOjk7UurFd981foDqQ', 
-			callbackURL            : location.origin + '/highlight' || (window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + '/highlight'),
+			callbackURL            : location.origin || (window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + '/highlight'),
 			callbackOnLocationHash : true
 		});
 

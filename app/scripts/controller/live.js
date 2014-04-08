@@ -15,7 +15,7 @@ define([
 	var Controller = Backbone.Controller.extend({
 		el          : 'section.live',
 		model       : Live,
-		view        : LiveView,
+		view        : LiveView
 	});
 
 	return Controller;
