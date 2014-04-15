@@ -206,3 +206,53 @@
 		}
 	}
 }
+
+.discoveries {
+	ul.video-list {
+		margin-bottom: 60px;
+		li.item {
+			font-family: @sans_serif;
+			border-top: 1px solid @line_color;
+			padding: 1.6em 0 3.2em 0;
+			&:first-child {
+				border-top: 0;
+			}
+			&:hover {
+				.title {
+					color: @point_color;
+				}
+			}
+			.title {
+				font-size: @list_title_font_size;
+				font-weight: bold;
+				width: 100%;
+				overflow: hidden;
+				padding: 0.5em 0;
+				.ellipsis();
+				.transition_all();
+			}
+			.subtitle {
+				font-size: @list_subtitle_font_size;
+			}
+			.author {
+				padding-top: 0.8em;
+				display: inline-block;
+				color: #6d6f72;
+				img {
+					display: inline-block;
+					height: 36px;
+					width: 36px;
+					margin-right: 4px;
+					.rounded-corners(18px);
+				}
+				span {
+					display: inline-block;
+					vertical-align: top;
+					font-size: @author_font_size;
+					line-height: 1em;
+					padding-top: 0.8em;
+				}
+			}
+		}
+	}
+}

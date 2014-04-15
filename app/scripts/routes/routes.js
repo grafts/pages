@@ -1,20 +1,20 @@
-define([
-	'jquery',
-	'underscore',
-	'backbone',
-	'controller/utils',
-	'controller/intro',
-	'controller/video',
-	'controller/video_a',
-	'controller/live',
-	'controller/user',
-	'controller/class',
-	'controller/lesson',
-	'controller/search',
-], function ($, _, Backbone, UtilsController, IntroController, VideoController, Video_aController, LiveController, UserController, ClassController, LessonController, SearchController) {
+define(function(require){
+	var $                     = require('jquery'),
+		_                     = require('underscore'),
+		Backbone              = require('backbone'),
+		UtilsController       = require('controller/utils'),
+		IntroController       = require('controller/intro'),
+		DiscoveriesController = require('views/discoveries'),
+		VideoController       = require('controller/video'),
+		Video_aController     = require('controller/video_a'),
+		LiveController        = require('controller/live'),
+		UserController        = require('controller/user'),
+		ClassController       = require('controller/class'),
+		LessonController      = require('controller/lesson'),
+		SearchController      = require('controller/search');
+
 
 	var Router          = Backbone.Router.extend({
-		
 		routes: {
 			
 			''                       : '_router',
@@ -25,14 +25,15 @@ define([
 		},
 
 		controllers : {
-			'intro'   : new IntroController(),
-			'video'   : new VideoController(),
-			'video_a' : new Video_aController(),
-			'live'    : new LiveController(),
-			'user'    : new UserController(),
-			'class'   : new ClassController(),
-			'lesson'  : new LessonController(),
-			'search'  : new SearchController()
+			intro       : new IntroController(),
+			video       : new VideoController(),
+			video_a     : new Video_aController(),
+			live        : new LiveController(),
+			user        : new UserController(),
+			class       : new ClassController(),
+			lesson      : new LessonController(),
+			search      : new SearchController(),
+			discoveries : new DiscoveriesController()
 		},
 
 		initialize : function(){
@@ -52,7 +53,7 @@ define([
 		_router : function(resource, id, action){
 			var self = this,
 				search = deParam(Backbone.history.location.search),
-				param = { 
+				param = {
 					id       : id,
 					resource : resource,
 					action   : action,
@@ -62,6 +63,10 @@ define([
 				pausedController;
 
 			if(!resource || resource == ""){
+				if(Backbone.User.current()){
+					Backbone.history.navigate('/discoveries', { trigger : true });
+					return;
+				}
 				resource = 'intro';
 			}
 

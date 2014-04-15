@@ -1,0 +1,24 @@
+<div class="discoveries-wrapper">
+	<div class="videos">
+		<div class="container">
+			<hr/>
+			<h4>Videos</h4>
+			<ul class="video-list">
+				{{#each this}}
+				<li class="item">
+					<a href="/video/{{this.objectId}}">
+						<p class="title">{{this.title}}</p>
+						<p class="subtitle">{{this.subtitle}}</p>
+					</a>
+					<a href="/user/{{this.author.objectId}}" class="author">
+						{{#if this.author.thumb.url}}
+						<img src="{{this.author.thumb.url}}" alt="avatar" class="avatar">
+						{{/if}}
+						<span class="name">{{this.author.username}}</span>
+					</a>
+				</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</div>

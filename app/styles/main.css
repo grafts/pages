@@ -4339,3 +4339,58 @@ img {
 .user-item .contents .videos-wrapper ul.list.drafts li span .title {
   font-size: 1.3em;
 }
+.discoveries ul.video-list {
+  margin-bottom: 60px;
+}
+.discoveries ul.video-list li.item {
+  font-family: 'HelveticaNeue', 'NanumBarunGothic', 'PT sans', sans-serif;
+  border-top: 1px solid #e7e7e7;
+  padding: 1.6em 0 3.2em 0;
+}
+.discoveries ul.video-list li.item:first-child {
+  border-top: 0;
+}
+.discoveries ul.video-list li.item:hover .title {
+  color: #ed1207;
+}
+.discoveries ul.video-list li.item .title {
+  font-size: 1.8em;
+  font-weight: bold;
+  width: 100%;
+  overflow: hidden;
+  padding: 0.5em 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  -webkit-transition: all 0.25s ease-out;
+  -moz-transition: all 0.25s ease-out;
+  -ms-transition: all 0.25s ease-out;
+  -o-transition: all 0.25s ease-out;
+  transition: all 0.25s ease-out;
+}
+.discoveries ul.video-list li.item .subtitle {
+  font-size: 1.3em;
+}
+.discoveries ul.video-list li.item .author {
+  padding-top: 0.8em;
+  display: inline-block;
+  color: #6d6f72;
+}
+.discoveries ul.video-list li.item .author img {
+  display: inline-block;
+  height: 36px;
+  width: 36px;
+  margin-right: 4px;
+  -webkit-border-radius: 18px;
+  -moz-border-radius: 18px;
+  -ms-border-radius: 18px;
+  -o-border-radius: 18px;
+  border-radius: 18px;
+}
+.discoveries ul.video-list li.item .author span {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 1em;
+  line-height: 1em;
+  padding-top: 0.8em;
+}
