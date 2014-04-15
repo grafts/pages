@@ -476,6 +476,25 @@ define([
 								console.log(err);
 							});
 						}
+					},
+					publish : {
+						article : function(){
+							self.model.save({
+								publish : true,
+								publishedAt : new Date()
+							}).then(function(err){
+								Backbone.history.navigate('/video/' + self.model.id, { trigger : true });
+							});
+						}
+					},
+					unpublish : {
+						article : function(){
+							self.model.save({
+								publish : false
+							}).then(function(err){
+								Backbone.history.navigate('/video/' + self.model.id, { trigger : true });
+							});
+						}
 					}
 				};
 

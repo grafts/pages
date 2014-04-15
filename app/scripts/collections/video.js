@@ -10,10 +10,14 @@ define([
 	var Collection = Backbone.Collection.extend({
 		model: Model,
 		initialize : function(data){
-			var query      = new Backbone.Query(Model);
+			var currentUser = Backbone.User.current(),
+				query       = new Backbone.Query(Model);
 
 			query.include(['author']);
 			if(data){
+				if(!currentUser || !data.author || currentUser.id != data.author.id){
+					data.publish = true;
+				}
 				Object.keys(data).forEach(function(key){
 					query.equalTo(key, data[key]);
 				});

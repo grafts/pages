@@ -17,11 +17,11 @@ define([
 			this.listenTo(this.videos, 'sync', this.render);
 		},
 		render : function(){
-			this.delegateEvents();
-			this.$el.show();
 			this.$el.html(this.template(this.videos.JSON()));
 		},
 		run : function(){
+			this.$el.show();
+			this.delegateEvents();
 			if(this.videos.length == 0){
 				this.videos.fetch();
 			}

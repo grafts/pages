@@ -4,7 +4,11 @@
 	</div>
 	<div class="tool edit-tool" data-edit="article">
 		<button class="button edit-tool-save">Save</button>
+		{{#if publish}}
+		<button class="button edit-tool-unpublish">Unpublish</button>
+		{{else}}
 		<button class="button edit-tool-publish">Publish</button>
+		{{/if}}
 		<button class="button edit-tool-delete">Delete</button>
 	</div>
 
@@ -24,8 +28,10 @@
 			</p>
 			<p class="subtitle editable" data-attr="subtitle">{{subtitle}}</p>
 			<a class="author uneditable" href="/user/{{author.objectId}}">
+				{{#if author.avatar.url}}
 				<img class="avatar" src="{{author.avatar.url}}" alt="avatar">
-				<span class="name">{{author.name}}</span>
+				{{/if}}
+				<span class="name">{{author.username}}</span>
 			</a>
 		</div>
 	</div>
@@ -62,17 +68,17 @@
 				<ul>
 					<li>
 						<a>
-							<i class="icon-gplus-squared"></i>
+							<i class="icon-google-plus-square"></i>
 						</a>
 					</li>
 					<li>
 						<a>
-							<i class="icon-facebook-squared"></i>
+							<i class="icon-facebook-square"></i>
 						</a>
 					</li>
 					<li>
 						<a>
-							<i class="icon-twitter"></i>
+							<i class="icon-twitter-square"></i>
 						</a>
 					</li>
 				</ul>

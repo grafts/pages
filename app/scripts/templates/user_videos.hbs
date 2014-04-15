@@ -4,9 +4,9 @@
 		<div class="wrapper">
 			<hr/>
 			<h4>Published Videos</h4>
-			<ul class="published list">
+			<ul class="published video-list">
 				{{#each videos.published}}
-				<li>
+				<li class="item">
 					<a href="/video/{{this.objectId}}">
 						<p class="title">{{this.title}}</p>
 						<p class="subtitle">{{this.subtitle}}</p>
@@ -20,9 +20,9 @@
 		<div class="wrapper">
 			<hr/>
 			<h4>Drafts</h4>
-			<ul class="drafts list">
+			<ul class="drafts video-list">
 				{{#each videos.drafts}}
-				<li>
+				<li class="item">
 					<a href="/video/{{this.objectId}}">
 						<p class="title">{{this.title}}</p>
 					</a>
@@ -36,9 +36,9 @@
 	{{#if videos.published}}
 	<hr/>
 	<h4>Videos</h4>
-	<ul class="published list">
+	<ul class="published video-list">
 		{{#each videos.published}}
-		<li>
+		<li class="item">
 			<a href="/video/{{this.objectId}}">
 				<p class="title">{{this.title}}</p>
 				<p class="subtitle">{{this.subtitle}}</p>

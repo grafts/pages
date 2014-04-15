@@ -82,21 +82,18 @@
 							z-index: 1000;
 							position: absolute;
 							top: -3px;
-							right: -11px;
+							right: -13px;
 							display: none;
 							button {
 								display: inline-block;
+								background: transparent;
 								z-index: 1001;
-								background: #fff;
-								width: @timeline_height + 8px;
-								height: @timeline_height + 8px;
-								border: 1px solid @point_color;
 								cursor: pointer;
 								text-align: center;
+								color: @point_color;
 								.rounded-corners(1em);
 								i {
 									color: @point_color;
-									margin-left: -0.15em;
 								}
 								&:hover {
 									.transform(scale(1.3));
@@ -326,25 +323,16 @@
 						.script-delete {
 							display: none;
 							position: absolute;
-							top: 2px;
+							top: 0;
 							right: 0;
 							button {
-								min-width: 20px;
-								padding: 4px;
-								background: @fill_color;
-								font-size: @small_font_size;
-								line-height: 1.1em;
-								color: #fff;
+								background-color: transparent;
+								font-size: 2em;
+								color: @fill_color;
 								cursor: pointer;
-								.rounded-corners();
-								.transition(background-color 400ms linear);
+								.transition(color 400ms linear);
 								&:hover {
-									background: @point_color;
-								}
-								i {
-									&:before {
-										width: auto;
-									}
+									color: @point_color;
 								}
 							}
 						}
@@ -522,6 +510,14 @@
 				.timeline-wrapper {
 					.edit-tool {
 						display: inline-block;
+					}
+				}
+			}
+			.pointers {
+				.pointer {
+					&:before {
+						top: 16px;
+						height: 12px;
 					}
 				}
 			}
