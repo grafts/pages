@@ -55,6 +55,7 @@ define([
 			e.preventDefault();
 			e.stopPropagation();
 			Backbone.User.logOut();
+			Backbone.Auth.logout();
 			window.location.href = '/discoveries';
 		},
 		_on : function(){

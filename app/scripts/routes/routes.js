@@ -62,18 +62,6 @@ define(function(require){
 				resourceChanged = (!!this.current && this.current != resource),
 				pausedController;
 
-			if(!resource || resource == ""){
-				if(Backbone.User.current()){
-					Backbone.history.navigate('/discoveries', { trigger : true });
-					return;
-				}
-				resource = 'intro';
-			}
-
-			if(!this.controllers[resource]){
-				console.log('wrong url');
-				return;
-			}
 
 			if(this.current){
 				pausedController = this.controllers[this.current];
@@ -81,6 +69,17 @@ define(function(require){
 			}
 
 			this.util.auth().then(function(user){
+				if(!resource || resource == ""){
+					if(user){
+						window.location.href = '/discoveries';
+						return;
+					}
+					resource = 'intro';
+				}
+				if(!self.controllers[resource]){
+					console.log('wrong url');
+					resource = 'notFound';
+				}
 				return self.controllers[resource].run(param);
 			})
 			.then(function(currentView){

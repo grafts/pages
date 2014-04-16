@@ -74,7 +74,7 @@ define([
 			return Parse.Object.destroyAll(contents.concat(comments), option);
 		},
 		insertDummyData : function(id){
-			var _id    = id * 1000,
+			var _id    = id||1 * 1000,
 				newId  = function(){
 					return (_id++) + '';
 				},
@@ -83,7 +83,8 @@ define([
 
 			var dUser = new User({
 					id         : "1",
-					name       : '아만다 사이프리드',
+					name       : 'Amanda Michelle Seyfried',
+					username   : 'Amanda Michelle Seyfried',
 					avatar     : {
 						url    : '/images/avatar.jpg'
 					}
