@@ -19,6 +19,7 @@ define([
 			this.updateDom();
 			this.listenTo(this.collection, 'sync', this.updateDom);
 			this.listenTo(this.collection, 'change', this.updateDom);
+			this.listenTo(this.collection, 'reset', this.updateDom);
 		},
 		render : function(id){
 			this.delegateEvents();

@@ -5,8 +5,11 @@ define([
 	'underscore',
 	'backbone',
 
-	'views/gnb'
-], function ($, _, Backbone, GNB) {
+	'views/gnb',
+
+	'models/video',
+	'models/class'
+], function ($, _, Backbone, GNB, Video, Class) {
 	'use strict';
 
 	var UtilsController = Backbone.Controller.extend({
@@ -48,17 +51,33 @@ define([
 			this.logoStart();
 
 			Backbone.pubsub.on('gnb:toggle', toggleView, this);
+			Backbone.pubsub.on('create', this.create, this);
 
 			function toggleView(){
 				$('.screen').toggleClass('scrollable').toggleClass('off');
 			}
 		},
-		run : function(user){
+		create : function(option){
+			var self   = this,
+				user   = Backbone.User.current(),
+				models = {
+					'video' : Video,
+					'class' : Class
+				},
+				model, attr;
 
-		},
-		stop : function(){
+			if(!user) return
 
+			model = new models[option.model]({
+				author : user
+			});
+
+			model.save().then(function(data){
+				Backbone.history.navigate('/'+option.model+'/' + data.id + '/update', { trigger : true });
+			});
 		},
+		run : function(user){},
+		stop : function(){},
 		auth : function(){
 			var self = this;
 

@@ -353,6 +353,16 @@ module.exports = function (grunt) {
         'rev',
         'usemin'
     ]);
+    grunt.registerTask('cssbuild', [
+        'clean:dist',
+        'useminPrepare',
+        'concat',
+        'cssmin',
+        'uglify',
+        'copy',
+        'rev',
+        'usemin'
+    ]);
 
     grunt.registerTask('default', [
         'jshint',

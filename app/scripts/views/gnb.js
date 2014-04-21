@@ -98,18 +98,8 @@ define([
 		},
 		create : function(e){
 			e.preventDefault();
-			var self  = this,
-				user  = Backbone.User.current(),
-				attr  = e.currentTarget.dataset.attr,
-				Model = attr == 'video' ? Video : Class,
-				model = new Model({
-					author : user
-				});
-
-			model.save().then(function(model){
-				self._off();
-				Backbone.history.navigate('/'+attr+'/' + model.id + '/update', { trigger : true });
-			});
+			this._off();
+			Backbone.pubsub.trigger('create', { model : e.currentTarget.dataset.attr });
 		},
 		link : function(e){
 			e.preventDefault();

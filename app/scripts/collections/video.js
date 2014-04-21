@@ -14,10 +14,10 @@ define([
 				query       = new Backbone.Query(Model);
 
 			query.include(['author']);
+			if(!currentUser || !data || !data.author || currentUser.id != data.author.id){
+				query.equalTo('publish', true);
+			}
 			if(data){
-				if(!currentUser || !data.author || currentUser.id != data.author.id){
-					data.publish = true;
-				}
 				Object.keys(data).forEach(function(key){
 					query.equalTo(key, data[key]);
 				});

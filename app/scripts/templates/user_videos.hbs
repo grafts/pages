@@ -8,7 +8,7 @@
 				{{#each videos.published}}
 				<li class="item">
 					<a href="/video/{{this.objectId}}">
-						<p class="title">{{this.title}}</p>
+						<p class="title">{{#if this.title}}{{this.title}}{{else}}Untitled{{/if}}</p>
 						<p class="subtitle">{{this.subtitle}}</p>
 					</a>
 				</li>
@@ -24,7 +24,7 @@
 				{{#each videos.drafts}}
 				<li class="item">
 					<a href="/video/{{this.objectId}}">
-						<p class="title">{{this.title}}</p>
+						<p class="title">{{#if this.title}}{{this.title}}{{else}}Untitled{{/if}}</p>
 					</a>
 				</li>
 				{{/each}}
@@ -40,7 +40,7 @@
 		{{#each videos.published}}
 		<li class="item">
 			<a href="/video/{{this.objectId}}">
-				<p class="title">{{this.title}}</p>
+				<p class="title">{{#if this.title}}{{this.title}}{{else}}Untitled{{/if}}</p>
 				<p class="subtitle">{{this.subtitle}}</p>
 			</a>
 		</li>

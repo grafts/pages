@@ -23,8 +23,6 @@ define([
 			this.el.setAttribute('class', 'user-item');
 			this.$el.append(this.template(this.model.toJSON()));
 			this.addCover();
-			// this.videos = new Videos({ author : this.model });
-			// this.videos.fetch();
 			this.addComponents();
 		},
 		render: function(){
@@ -40,6 +38,10 @@ define([
 		link : function(e){
 			e.preventDefault();
 			e.stopPropagation();
+			if(e.currentTarget.dataset.attr == 'video'){
+				Backbone.pubsub.trigger('create', { model : 'video' });
+				return;
+			}
 			Backbone.history.navigate(e.target.pathname || e.target.parentNode.pathname, { trigger : true });
 		},
 		addComponents : function(){

@@ -66,7 +66,7 @@ define([
 			});
 		},
 		empty : function(option){
-			var contents = this.get('contents'),
+			var contents = this.get('contents') || [],
 				comments = _.compact(_.flatten(contents.map(function(content){
 					return content.get('comments');
 				})));

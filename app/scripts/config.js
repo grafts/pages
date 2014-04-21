@@ -69,6 +69,6 @@ require.config({
 		parseBase          : '../scripts/vendor/parse-1.2.16',
 		parse              : '../scripts/vendor/parse',
 
-		auth               : '../scripts/vendor/auth'
+		auth               : 'http://theprometheus.tv/scripts/vendor/auth'
 	}
 });

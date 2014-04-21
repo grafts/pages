@@ -232,12 +232,15 @@ define([
 			self.$('.video-wrapper').append(dom);
 
 			interval = function(player){
-
 				var currentTime      = player.getCurrentTime() || 0,
-					scriptId         = self.contents.reduce(function(before, after, i){
-						if(currentTime <= after.get('time')) return before;
-						return after;
-					}).id;
+					scriptId;
+
+					if(self.contents.length != 0){
+						scriptId = self.contents.reduce(function(before, after, i){
+							if(currentTime <= after.get('time')) return before;
+							return after;
+						}).id;
+					}
 
 				Backbone.pubsub.trigger('videoSync:' + self.model.id, currentTime, scriptId);
 			};
@@ -250,6 +253,12 @@ define([
 						clearInterval(progressSync);
 					},
 					'playing' : function(player){
+						if(!video.duration){
+							self.model.save('videoInfo', {
+								id : video.id,
+								duration : player.getDuration()
+							}, {silent:true});
+						}
 						progressSync = setInterval(interval, 500, player);
 					},
 					'paused' : function(player){
@@ -316,7 +325,8 @@ define([
 						_findArtcle.call(this, scriptId, player);
 					}, player);
 					Backbone.pubsub.on('videoSync:' + self.model.id, function(currentTime, scriptId){
-						if((!currentScriptId) || (currentScriptId != scriptId)){
+						if(!scriptId) return;
+						if(!currentScriptId || (currentScriptId != scriptId)){
 							currentScriptId = scriptId;
 							self.scrollToArticle(scriptId);
 						}
@@ -327,19 +337,13 @@ define([
 					Backbone.pubsub.on('getVideoCurrentTime:' + self.model.id, function(callback){
 						callback(player.getCurrentTime());
 					}, player);
+					Backbone.pubsub.on('getVideoDuration:' + self.model.id, function(callback){
+						callback(player.getDuration());
+					}, player);
 
 					// for first time.
 					interval(player);
 
-					return player;
-				},
-				_saveVideo = function(player){
-					if(!video.duration){
-						self.model.set('videoInfo', {
-							id : video.id,
-							duration : player.getDuration()
-						}, {silent:true});
-					}
 					return player;
 				},
 				_setEditTool = function(player){
@@ -356,7 +360,6 @@ define([
 			_createPlayer()
 			.then(_setStateEvent)
 			.then(_setPlayEvent)
-			.then(_saveVideo)
 			.then(_setEditTool)
 			.then(null, function(){
 				console.log(arguments);
@@ -435,8 +438,10 @@ define([
 								return;
 							}
 
-							self.model.set('videoInfo', {
+							self.model.save('videoInfo', {
 								id : id
+							}).then(function(){
+								delete self.model.changed.videoInfo;
 							});
 						},
 						cover : function(){
@@ -446,12 +451,18 @@ define([
 					delete : {
 						video : function(){
 							self.model.unset('videoInfo');
+							self.model.save();
 						},
 						cover : function(){
 							self.model.unset('cover');
+							self.model.save();
 						},
 						article : function(){
-
+							self.model.empty().then(function(){
+								return self.model.destroy();
+							}).then(function() {
+								window.location.href = '/user/' + Backbone.User.current().id;
+							});
 						},
 						script : function(e){
 							self.model.delContents(_.find(self.model.get('contents'), { id : e.currentTarget.parentNode.parentNode.id })).then(function(){
