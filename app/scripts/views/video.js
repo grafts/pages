@@ -202,13 +202,16 @@ define([
 				video      = this.model.get('videoInfo'),
 				editButton = this.$('.edit-tool[data-edit="video"]');
 
-			if(this.$('iframe.video').length){
-				this.deleteVideo(function(){
+			if(!video){
+				this.deleteVideo();
+			} else {
+				if(!this.player){
 					self.addVideo();
-				});
-			}
-			else {
-				self.addVideo();
+				} else if(this.player.id != video.id){
+					this.deleteVideo(function(){
+						self.addVideo();
+					});
+				}
 			}
 
 			editButton.children().hide();
@@ -232,7 +235,7 @@ define([
 			self.$('.video-wrapper').append(dom);
 
 			interval = function(player){
-				var currentTime      = player.getCurrentTime() || 0,
+				var currentTime = player.getCurrentTime() || 0,
 					scriptId;
 
 					if(self.contents.length != 0){
@@ -257,7 +260,7 @@ define([
 							self.model.save('videoInfo', {
 								id : video.id,
 								duration : player.getDuration()
-							}, {silent:true});
+							});
 						}
 						progressSync = setInterval(interval, 500, player);
 					},
@@ -271,9 +274,8 @@ define([
 					'player cued' : function(player){
 						console.log(arguments);
 					}
-				};
-
-			var _createPlayer = function(){
+				},
+				_createPlayer = function(){
 					var player = new YT.Player(dom[0], {
 						videoId : video.id
 					});
@@ -343,6 +345,8 @@ define([
 
 					// for first time.
 					interval(player);
+					// caption load
+					player.loadModule("captions");
 
 					return player;
 				},
@@ -353,6 +357,10 @@ define([
 
 					self.$('.player').addClass('on');
 					return player;
+				},
+				_setPlayerAttr = function(player){
+					self.player = player;
+					self.player.id = video.id;
 				};
 
 			dom.empty();
@@ -361,6 +369,7 @@ define([
 			.then(_setStateEvent)
 			.then(_setPlayEvent)
 			.then(_setEditTool)
+			.then(_setPlayerAttr)
 			.then(null, function(){
 				console.log(arguments);
 			});
@@ -368,6 +377,7 @@ define([
 		deleteVideo : function(callback){
 			var self = this;
 
+			delete this.player;
 			Backbone.pubsub.trigger('videoUnrender:' + this.model.id, true, function(){
 				self.$('.video-wrapper').empty();
 				self.$('.edit-tool[data-edit="video"]')
@@ -440,8 +450,6 @@ define([
 
 							self.model.save('videoInfo', {
 								id : id
-							}).then(function(){
-								delete self.model.changed.videoInfo;
 							});
 						},
 						cover : function(){

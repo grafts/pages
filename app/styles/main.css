@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800);
 /*common elements*/
 
 *,
@@ -71,7 +71,7 @@ body {
   color: #636466;
   background: white;
   font-size: 13px;
-  font-family: 'HelveticaNeue', 'PT sans', 'Arial', sans-serif;
+  font-family: 'Open sans', 'NanumBarunGothic', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 @media (min-width: 768px) {
@@ -141,14 +141,14 @@ h1 {
   color: #414042;
   font-size: 2.3em;
   line-height: 1em;
-  font-family: 'HelveticaNeue', 'PT sans', 'NanumBarunGothic', sans-serif;
+  font-family: 'Open sans', 'NanumBarunGothic', sans-serif;
 }
 h4 {
   color: #414042;
   font-size: 1.2em;
   line-height: 1em;
   margin: 6px 0 22px 0;
-  font-family: 'PT Sans', sans-serif;
+  font-family: 'Open sans', 'NanumBarunGothic', sans-serif;
   font-weight: 400;
   letter-spacing: 0.05em;
 }
@@ -353,7 +353,7 @@ h4 {
   margin: 6px 0 24px 0;
   color: #6d6f72;
   font-weight: bold;
-  font-family: 'HelveticaNeue', 'PT sans', sans-serif;
+  font-family: 'Open sans', 'NanumBarunGothic', sans-serif;
 }
 .search .collection {
   display: inline-block;
@@ -364,7 +364,7 @@ h4 {
   text-align: left;
   height: 92px;
   margin-bottom: 24px;
-  font-family: 'HelveticaNeue', 'NanumBarunGothic', 'PT sans', sans-serif;
+  font-family: 'Open sans', 'NanumBarunGothic', sans-serif;
 }
 .search .collection .item .thumb {
   position: absolute;
@@ -444,7 +444,7 @@ h4 {
   height: 70px;
   z-index: 100;
   color: white;
-  font-family: 'HelveticaNeue', 'PT sans', 'NanumBarunGothic', sans-serif;
+  font-family: 'Open sans', 'NanumBarunGothic', sans-serif;
 }
 .header a {
   display: block;
@@ -478,6 +478,7 @@ h4 {
 .header .logo i {
   display: inline-block;
   margin-top: 6px;
+  line-height: 1.07em;
   -webkit-transition: all 0.25s ease-out;
   -moz-transition: all 0.25s ease-out;
   -ms-transition: all 0.25s ease-out;
@@ -2500,7 +2501,7 @@ h4 {
   color: white;
   text-align: left;
   font-size: 0.9em;
-  font-family: 'HelveticaNeue', 'NanumBarunGothic', 'PT sans', sans-serif;
+  font-family: 'Open sans', 'NanumBarunGothic', sans-serif;
   background: #b1b3b6;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2649,7 +2650,7 @@ h4 {
 }
 .video-item .contents .timeline-contents .container .scripts .item .script p {
   display: block;
-  font-family: 'HelveticaNeue', 'NanumBarunGothic', 'PT sans', sans-serif;
+  font-family: 'Open sans', 'NanumBarunGothic', sans-serif;
   font-size: 1.1em;
   font-weight: normal;
   line-height: 2em;
@@ -2748,7 +2749,7 @@ h4 {
   font-size: 1em;
   background: white;
   letter-spacing: 0;
-  font-family: 'HelveticaNeue', 'NanumBarunGothic', 'PT sans', sans-serif;
+  font-family: 'Open sans', 'NanumBarunGothic', sans-serif;
   margin-top: -18px;
   text-align: right;
   -webkit-transition: all 0.25s ease-out;
@@ -4178,7 +4179,7 @@ ul.video-list {
 }
 ul.video-list li.item {
   position: relative;
-  font-family: 'HelveticaNeue', 'NanumBarunGothic', 'PT sans', sans-serif;
+  font-family: 'Open sans', 'NanumBarunGothic', sans-serif;
   border-top: 1px solid #e7e7e7;
   padding: 1.6em 0 3.2em 0;
 }

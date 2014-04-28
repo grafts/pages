@@ -100,6 +100,10 @@ define([
 				script = this.$('.item[data-id="'+scriptId+'"]');
 
 			this.getDuration().then(function(duaration) {
+				if(duaration != self.duration){
+					self.duration = duaration;
+					self.refreshPointers();
+				}
 				self.$('.progress').css('width', (progress/duaration*100) + '%');
 			});
 
@@ -107,6 +111,10 @@ define([
 				this.$('.item').removeClass('on');
 				script.addClass('on');
 			}
+		},
+		refreshPointers : function(){
+			this.$('.pointers').empty();
+			this.addAll(this.contents);
 		},
 		link : function(e){
 			var current = e.currentTarget.parentNode.dataset.id;
