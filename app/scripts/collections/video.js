@@ -24,6 +24,9 @@ define([
 			}
 			this.query = query;
 		},
+		comparator : function(model) {
+			return - model.updatedAt;
+		},
 		JSON : function(){
 			return this.models.map(function(model){
 				return model.JSON();

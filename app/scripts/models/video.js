@@ -111,6 +111,7 @@ define([
 					like       : 123,
 					relate     : {
 						id         : 2,
+						objectId   : "d983dh289d2893dh2938dh9238hd",
 						title      : 'Today is good day to die',
 						subtitle   : '자르반 4세, 데마시아의 귀감',
 						author     : dUser,
